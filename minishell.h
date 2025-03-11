@@ -33,6 +33,6 @@ typedef struct	s_input
 	int			position;
 	t_input		*next;
 	t_input		*prev;
-}				t_input
+}				t_input;
 
 # endif
