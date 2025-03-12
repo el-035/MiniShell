@@ -2,9 +2,9 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror 
+CFLAGS = -g #-Wall -Wextra -Werror 
 
-SRC = minishell.c
+SRC = minishell.c list_utils.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a

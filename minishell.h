@@ -28,11 +28,15 @@ typedef enum e_type
 
 typedef struct	s_input
 {
-	char 		*content;
-	t_type		*type;
-	int			position;
-	t_input		*next;
-	t_input		*prev;
+	char 			*content;
+	enum e_type		*type;
+	int				position;
+	struct s_input		*next;
+	struct s_input		*prev;
 }				t_input;
 
+
+//list utils
+t_input	*add_new(char *content, int pos, t_input *prev);
+t_input	*make_new_node(char *content, int pos);
 # endif
