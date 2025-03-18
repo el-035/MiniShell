@@ -5,73 +5,91 @@
 
 void init_input(t_input *first)
 {
-	//printf("test init\n");
-	
+
 	first->content = NULL;
-	first->type = NULL;
+	first->type = UNKNOWN;	
 	first->position = -1;
 	first->next = NULL;
 	first->prev = NULL;
-}
 
-void	test_print(t_input *first)
+}
+void	free_split(char **split)
 {
-	t_input *cur;
-	cur = first;
-	 
-	while(cur->next != first)
-	{
-		printf("node %d, content: %s:  cur %p, prev: %p, next: %p\n", cur->position, cur->content, &cur, cur->prev, cur->next);
-		cur = cur->next;
-	}
-	printf("node %d, content: %s: cur %p, prev: %p, next: %p\n", cur->position, cur->content, &cur, cur->prev, cur->next);
+	int	word;
 
+	word = 0;
+	while (split[word])
+	{
+		free(split[word]);
+		word++;
+	}
+	free(split);
+	return ;
 }
 
-int  parse_input(char *line, t_input *first)
+int  parse_input(char *line, t_input **first)
 {
 	t_input	*cur;
 	char 	**split;
 	int 	pos = 0;
 
-	split = ft_split(line, ' ');
+	split = mini_split(line);
 	if (!split)
-		return NULL; //handle later on
-	//printf("test6\n");
-	first = make_new_node(split[pos], pos);
-	if (!first)
-		return NULL; //handle later on
-	
+		return 0;
+	*first = make_new_node(split[pos], pos);
+	if (!*first)
+		return 0; //handle later on
 	pos++;
-	cur = first;
+	cur = *first;
 	while(split[pos])
-	{
+	{	
 		cur = add_new(split[pos], pos, cur);
+		if (!cur)
+			return 0;
 		pos++;
-		//protect
 	}
-	cur->next = first;
-	test_print(first);
-	free(split);
+	cur->next = *first;
+	//free(split); make function
 	return(1);
 }
 
-//check first thing in the list if it is executable
+//changed parse input with double pointer to first
+//rewrote split
+
+void	free_list(t_input *first)
+{
+	t_input	*cur;
+	t_input	*tmp;
+
+	if (!first) // Handle empty list
+		return ;
+	cur = first->next;
+	while (cur != first)
+	{
+		tmp = cur;
+		cur = cur->next;
+		//free(tmp->content); // Free dynamically allocated content if needed
+		free(tmp);
+	}
+	//free(first->content); // Free the content of the first node
+	free(first);
+}
 
 int main(void)
 {
 	char *line;
-	t_input first;
+	t_input *first;
 	
 	while (1)
 	{
-		line = readline("Minishell: ");
+		line = readline("Minishell:~$ ");
 		if (strncmp(line, "exit", 5) == 0)
 			break ;
-		//printf("test7\n");
-		init_input(&first);
-		if (!parse_input(line, &first))
+		if (!*line || !parse_input(line, &first))
 			continue ;		//error handling
+		assign_type(&first);
+		//test_print(first);
 		free(line);
 	}
+	free_list(first);
 }

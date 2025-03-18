@@ -7,9 +7,9 @@ t_input	*make_new_node(char *content, int pos)
 	node = (t_input *)malloc(sizeof(t_input));
 	if (!node)
 		return (NULL);
+	init_input(node);
 	node->content = content;
 	node->position = pos;
-	node->next = NULL;
 	return (node);
 }
 
@@ -23,4 +23,21 @@ t_input	*add_new(char *content, int pos, t_input *prev)
 	prev->next = node;
 	node->prev = prev;
 	return (node);
+}
+
+int	list_size(t_input *first)
+{
+	int	size;
+	t_input *cur;
+
+	size = 1;
+	if (!first)
+		return (0);
+	cur = first->next;
+	while (cur != first)
+	{
+		cur = cur -> next;
+		size++;
+	}
+	return (size);
 }
