@@ -1,15 +1,4 @@
-#include <stdlib.h>
 #include "minishell.h"
-
-int	ft_strlen(const char *s)	//DELETE
-{
-	int	length;
-
-	length = 0;
-	while (s[length])
-		length++;
-	return (length);
-}
 
 static int	ft_word_count(char *s)
 {
@@ -22,37 +11,32 @@ static int	ft_word_count(char *s)
 	f_quote = 0;
 	while (s[i])
 	{
-		while ((s[i] == 32 || s[i] == 9) && s[i] && f_quote == 0)		//skippiamo spazi
+		while ((s[i] == 32 || s[i] == 9) && !f_quote)
 			i++;
-		if ((s[i] != 32 && s[i] != 9) && s[i] && f_quote == 0)			//word +1
+		if (s[i] && !f_quote)
 		{
 			wc++;
 			if (s[i] == 34 || s[i] == 39)
 				f_quote = s[i++];
-			i++;
 		}
-		while (f_quote == 0 && (s[i] != 32 && s[i] != 9) && s[i])		//skippiamo word
-			i++;
-		while ((f_quote == 34 || f_quote == 39) && s[i])
+		while (s[i] && (f_quote || (s[i] != 32 && s[i] != 9)))
 		{
-			if (f_quote == s[i++])
+			if (f_quote && s[i] == f_quote)
 				f_quote = 0;
+			i++;
 		}
 	}
 	return (wc);
 }
 
-static char	*ft_word(char *s, int i)
+static char word_len(char *s, int i)
 {
-	char	*word;
 	int		j;
 	int		f_quote;
 	int		len;
 
 	j = 0;
 	f_quote = 0;
-	while ((s[i] == 32 || s[i] == 9) && s[i])
-		i++;
 	if (s[i] == 34 || s[i] == 39)
 	{
 		j++;
@@ -60,9 +44,7 @@ static char	*ft_word(char *s, int i)
 	}
 	while(s[i])
 	{
-		if (f_quote == 0 && (s[i] == 32 || s[i] == 9))
-			break ;
-		if (f_quote == s[i])
+		if ((f_quote == 0 && (s[i] == 32 || s[i] == 9)) || f_quote == s[i])
 			break ;
 		i++;
 		j++;
@@ -70,17 +52,28 @@ static char	*ft_word(char *s, int i)
 	len = j + 1;
 	if (f_quote == 0)
 		len--;
-	word = (char *) calloc((len + 1), sizeof(char));	//ft_calloc
+	return (len);
+}
+
+static char	*ft_word(char *s, int i)
+{
+	char	*word;
+	int		j;
+	int		len;
+
+	while ((s[i] == 32 || s[i] == 9) && s[i])
+		i++;
+	len = word_len(s, i);
+	word = (char *) ft_calloc((len + 1), sizeof(char));	//ft_calloc
 	if (!word)
 		return (NULL);
-	i = i - j;
 	j = 0;
 	while (j < len)
 		word[j++] = s[i++];
 	return (word);
 }
 
-static char	**ft_free(char **split)
+/* static char	**free_split(char **split)
 {
 	int	word;
 
@@ -92,9 +85,9 @@ static char	**ft_free(char **split)
 	}
 	free(split);
 	return (NULL);
-}
+} */
 
-char	**mini_split(char const *s)
+char	**mini_split(char const *s)	//remove mains
 {
 	int		wc;
 	int		i;
@@ -104,7 +97,7 @@ char	**mini_split(char const *s)
 	wc = ft_word_count((char *) s);
 	i = 0;
 	j = 0;
-	split = (char **) malloc ((wc + 1) * sizeof(char *));
+	split = (char **) ft_calloc ((wc + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
 
@@ -112,7 +105,7 @@ char	**mini_split(char const *s)
 	{
 		split[j] = ft_word((char *)s, i);
 		if (!split[j++])
-			return (ft_free(split));
+			return (free_split(split), NULL);
 		while ((s[i] == 32 || s[i] == 9) && s[i])
 			i++;
 		i = i + ft_strlen(split[j - 1]);
@@ -267,7 +260,7 @@ int main() {
 
         // Free the memory allocated by mini_split
         if (split != NULL) {
-            ft_free(split);
+            free_split(split);
         }
     }
 

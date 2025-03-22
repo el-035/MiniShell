@@ -8,7 +8,12 @@ t_input	*make_new_node(char *content, int pos)
 	if (!node)
 		return (NULL);
 	init_input(node);
-	node->content = content;
+	node->content = ft_strdup(content);
+	if (!node->content) // fix
+	{
+		free(node);
+		return (NULL);
+	}
 	node->position = pos;
 	return (node);
 }

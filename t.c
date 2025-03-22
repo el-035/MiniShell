@@ -18,8 +18,6 @@ const char *get_type_str(enum e_type type)
 		return "HERE_DOC";
 	if (type == ENV_VAR)
 		return "ENV_VAR";
-	if (type == SUBSHELL)
-		return "SUBSHELL";
 	return "UNKNOWN";
 }
 

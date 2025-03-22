@@ -39,6 +39,7 @@ typedef struct	s_input
 //main
 void init_input(t_input *first);
 int  parse_input(char *line, t_input **first);
+void free_split(char **split);
 
 //list utils
 t_input	*add_new(char *content, int pos, t_input *prev);

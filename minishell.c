@@ -13,14 +13,18 @@ void init_input(t_input *first)
 	first->prev = NULL;
 
 }
-void	free_split(char **split)
+
+void free_split(char **split)
 {
 	int	word;
 
 	word = 0;
+	if (!split)
+		return ;
 	while (split[word])
 	{
-		free(split[word]);
+		if (split[word])	
+			free(split[word]);
 		word++;
 	}
 	free(split);
@@ -38,7 +42,7 @@ int  parse_input(char *line, t_input **first)
 		return 0;
 	*first = make_new_node(split[pos], pos);
 	if (!*first)
-		return 0; //handle later on
+		return (free_split(split), 0);
 	pos++;
 	cur = *first;
 	while(split[pos])
@@ -49,29 +53,28 @@ int  parse_input(char *line, t_input **first)
 		pos++;
 	}
 	cur->next = *first;
-	//free(split); make function
+	free_split(split);
 	return(1);
 }
-
-//changed parse input with double pointer to first
-//rewrote split
 
 void	free_list(t_input *first)
 {
 	t_input	*cur;
 	t_input	*tmp;
 
-	if (!first) // Handle empty list
+	if (!first)
 		return ;
 	cur = first->next;
 	while (cur != first)
 	{
+		if (!cur)
+			return ;
 		tmp = cur;
 		cur = cur->next;
-		//free(tmp->content); // Free dynamically allocated content if needed
+		free(tmp->content);
 		free(tmp);
 	}
-	//free(first->content); // Free the content of the first node
+	free(first->content);
 	free(first);
 }
 
@@ -79,17 +82,21 @@ int main(void)
 {
 	char *line;
 	t_input *first;
+	int i = 0;
 	
-	while (1)
+	first = NULL;
+	while (i < 3)
 	{
 		line = readline("Minishell:~$ ");
-		if (strncmp(line, "exit", 5) == 0)
-			break ;
+		if (strncmp(line, "exit", 5) == 0)	//needs to be a command
+			return (free(line), 1);
 		if (!*line || !parse_input(line, &first))
 			continue ;		//error handling
 		assign_type(&first);
 		//test_print(first);
 		free(line);
+		i++;
 	}
+	rl_clear_history();	//
 	free_list(first);
 }
