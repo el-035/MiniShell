@@ -1,5 +1,5 @@
 #include"minishell.h"
-
+#include<string.h>
 t_input	*make_new_node(char *content, int pos)
 {
 	t_input	*node;

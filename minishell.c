@@ -64,28 +64,27 @@ void	free_list(t_input *first)
 
 	if (!first)
 		return ;
-	cur = first->next;
-	while (cur != first)
+	cur = first;
+	tmp = NULL;
+	while (cur)
 	{
-		if (!cur)
-			return ;
-		tmp = cur;
-		cur = cur->next;
-		free(tmp->content);
-		free(tmp);
+		tmp = cur->next;
+		if (cur->content)
+			free(cur->content);
+		free(cur);
+		if (tmp == first)
+			break ;
+		cur = tmp;
 	}
-	free(first->content);
-	free(first);
 }
 
 int main(void)
 {
 	char *line;
 	t_input *first;
-	int i = 0;
 	
 	first = NULL;
-	while (i < 3)
+	while (1)
 	{
 		line = readline("Minishell:~$ ");
 		if (strncmp(line, "exit", 5) == 0)	//needs to be a command
@@ -93,10 +92,9 @@ int main(void)
 		if (!*line || !parse_input(line, &first))
 			continue ;		//error handling
 		assign_type(&first);
-		//test_print(first);
+		test_print(first);
 		free(line);
-		i++;
+		free_list(first);
 	}
-	rl_clear_history();	//
-	free_list(first);
+	//rl_clear_history();	//
 }
