@@ -64,7 +64,7 @@ static char	*ft_word(char *s, int i)
 	while ((s[i] == 32 || s[i] == 9) && s[i])
 		i++;
 	len = word_len(s, i);
-	word = (char *) ft_calloc((len + 1), sizeof(char));	//ft_calloc
+	word = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!word)
 		return (NULL);
 	j = 0;
@@ -72,20 +72,6 @@ static char	*ft_word(char *s, int i)
 		word[j++] = s[i++];
 	return (word);
 }
-
-/* static char	**free_split(char **split)
-{
-	int	word;
-
-	word = 0;
-	while (split[word])
-	{
-		free(split[word]);
-		word++;
-	}
-	free(split);
-	return (NULL);
-} */
 
 char	**mini_split(char const *s)	//remove mains
 {
@@ -95,6 +81,8 @@ char	**mini_split(char const *s)	//remove mains
 	char	**split;
 
 	wc = ft_word_count((char *) s);
+	if (!wc)
+		return (NULL);
 	i = 0;
 	j = 0;
 	split = (char **) ft_calloc ((wc + 1), sizeof(char *));
