@@ -24,7 +24,7 @@ int  save_input(char *line, t_input **first)
 	pos++;
 	cur = *first;
 	while(split[pos])
-	{	
+	{
 		cur = add_new(split[pos], pos, cur);
 		if (!cur)
 			return (free_split(split), free_list(*first), printf("Error\nAllocation failed\n"), 0);
@@ -43,15 +43,16 @@ int main(void)
 	first = NULL;
 	while (1)
 	{
-		line = readline("Minishell:~$ ");
+		line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		if (strncmp(line, "exit", 5) == 0)	//needs to be a command
 			return (free(line), 1);
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		assign_type(&first);
 		//test_print(first);
+		add_history(line);
 		free(line);
 		free_list(first);
 	}
-	//rl_clear_history();	//
+	rl_clear_history();
 }

@@ -140,7 +140,7 @@ int is_red_or_pipe(t_input *first)
 	else if (ft_strncmp(first->content, ">>", 3) == 0)
 		return (first->type = REDIR_APPEND, 1);
 	else if (ft_strncmp(first->content, "<<", 3) == 0)
-		return (first->type = HERE_DOC, 1);	//change name maybe??
+		return (first->type = HERE_DOC, 1);
 	else if (ft_strncmp(first->content, "|", 2) == 0)
 		return (first->type = PIPE, 1);
 	else if (ft_strncmp(first->content, "$", 1) == 0 && ft_strncmp(first->content, "$?", 2) != 0)
