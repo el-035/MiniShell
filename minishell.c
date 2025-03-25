@@ -35,6 +35,13 @@ int  save_input(char *line, t_input **first)
 	return(1);
 }
 
+int	parsing(t_input *first)	//return value?
+{
+	assign_type(&first);
+	find_ev(first);
+	return 0;	//
+}
+
 int main(void)
 {
 	char *line;
@@ -48,11 +55,11 @@ int main(void)
 			return (free(line), 1);
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
-		assign_type(&first);
+		parsing(first);
 		//test_print(first);
 		add_history(line);
 		free(line);
-		free_list(first);
+//		free_list(first);
 	}
 	rl_clear_history();
 }

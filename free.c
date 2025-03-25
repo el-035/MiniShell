@@ -34,7 +34,8 @@ void	free_list(t_input *first)
 		tmp = cur->next;
 		if (cur->content)
 			free(cur->content);
-		free(cur);
+		if (cur)
+			free(cur);
 		if (tmp == first)
 			break ;
 		cur = tmp;

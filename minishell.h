@@ -58,6 +58,10 @@ int is_red_or_pipe(t_input *first);
 int	syntax_check(t_input *first);
 int	assign_type(t_input **first);
 
+//env_var
+int	find_ev(t_input *first);
+int	expand_var(t_input **cur);
+
 //tests
 const char *get_type_str(enum e_type type);
 void	test_print(t_input *first);

@@ -4,7 +4,6 @@
 //first checks how many commands there are
 //each command is a token
 //checks the syntax of all, if any error will not start
-//aliases and functions --not needed
 //evaluate variables??
 //it now checks if the token represents a build in command or external one
 //if external it goes to the path
@@ -12,32 +11,6 @@
 //execution starts
 
 //what about environment variables
-
-//DEFINE TYPE
-//first element is command unless redirection or pipe
-	//strcmp and if not | < << or special symbol is a command
-	//next is an argument unless it is a special symbol
-//after redirection expect a file
-//after pipe expect new command
-
-//SYNTAX
-
-//Two special characters (pipe, redirection) can't appear together: OK
-//empty input OK
-//unclosed quotes 	OK
-//Invalid Environment Variables??
-
-//pipes
-	//no pipes at beginning nor end	 OK
-	//no pipe after pipe			OK
-	//After a pipe or redirection, you need a valid command or argument: OK
-//REDIR
-	//no redir at beginning nor end OK
-	//Redirection can't follow another redirection without an argument: OK
-	//Redirection needs a valid file/token after it:
-	//Pipe can't immediately follow a redirection: OK
-	//After a pipe or redirection, you need a valid command or argument: OK
-
 
 /* 
 Variable expansion (if you want to handle $VARIABLE):
@@ -74,7 +47,6 @@ int	pipe_syntax(t_input *cur, t_input *first)
 		return (printf("Syntax error\nPipes must be followed by commands or arguments\n"), 1);
 	return 0;
 }
-
 
 int redir_syntax(t_input *cur, t_input *first)
 {
@@ -170,3 +142,5 @@ int	assign_type(t_input **first)
 	}
 	return(syntax_check(*first));
 }
+
+
