@@ -56,10 +56,10 @@ int main(void)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		parsing(first);
-		//test_print(first);
+		test_print(first);
 		add_history(line);
 		free(line);
-//		free_list(first);
+		free_list(first);
 	}
 	rl_clear_history();
 }

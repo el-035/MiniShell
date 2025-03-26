@@ -12,9 +12,9 @@ char *save_start(char *content)
 		len++;
 	if (len == 0)
 		return (ft_strdup(""));
-	start = NULL; // (char *) ft_calloc((len + 1), sizeof(char));
+	start = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!start)
-		return (NULL); //
+		return (printf("Allocation failed\n"), NULL); //
 	while (i < len)
 	{
 		start[i] = content[i];
@@ -35,7 +35,7 @@ char	*extract_var(char *content)
 		len++;
 	var = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!var)
-		return (NULL);		//error
+		return (printf("Allocation failed\n"), NULL); //
 	while (++i < len)
 		var[i] = content[i];
 	return (var);
@@ -54,9 +54,9 @@ char	*save_rest(char *content, char *var)
 	while (content[len])
 		len++;
 	len = len - i;
-	rest =  (char *) ft_calloc((len + 1), sizeof(char));
+	rest = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!rest)
-		return (NULL);		//error
+		return (printf("Allocation failed\n"), NULL); //
 	len = 0;
 	while (content[i])
 		rest[len++] = content[i++];
@@ -69,39 +69,38 @@ int	expand_var(t_input **cur)
 	char *start;
 	char *var;
 	char *end;
+	char *temp;
 
 	if (ft_strncmp((*cur)->content, "$?", 2) == 0)
 		return 5; //idk handle this :( 	also handle more than one $
 	start = save_start((*cur)->content);
 	if (!start)
-		return (free_list(*cur), 1);
+		return (1);
 	var = extract_var(ft_strchr((*cur)->content, '$') + 1);
 	if (!var)
-		return (free(start), free_list(*cur), 1);
+		return (free(start), 1);
 	end = save_rest(ft_strchr((*cur)->content, '$') + 1, var);
 	if (!end)
-		return (free(start), free(var), free_list(*cur), 1);
-	
-/* 	printf("start: %s\n", start);
-	printf("var: %s\n", var);
-	printf("end: %s\n", end); */
-
+		return (free(start), free(var), 1);
 	value = getenv(var);
-
-	free((*cur)->content);
-	if (start)
-		value = ft_strjoin(start, value);
-	if (end)
-		value = ft_strjoin(value, end);
+	value = ft_strjoin(start, value);
 	if (!value)
-		return (1); // erroerop
+		return (free(start), free(var), free(end), 1);
+	free(start);
+	if (end)
+	{
+		temp = ft_strjoin(value, end);
+		free(value);
+		value = temp;
+		free(end);
+	}	
+	if (!value)
+		return (free(var), 1);
+	free((*cur)->content);	
 	(*cur)->content = ft_strdup(value);
 	if (var)
 		free(var);
-	if (start)
-		free(start);
-	if(end)
-		free(end);
+	free(value);
 	if (ft_strchr((*cur)->content, '$') != 0)
 		expand_var(cur);
 	return 0;
@@ -121,5 +120,4 @@ int	find_ev(t_input *first)
 			break ;
 	}
 	return 0;
-
 }
