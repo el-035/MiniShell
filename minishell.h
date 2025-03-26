@@ -19,7 +19,7 @@ typedef enum e_type
 	REDIR_OUT,   // Output redirection (">")
 	REDIR_APPEND,// Append redirection (">>")
 	HERE_DOC,    // Here document ("<<")
-	ENV_VAR,     // Environment variable ("$HOME")
+	//ENV_VAR,     // Environment variable ("$HOME")
 	//S_QUOTE,     // Quoted string ('...')
 	//D_QUOTE,	 // Quoted string ("...")
 	//SEP,         // Separator (e.g., ";")

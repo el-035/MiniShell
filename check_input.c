@@ -10,7 +10,6 @@
 //sets up redirections including pipes (needs to be ready before command starts)
 //execution starts
 
-//what about environment variables
 
 /* 
 Variable expansion (if you want to handle $VARIABLE):
@@ -115,8 +114,6 @@ int is_red_or_pipe(t_input *first)
 		return (first->type = HERE_DOC, 1);
 	else if (ft_strncmp(first->content, "|", 2) == 0)
 		return (first->type = PIPE, 1);
-	else if (ft_strncmp(first->content, "$", 1) == 0 && ft_strncmp(first->content, "$?", 2) != 0)
-		return(first->type = ENV_VAR, 1);
 	else
 		return (0);
 }

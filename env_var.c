@@ -82,7 +82,7 @@ int	expand_var(t_input **cur)
 	end = save_rest(ft_strchr((*cur)->content, '$') + 1, var);
 	if (!end)
 		return (free(start), free(var), 1);
-	value = getenv(var);
+	value = getenv(var);		//what if its not
 	value = ft_strjoin(start, value);
 	if (!value)
 		return (free(start), free(var), free(end), 1);
@@ -113,7 +113,7 @@ int	find_ev(t_input *first)
 	cur = first;
 	while(cur)
 	{
-		if (cur->type == ENV_VAR)
+		if (ft_strchr(cur->content, '$'))	//handle $$ and /$
 			expand_var(&cur);
 		cur = cur->next;
 		if (cur == first)

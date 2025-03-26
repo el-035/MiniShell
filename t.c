@@ -16,8 +16,8 @@ const char *get_type_str(enum e_type type)
 		return "REDIR_APPEND";
 	if (type == HERE_DOC)
 		return "HERE_DOC";
-	if (type == ENV_VAR)
-		return "ENV_VAR";
+/* 	if (type == ENV_VAR)
+		return "ENV_VAR"; */
 	return "UNKNOWN";
 }
 
