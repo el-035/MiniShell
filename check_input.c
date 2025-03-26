@@ -10,11 +10,7 @@
 //sets up redirections including pipes (needs to be ready before command starts)
 //execution starts
 
-
 /* 
-Variable expansion (if you want to handle $VARIABLE):
-Expand environment variables ($HOME, $PATH, etc.)
-Handle special cases like $? (exit status)
 Command identification:
 
 Check if the command is a built-in (cd, echo, etc.) or an external command.
@@ -32,7 +28,6 @@ Handle signals:
 Handle CTRL+C, CTRL+D, CTRL+\
 Restore terminal state if needed
 Clean up:
-
 Free memory and close file descriptors */
 
 

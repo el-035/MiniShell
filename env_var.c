@@ -63,13 +63,34 @@ char	*save_rest(char *content, char *var)
 	return (rest);
 }
 
+int	save_var(t_input **cur, char *start, char *end, char *var)
+{
+	char *temp;
+	char *value;
+
+	value = getenv(var);		//what if its not
+	value = ft_strjoin(start, value);
+	if (!value)
+		return (free(start), free(var), free(end), 1);
+	free(start);
+	temp = ft_strjoin(value, end);
+	free(value);
+	value = temp;
+	free(end);
+	if (!value)
+		return (free(var), 1);
+	free((*cur)->content);	
+	(*cur)->content = ft_strdup(value);
+	free(var);
+	free(value);
+	return 0;
+}
+
 int	expand_var(t_input **cur)
 {
-	char *value;
 	char *start;
 	char *var;
 	char *end;
-	char *temp;
 
 	if (ft_strncmp((*cur)->content, "$?", 2) == 0)
 		return 5; //idk handle this :( 	also handle more than one $
@@ -82,25 +103,7 @@ int	expand_var(t_input **cur)
 	end = save_rest(ft_strchr((*cur)->content, '$') + 1, var);
 	if (!end)
 		return (free(start), free(var), 1);
-	value = getenv(var);		//what if its not
-	value = ft_strjoin(start, value);
-	if (!value)
-		return (free(start), free(var), free(end), 1);
-	free(start);
-	if (end)
-	{
-		temp = ft_strjoin(value, end);
-		free(value);
-		value = temp;
-		free(end);
-	}	
-	if (!value)
-		return (free(var), 1);
-	free((*cur)->content);	
-	(*cur)->content = ft_strdup(value);
-	if (var)
-		free(var);
-	free(value);
+	save_var(cur, start, end, var);
 	if (ft_strchr((*cur)->content, '$') != 0)
 		expand_var(cur);
 	return 0;
