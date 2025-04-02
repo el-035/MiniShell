@@ -30,14 +30,22 @@ int  save_input(char *line, t_input **first)
 			return (free_split(split), free_list(*first), printf("Error\nAllocation failed\n"), 0);
 		pos++;
 	}
-	cur->next = *first;
+	if (pos > 1)
+	{
+		cur->next = *first;
+		(*first)->prev = cur;
+	}
 	free_split(split);
 	return(1);
 }
 
 int	parsing(t_input *first)	//return value?
 {
-	assign_type(&first);
+	int exit;
+	
+	exit = assign_type(&first);
+	if (exit != 0)
+		return (exit);
 	find_ev(first);
 	return 0;	//
 }
@@ -46,7 +54,9 @@ int main(void)
 {
 	char *line;
 	t_input *first;
+	int	exit;
 	
+	exit = 0;
 	first = NULL;
 	while (1)
 	{
@@ -55,11 +65,15 @@ int main(void)
 			return (free(line), 1);
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
-		parsing(first);
+		exit = parsing(first);
+		//printf("%d", exit);
 		test_print(first);
 		add_history(line);
 		free(line);
 		free_list(first);
+		if (exit != 0)
+			break ;
 	}
 	rl_clear_history();
+	return (exit);
 }

@@ -4,19 +4,19 @@
 //first checks how many commands there are
 //each command is a token
 //checks the syntax of all, if any error will not start
-//evaluate variables??
+//evaluate variables
 //it now checks if the token represents a build in command or external one
 //if external it goes to the path
 //sets up redirections including pipes (needs to be ready before command starts)
 //execution starts
 
-/* 
+/*
 Command identification:
 
 Check if the command is a built-in (cd, echo, etc.) or an external command.
 If it's external, search for it in the PATH.
-Set up redirections and pipes:
 
+Set up redirections and pipes:
 Open/close file descriptors for redirections (<, >, >>)
 Set up pipes between commands if needed
 Fork and execute:
@@ -31,32 +31,35 @@ Clean up:
 Free memory and close file descriptors */
 
 
-int	pipe_syntax(t_input *cur, t_input *first)
+int is_red(t_input *cur)
 {
-	if (cur == first || cur->next == first)
-		return (printf("Syntax error\nPipe cannot be at beginning or end\n"), 1);
-	if (cur->next != first && cur->next->type == PIPE)
-		return (printf("Syntax error\nTwo consecutive pipes\n"), 1);
-	if (cur->next != first && cur->next->type != ARG && cur->next->type != CMD)
-		return (printf("Syntax error\nPipes must be followed by commands or arguments\n"), 1);
+	if (cur->type != REDIR_APPEND && cur->type != HERE_DOC && cur->type != REDIR_IN && cur->type != REDIR_OUT)
+		return (0);
+	return 1;
+}
+
+int more_syntax(t_input *cur, t_input *first)	//newline erorr
+{
+	(void)*first;		//
+	if (is_red(cur) == 1 && cur->next->type == REDIR_OUT)
+		return (write(2, " syntax error near unexpected token `>'\n", 40), 2);
+	
+	if (is_red(cur) == 1 && cur->next->type == REDIR_IN)
+		return (write(2, " syntax error near unexpected token `<'\n", 40), 2);
+
+	if (is_red(cur) == 1 && cur->next->type == REDIR_APPEND)
+		return (write(2, " syntax error near unexpected token `>>'\n", 40), 2);
+
+	if (is_red(cur) == 1 && cur->next->type == HERE_DOC)
+		return (write(2, " syntax error near unexpected token `<<'\n", 40), 2);
+	if (cur->type == PIPE && cur->next->type == PIPE)
+		return (write(2, " syntax error near unexpected token `|'\n", 40), 2);
+	if ((cur->type == REDIR_APPEND || cur->type == REDIR_IN || cur->type == REDIR_OUT || cur->type == HERE_DOC) && cur->next->type == PIPE)
+		return (write(2, " syntax error near unexpected token `|'\n", 40), 2);
 	return 0;
 }
 
-int redir_syntax(t_input *cur, t_input *first)
-{
-	if (cur == first || cur->next == first)
-		return (printf("Syntax error\nRedirection cannot be at beginning or end\n"), 1);
-	if (cur->next->type == REDIR_APPEND || cur->next->type == REDIR_IN || cur->next->type == REDIR_OUT || cur->next->type == HERE_DOC)
-		return (printf("Syntax error\nTwo consecutive redirections\n"), 1);
-	if (cur->next != first && cur->next->type == PIPE)
-		return (printf("Syntax error\nPipe following redirection\n"), 1);
-	if (cur->next != first && cur->next->type != ARG && cur->next->type != CMD)
-		return (printf("Syntax error\nRedirections must be followed by commands or arguments\n"), 1);
-	//Redirection needs a valid file/token after it:
-	return 0;
-}
-
-int quotes_syntax(t_input *cur)
+int quotes_syntax(t_input *cur)	//idk 
 {
 	int i = 0;
 	int	s = 0;
@@ -71,27 +74,44 @@ int quotes_syntax(t_input *cur)
 		i++;
 	}
 	if (s % 2 != 0 || d % 2 != 0)
-		return(printf("Syntax error\nUnclosed quotes\n"), 1);
+		return(printf("Unexpected end of file\n"), 2);
 	return 0;
+}
+
+int check_nl(t_input *first)
+{
+	if (first->type == REDIR_APPEND || first->type == REDIR_IN || first->type == REDIR_OUT || first->type == HERE_DOC)
+		return (write(2, " syntax error near unexpected token `newline'\n", 46), 2);
+	if (first->type == PIPE)
+		return (write(2, " syntax error near unexpected token `|'\n", 40), 2);
+	if (!first->prev)
+		return (0);
+
+	if (first->prev->type == REDIR_APPEND || first->prev->type == REDIR_IN || first->prev->type == REDIR_OUT || first->prev->type == HERE_DOC)
+		return (write(2, " syntax error near unexpected token `newline'\n", 46), 2);
+	return 0;
+	//unclosed quotes or parenthesis
 }
 
 int	syntax_check(t_input *first)
 {
 	t_input *cur;
 	int		size;
+	int		exit;
 
 	cur = first;
 	size = list_size(first) - 1;
+	exit = check_nl(first);
+	if (exit != 0)
+		return (exit);
 	while (size-- >= 0)
 	{
-		if (cur->type == PIPE && pipe_syntax(cur, first) == 1)
-			return (1);
-		if ((cur->type == REDIR_APPEND || cur->type == REDIR_IN || cur->type == REDIR_OUT || cur->type == HERE_DOC) && redir_syntax(cur, first) == 1)
-			return (1);
-		if ((ft_strchr(cur->content, '\'') != NULL || ft_strchr(cur->content, '"') != NULL) && quotes_syntax(cur) == 1)
-			return (1);
-		//Redirection needs a valid file/token after it:
-		//Invalid Environment Variables??
+		exit = more_syntax(cur, first);
+		if (exit != 0)
+			return (exit);
+		exit = quotes_syntax(cur);
+		if ((ft_strchr(cur->content, '\'') != NULL || ft_strchr(cur->content, '"') != NULL) && exit != 0)
+			return (exit);
 		cur = cur->next;
 	}
 	return 0;
@@ -99,7 +119,7 @@ int	syntax_check(t_input *first)
 
 int is_red_or_pipe(t_input *first)
 {
-	if (ft_strncmp(first->content, "<", 2) == 0)
+	if (ft_strncmp(first->content, "<", 1) == 0)
 		return (first->type = REDIR_IN, 1);
 	else if (ft_strncmp(first->content, ">", 2) == 0)
 		return (first->type = REDIR_OUT, 1);
@@ -119,20 +139,20 @@ int	assign_type(t_input **first)
 
 	if ((*first)->position == 0 && is_red_or_pipe(*first) == 0)
 		(*first)->type = CMD;
-	cur = (*first)->next;
-	
+	if ((*first)->next)
+		cur = (*first)->next;
+	else
+		cur = *first;
 	while (cur != *first)
 	{
 		if (cur->prev->type == CMD && is_red_or_pipe(cur) == 0)
-		cur->type = ARG;
+			cur->type = ARG;
 		else if (cur->prev->type == PIPE)
-		cur->type = CMD;
+			cur->type = CMD;
 		else if (cur->prev->type == REDIR_APPEND || cur->prev->type == REDIR_IN || cur->prev->type == REDIR_OUT || cur->prev->type == HERE_DOC)
-		cur->type = ARG;
+			cur->type = ARG;
 		is_red_or_pipe(cur);	//double check this
 		cur = cur->next;
 	}
 	return(syntax_check(*first));
 }
-
-

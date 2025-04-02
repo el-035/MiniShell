@@ -38,6 +38,8 @@ int	list_size(t_input *first)
 	size = 1;
 	if (!first)
 		return (0);
+	if (!first->next)
+		return (1);
 	cur = first->next;
 	while (cur != first)
 	{

@@ -103,7 +103,8 @@ int	expand_var(t_input **cur)
 	end = save_rest(ft_strchr((*cur)->content, '$') + 1, var);
 	if (!end)
 		return (free(start), free(var), 1);
-	save_var(cur, start, end, var);
+	if (save_var(cur, start, end, var) == 1)
+		return 1;
 	if (ft_strchr((*cur)->content, '$') != 0)
 		expand_var(cur);
 	return 0;

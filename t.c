@@ -26,12 +26,21 @@ void	test_print(t_input *first)
 {
 	t_input *cur;
 	cur = first;
-	 
+	
+	if (!cur->next)
+	{
+		printf("node %d, content: %s: type:%s\n", cur->position, cur->content, get_type_str(cur->type));
+		return ;
+	}
+
 	while(cur->next != first)
 	{
+		//printf("cur: %p prev: %p\n", cur, cur->prev);
 		printf("node %d, content: %s: type:%s\n", cur->position, cur->content, get_type_str(cur->type));
 		cur = cur->next;
 	}
+	//printf("cur: %p prev: %p\n", cur, cur->prev);
+
 	printf("node %d, content: %s:  type:%s\n", cur->position, cur->content, get_type_str(cur->type));
 
 }
