@@ -32,6 +32,7 @@ typedef struct	s_input
 {
 	char 			*content;
 	enum e_type		type;
+	int				is_builtin;
 	int				position;
 	struct s_input		*next;
 	struct s_input		*prev;
@@ -61,6 +62,10 @@ int	assign_type(t_input **first);
 //env_var
 int	find_ev(t_input *first);
 int	expand_var(t_input **cur);
+
+//commands
+int	is_built_in(t_input *first);
+int compare_cmd(t_input *cur, char **commands);
 
 //tests
 const char *get_type_str(enum e_type type);

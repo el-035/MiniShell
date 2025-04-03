@@ -7,6 +7,7 @@ void init_input(t_input *first)
 	first->position = -1;
 	first->next = NULL;
 	first->prev = NULL;
+	first->is_builtin = 0;
 }
 
 int  save_input(char *line, t_input **first)
@@ -47,6 +48,7 @@ int	parsing(t_input *first)	//return value?
 	if (exit != 0)
 		return (exit);
 	find_ev(first);
+	is_built_in(first);
 	return 0;	//
 }
 

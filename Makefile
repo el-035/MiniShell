@@ -5,7 +5,7 @@ CC = cc
 CFLAGS = -g -Wall -Wextra -Werror 
 
 #delete t.c
-SRC = minishell.c list_utils.c check_input.c t.c split.c free.c env_var.c
+SRC = minishell.c list_utils.c check_input.c t.c split.c free.c env_var.c check_commands.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
