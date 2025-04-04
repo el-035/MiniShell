@@ -7,7 +7,8 @@ void init_input(t_input *first)
 	first->position = -1;
 	first->next = NULL;
 	first->prev = NULL;
-	first->is_builtin = 0;
+	first->is_builtin = -1;
+	first->cmd_path = NULL;
 }
 
 int  save_input(char *line, t_input **first)
@@ -48,7 +49,9 @@ int	parsing(t_input *first)	//return value?
 	if (exit != 0)
 		return (exit);
 	find_ev(first);
-	is_built_in(first);
+	exit = find_cmd(first);
+	if (exit != 0)
+		return (exit);
 	return 0;	//
 }
 
@@ -68,7 +71,6 @@ int main(void)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		exit = parsing(first);
-		//printf("%d", exit);
 		test_print(first);
 		add_history(line);
 		free(line);

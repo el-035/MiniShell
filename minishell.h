@@ -33,6 +33,7 @@ typedef struct	s_input
 	char 			*content;
 	enum e_type		type;
 	int				is_builtin;
+	char			*cmd_path;		//needs to be added to free ft
 	int				position;
 	struct s_input		*next;
 	struct s_input		*prev;
@@ -62,10 +63,12 @@ int	assign_type(t_input **first);
 //env_var
 int	find_ev(t_input *first);
 int	expand_var(t_input **cur);
+char	*extract_var(char *content);
 
 //commands
-int	is_built_in(t_input *first);
+
 int compare_cmd(t_input *cur, char **commands);
+int	find_cmd(t_input *first);
 
 //tests
 const char *get_type_str(enum e_type type);
