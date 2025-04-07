@@ -35,7 +35,7 @@ int	get_cmd_path(t_input *cur)
 {
 	char	**path;
 
-	path = ft_split(getenv("PATH"), ':');		//freeeeeeeee
+	path = ft_split(getenv("PATH"), ':');
 	return (search_path(cur, path));
 	return 0;
 }
@@ -63,15 +63,21 @@ int	find_cmd(t_input *first)
 {
 	char	*commands[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	t_input	*cur;
+	int		exit;
 
 	cur = first;
+	exit = 0;
 	while (cur)
 	{
 		if (cur->type == CMD)
 		{
 			compare_cmd(cur, commands);
 			if (cur->is_builtin == 0)
-				return (get_cmd_path(cur));
+			{
+				exit = get_cmd_path(cur);
+				if (exit != 0)
+					return (exit);
+			}
 		}
 		if (cur->next)
 			cur = cur->next;

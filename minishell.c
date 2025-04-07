@@ -48,18 +48,28 @@ int	parsing(t_input *first)	//return value?
 	exit = assign_type(&first);
 	if (exit != 0)
 		return (exit);
+	// here doc
+	// work on quotes
 	find_ev(first);
 	exit = find_cmd(first);
 	if (exit != 0)
 		return (exit);
 	return 0;	//
 }
+/* void	handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+
+	}
+} */
 
 int main(void)
 {
-	char *line;
-	t_input *first;
-	int	exit;
+	char 				*line;
+	t_input 			*first;
+	//struct sigaction	sig;
+	int					exit;
 	
 	exit = 0;
 	first = NULL;
@@ -71,6 +81,10 @@ int main(void)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		exit = parsing(first);
+		/* sig.sa_handler = handler;
+		sigaction(SIGINT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL); */
+		//ctrl d
 		test_print(first);
 		add_history(line);
 		free(line);
