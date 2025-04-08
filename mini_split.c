@@ -11,48 +11,53 @@ static int	ft_word_count(char *s)
 	f_quote = 0;
 	while (s[i])
 	{
-		while ((s[i] == 32 || s[i] == 9) && !f_quote)
+		while ((s[i] == 32 || s[i] == 9))
 			i++;
-		if (s[i] && !f_quote)
+		if (!s[i])
+			break ;
+		wc++;
+		while (s[i])
 		{
-			wc++;
 			if (s[i] == 34 || s[i] == 39)
-				f_quote = s[i++];
-		}
-		while (s[i] && (f_quote || (s[i] != 32 && s[i] != 9)))
-		{
-			if (f_quote && s[i] == f_quote)
-				f_quote = 0;
+			{
+				if (f_quote == 0)
+					f_quote = s[i];
+				else if (f_quote == s[i])
+					f_quote = 0;
+			}
+			else if ((s[i] == 32 || s[i] == 9) && f_quote == 0)
+				break ;
 			i++;
 		}
 	}
 	return (wc);
 }
 
-static char word_len(char *s, int i)
+static int word_len(char *s, int i)
 {
 	int		j;
 	int		f_quote;
-	int		len;
 
-	j = 0;
+	j = i;
 	f_quote = 0;
-	if (s[i] == 34 || s[i] == 39)
-	{
-		j++;
-		f_quote = s[i++];
-	}
+	while ((s[i] == 32 || s[i] == 9))
+		i++;
+	if (!s[i])
+		return 0;
 	while(s[i])
 	{
-		if ((f_quote == 0 && (s[i] == 32 || s[i] == 9)) || f_quote == s[i])
+		if (s[i] == 34 || s[i] == 39)
+		{
+			if (f_quote == 0)
+				f_quote = s[i];
+			else if (f_quote == s[i])
+				f_quote = 0;
+		}
+		else if ((s[i] == 32 || s[i] == 9) && f_quote == 0)
 			break ;
 		i++;
-		j++;
 	}
-	len = j + 1;
-	if (f_quote == 0)
-		len--;
-	return (len);
+	return (i - j);
 }
 
 static char	*ft_word(char *s, int i)
@@ -128,10 +133,11 @@ char	**mini_split(char const *s)	//remove mains
 
     return 0;
 } */
-/* 
-int main(void)
+
+/* int main(void)
 {
-    char *input = " 'cazzos' a test";
+    char *input = "echo  \"'\\\"hello\\\"'\"";
+
     char **result = mini_split(input);
     int i = 0;
 
@@ -148,9 +154,9 @@ int main(void)
         free(result[i++]);
     free(result);
     return (0);
-}
+} */
 
- */
+
 /* 
  void print_test_result(char *test_case, int test_num, int result) {
     if (result) {
@@ -261,3 +267,122 @@ int main() {
 
     return 0;
 } */
+/* 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Replace with your actual mini_split + free functions
+char **mini_split(const char *input);
+void free_split(char **split);
+
+void print_split_result(char **split) {
+    if (!split) {
+        printf("  NULL\n");
+        return;
+    }
+    for (int i = 0; split[i]; i++) {
+        printf("  [%s]\n", split[i]);
+    }
+}
+
+int compare_split(char **a, const char **b) {
+    int i = 0;
+    while (a && b && a[i] && b[i]) {
+        if (strcmp(a[i], b[i]) != 0)
+            return 0;
+        i++;
+    }
+    return (!a[i] && !b[i]);
+}
+
+void run_nested_quote_tests() {
+    struct {
+        char *input;
+        const char *expected[10]; // NULL-terminated
+    } test_cases[] = {
+        {
+            .input = "echo \"'\\\"hello\\\"'\"",
+            .expected = {"echo", "'\"hello\"'", NULL}
+        },
+        {
+            .input = "echo '\"hello\"'",
+            .expected = {"echo", "'\"hello\"'", NULL}
+        },
+        {
+            .input = "echo \"'nested' quotes\"",
+            .expected = {"echo", "\"'nested' quotes\"", NULL}
+        },
+        {
+            .input = "echo '\"more\" nesting'",
+            .expected = {"echo", "'\"more\" nesting'", NULL}
+        },
+        {
+            .input = "echo \"\"\"double\"\"\"",
+            .expected = {"echo", "\"\"\"double\"\"\"", NULL}
+        },
+        {
+            .input = "echo '\"'\"$USER\"'\"'",
+            .expected = {"echo", "'\"'\"$USER\"'\"'", NULL}
+        },
+        {
+            .input = "echo \"a'b'c\"",
+            .expected = {"echo", "\"a'b'c\"", NULL}
+        },
+        {
+            .input = "echo 'a\"b\"c'",
+            .expected = {"echo", "'a\"b\"c'", NULL}
+        },
+        {
+            .input = "echo '\"\"'",
+            .expected = {"echo", "'\"\"'", NULL}
+        },
+        {
+            .input = "echo \"''\"",
+            .expected = {"echo", "\"''\"", NULL}
+        },
+        {
+            .input = "echo '\"'",
+            .expected = {"echo", "'\"'", NULL}
+        },
+        {
+            .input = "echo \"'\"",
+            .expected = {"echo", "\"'\"", NULL}
+        },
+        {
+            .input = "echo \"\" 'test' \"more\"",
+            .expected = {"echo", "\"\"", "'test'", "\"more\"", NULL}
+        },
+        {
+            .input = "echo '\"inside\"' end",
+            .expected = {"echo", "'\"inside\"'", "end", NULL}
+        }
+    };
+
+    int total = sizeof(test_cases) / sizeof(test_cases[0]);
+    int passed = 0;
+
+    for (int i = 0; i < total; i++) {
+        printf("\n\033[1;34mTest %d: %s\033[0m\n", i + 1, test_cases[i].input);
+        char **result = mini_split(test_cases[i].input);
+        if (compare_split(result, test_cases[i].expected)) {
+            printf("\033[0;32m✅ Passed\033[0m\n");
+            passed++;
+        } else {
+            printf("\033[0;31m❌ Failed\033[0m\nExpected:\n");
+            for (int j = 0; test_cases[i].expected[j]; j++)
+                printf("  [%s]\n", test_cases[i].expected[j]);
+            printf("Got:\n");
+            print_split_result(result);
+        }
+        free_split(result);
+    }
+
+    printf("\n\033[1;36m%d / %d tests passed\033[0m\n", passed, total);
+}
+
+int main() {
+    run_nested_quote_tests();
+    return 0;
+}
+ */

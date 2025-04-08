@@ -86,6 +86,7 @@ int main(void)
 		sigaction(SIGQUIT, &sig, NULL); */
 		//ctrl d
 		test_print(first);
+
 		add_history(line);
 		free(line);
 		free_list(first);

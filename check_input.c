@@ -11,10 +11,6 @@
 //execution starts
 
 /*
-Command identification:
-
-Check if the command is a built-in (cd, echo, etc.) or an external command.
-If it's external, search for it in the PATH.
 
 Set up redirections and pipes:
 Open/close file descriptors for redirections (<, >, >>)
