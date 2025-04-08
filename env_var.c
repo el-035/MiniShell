@@ -97,9 +97,9 @@ int	check_quotes(char *content)
 	f_single = 0;
 	while (content[i] != '$')
 	{
-		if (content[i] == '\'' && f_single != 1)
+		if (content[i] == '\'' && f_single != 1 && f_double != 1)
 			f_single = 1;
-		else if (content[i] == '\'' && f_single == 1)
+		else if (content[i] == '\'' && f_single == 1 && f_double != 1)
 			f_single = 0;
 		if (content[i] == '"' && f_double != 1 && f_single != 1)
 			f_double = 1;
@@ -116,15 +116,17 @@ int	expand_var(t_input **cur)
 {
 	char *start;
 	char *var;
-	char *end;
+	char	*end;
+	//int		count;
 
-	if (ft_strchr((*cur)->content, '"') == 0 || ft_strchr((*cur)->content, '\'') == 0)
+
+	if (ft_strchr((*cur)->content, '"') != 0 || ft_strchr((*cur)->content, '\'') != 0)
 	{
 		if (check_quotes((*cur)->content) == 1)
 			return 0;
-	}	
-	if (ft_strncmp((*cur)->content, "$?", 2) == 0)	//find better way it could be not first
-		return (5); //idk handle this :( 	also handle more than one $
+	}
+	/* if (ft_strncmp((*cur)->content, "$?", 2) == 0)	//find better way it could be not first
+		return (5); //idk handle this :( 	also handle more than one $ */
 	start = save_start((*cur)->content);
 	if (!start)
 		return (1);
