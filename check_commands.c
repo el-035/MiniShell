@@ -10,7 +10,7 @@
     }
 } */
 
-int search_path(t_input *cur, char **path)
+/* int search_path(t_input *cur, char **path)
 {
 	int i;
 	char *cmd;
@@ -30,16 +30,16 @@ int search_path(t_input *cur, char **path)
 		i++;
 	}
 	return (free(cmd), free_split(path), write(2, " command not found\n", 19), return_exit_code(127), 1);
-}
+} */
 
-int	get_cmd_path(t_input *cur, t_data *data)
+/* int	get_cmd_path(t_input *cur, t_data *data)
 {
 	char	**path;
 	(void)data;		//chenge here if needed
 	path = ft_split(getenv("PATH"), ':');		//then here?
 	return (search_path(cur, path));
 	return 0;
-}
+} */
 
 int compare_cmd(t_input *cur, char **commands)
 {
@@ -59,25 +59,25 @@ int compare_cmd(t_input *cur, char **commands)
 	return 0;
 }
 
-int	find_cmd(t_input *first, t_data *data)
+int	find_cmd(t_input *first/* , t_data *data */)
 {
 	char	*commands[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	t_input	*cur;
-	int		exit;
+//	int		exit;
 
 	cur = first;
-	exit = 0;
+//	exit = 0;
 	while (cur)
 	{
 		if (cur->type == CMD)
 		{
 			compare_cmd(cur, commands);
-			if (cur->is_builtin == 0)
+			/* if (cur->is_builtin == 0)
 			{
 				exit = get_cmd_path(cur, data);
 				if (exit != 0)
 					return (exit);
-			}
+			} */
 		}
 		if (cur->next)
 			cur = cur->next;

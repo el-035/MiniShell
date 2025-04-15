@@ -92,7 +92,7 @@ char	*extract_var(char *content);
 //commands
 
 int compare_cmd(t_input *cur, char **commands);
-int	find_cmd(t_input *first, t_data *data);
+int	find_cmd(t_input *first/* , t_data *data */);
 
 //tests
 const char *get_type_str(enum e_type type);

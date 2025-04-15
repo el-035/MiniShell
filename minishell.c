@@ -51,7 +51,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 
 	if (find_ev(first) != 0)
 		return (return_exit_code(-1));
-	if (find_cmd(first, data) != 0)
+	if (find_cmd(first/* , data */) != 0)
 		return (return_exit_code(-1));
 
 	if (!parse_tokens(first, data))
