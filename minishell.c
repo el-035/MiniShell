@@ -47,10 +47,26 @@ int	parsing(t_input *first, t_data *data)	//return value?
 		return (return_exit_code(-1));
 	// here doc
 	// work on quotes
+
+
 	if (find_ev(first) != 0)
 		return (return_exit_code(-1));
 	if (find_cmd(first, data) != 0)
 		return (return_exit_code(-1));
+
+	if (!parse_tokens(first, data))
+		return (1);
+    //freegrepo
+	print_cmds(data);
+	if (!create_pipes(data))
+        return (1);
+	if (!get_env_path(data, data->envp))
+		return (1);
+	if (!open_files(data))
+		return (1);
+	if (!exec_proc(data, data->envp))
+		return (1);
+	
 	return 0;	//
 }
 
@@ -123,7 +139,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
-	data = malloc (sizeof(t_data));
+ 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
 		return (326482973);		//error
 	ft_memset(data, 0, sizeof(t_data));
@@ -139,16 +155,17 @@ int main(int argc, char **argv, char **envp)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
-		
+		/* if (strncmp(line, "exit", 5) == 0)	//needs to be a command
+			return (free(line), 1); */
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		return_exit_code(0);
 		parsing(first, data);
-		//test_print(first);
-		printf("%d\n", return_exit_code(-1));
+		//printf("%d\n", return_exit_code(-1));
 		add_history(line);
 		free(line);
 		free_list(first);
+		free_all(data);
 	}
 	rl_clear_history();
 	return (free_split(data->envp), return_exit_code(-1));

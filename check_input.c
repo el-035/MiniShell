@@ -148,6 +148,8 @@ int	assign_type(t_input **first)
 		else if (cur->prev->type == REDIR_APPEND || cur->prev->type == REDIR_IN || cur->prev->type == REDIR_OUT || cur->prev->type == HERE_DOC)
 			cur->type = ARG;
 		is_red_or_pipe(cur);	//double check this
+		if (cur->type == UNKNOWN)	//fixxxxxxxx bitchhhh
+			cur->type = ARG;
 		cur = cur->next;
 	}
 	return(syntax_check(*first));

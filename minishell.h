@@ -42,8 +42,7 @@ typedef struct	s_input
 
 typedef struct s_cmd
 {
-    char			*cmd;
-    struct s_cmd    *next;
+   // struct s_cmd    *next;
     char 			**args;        // [ls, -l, NULL]
     char *in;
     char *out;
@@ -101,5 +100,29 @@ void	test_print(t_input *first);
 
 //Split test
 char	**mini_split(char const *s);
+
+//Exec
+int	check_permission(t_data *data, char *fd_name, int file_order);
+int	get_env_path(t_data *data, char **envp);
+int open_files(t_data *data);
+
+void	free_cmds(t_cmd *cmd);
+void	free_cmd(t_cmd *cmd);
+void	free_str_arr(char **str);
+void	free_pipes(int ***pipes, int count);
+void	close_fd(int *fd);
+void	free_all(t_data *data);
+void	handle_error(char *str, int error_code);
+
+int	parse_tokens(t_input *tokens, t_data *data);
+
+char	*check_path(t_data *data, char *cmd);
+int execute_cmd(t_data *data, char **args, char **envp);
+int	exec_child(t_data *data, int index, char **envp);
+int exec_proc(t_data *data, char **envp);
+int	create_pipes(t_data *data);
+
+void print_cmd_list(t_cmd *cmds);
+void print_cmds(t_data *data);
 
 # endif
