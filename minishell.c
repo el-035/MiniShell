@@ -106,14 +106,7 @@ int	copy_envp(t_data *data, char **envp)
 {
 
 } */
-/* int		return_sig_flag(int flag)
-{
-	static int	t_flag = 0;
 
-	if (flag != -1)
-		t_flag = flag;
-	return (t_flag);
-} */
 
 /* void	handler(int sig)
 {
