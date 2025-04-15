@@ -40,9 +40,33 @@ typedef struct	s_input
 	struct s_input		*prev;
 }				t_input;
 
+typedef struct s_cmd
+{
+    char			*cmd;
+    struct s_cmd    *next;
+    char 			**args;        // [ls, -l, NULL]
+    char *in;
+    char *out;
+    int append;
+}               t_cmd;
+
+typedef struct s_data
+{
+    char		**env_path;
+	char		**envp;
+    pid_t 		*pid;
+    int           **pipes;
+    int           fd1;
+    int           fd2;
+    t_cmd 			*cmds;
+    int           cmd_count;
+    int           mod;
+}                 t_data;
+
 //main
 void init_input(t_input *first);
 int  save_input(char *line, t_input **first);
+int	return_exit_code(int exit);
 
 //free
 void free_split(char **split);
@@ -69,7 +93,7 @@ char	*extract_var(char *content);
 //commands
 
 int compare_cmd(t_input *cur, char **commands);
-int	find_cmd(t_input *first);
+int	find_cmd(t_input *first, t_data *data);
 
 //tests
 const char *get_type_str(enum e_type type);

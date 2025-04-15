@@ -41,58 +41,116 @@ int  save_input(char *line, t_input **first)
 	return(1);
 }
 
-int	parsing(t_input *first)	//return value?
-{
-	int exit;
-	
-	exit = assign_type(&first);
-	if (exit != 0)
-		return (exit);
+int	parsing(t_input *first, t_data *data)	//return value?
+{	
+	if (assign_type(&first) != 0)
+		return (return_exit_code(-1));
 	// here doc
 	// work on quotes
-	find_ev(first);
-	exit = find_cmd(first);
-	if (exit != 0)
-		return (exit);
+	if (find_ev(first) != 0)
+		return (return_exit_code(-1));
+	if (find_cmd(first, data) != 0)
+		return (return_exit_code(-1));
 	return 0;	//
 }
+
+
+int	return_exit_code(int exit)	//pass negative to just read the current exit code, any other value will update it
+{
+	static int f_exit = 0;
+
+	if (exit >= 0)
+		f_exit = exit;
+	return (f_exit);
+}
+
+int	copy_envp(t_data *data, char **envp)
+{
+	int i;
+
+	i = 0;
+	if (!*envp)			//handle this
+		return (printf("no env\n"), 1556);
+	while (envp[i])
+		i++;
+	data->envp = (char **) ft_calloc(i + 1, sizeof(char *));
+	if (!data->envp)
+		return 1561;		//error
+	i = 0;
+	while (envp[i])
+	{
+		data->envp[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	return 0;
+}
+
+
+/* char	*prompt(t_data *data)
+{
+
+} */
+/* int		return_sig_flag(int flag)
+{
+	static int	t_flag = 0;
+
+	if (flag != -1)
+		t_flag = flag;
+	return (t_flag);
+} */
+
 /* void	handler(int sig)
 {
-	if (sig == SIGINT)
+	if (sig == SIGINT)		//crtl C
 	{
-
+		return_exit_code(130);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	if (sig == SIGQUIT)		//ctrl /
+	{
 	}
 } */
 
-int main(void)
+int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
 	t_input 			*first;
+	t_data				*data;
 	//struct sigaction	sig;
-	int					exit;
-	
-	exit = 0;
+	(void)argc;
+	(void)argv;
+
+	data = malloc (sizeof(t_data));
+	if (!data)
+		return (326482973);		//error
+	ft_memset(data, 0, sizeof(t_data));
 	first = NULL;
+	copy_envp(data, envp);
 	while (1)
 	{
-		line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
-		if (strncmp(line, "exit", 5) == 0)	//needs to be a command
-			return (free(line), 1);
+/* 		sig.sa_handler = handler;
+		sigemptyset(&sig.sa_mask);
+		sigaction(SIGINT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL);  */
+		if (return_exit_code(-1) == 0)
+			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
+		else if (return_exit_code(-1) != 0)
+			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
+		
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
-		exit = parsing(first);
-		/* sig.sa_handler = handler;
-		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL); */
-		//ctrl d
-		test_print(first);
-
+		return_exit_code(0);
+		parsing(first, data);
+		//test_print(first);
+		printf("%d\n", return_exit_code(-1));
 		add_history(line);
 		free(line);
 		free_list(first);
-		if (exit != 0)
-			break ;
 	}
 	rl_clear_history();
-	return (exit);
+	return (free_split(data->envp), return_exit_code(-1));
 }
+

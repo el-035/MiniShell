@@ -38,20 +38,20 @@ int more_syntax(t_input *cur, t_input *first)	//newline erorr
 {
 	(void)*first;		//
 	if (is_red(cur) == 1 && cur->next->type == REDIR_OUT)
-		return (write(2, " syntax error near unexpected token `>'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `>'\n", 40), return_exit_code(2), 1);
 	
 	if (is_red(cur) == 1 && cur->next->type == REDIR_IN)
-		return (write(2, " syntax error near unexpected token `<'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `<'\n", 40), return_exit_code(2), 1);
 
 	if (is_red(cur) == 1 && cur->next->type == REDIR_APPEND)
-		return (write(2, " syntax error near unexpected token `>>'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `>>'\n", 40), return_exit_code(2), 1);
 
 	if (is_red(cur) == 1 && cur->next->type == HERE_DOC)
-		return (write(2, " syntax error near unexpected token `<<'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `<<'\n", 40), return_exit_code(2), 1);
 	if (cur->type == PIPE && cur->next->type == PIPE)
-		return (write(2, " syntax error near unexpected token `|'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `|'\n", 40), return_exit_code(2), 1);
 	if ((cur->type == REDIR_APPEND || cur->type == REDIR_IN || cur->type == REDIR_OUT || cur->type == HERE_DOC) && cur->next->type == PIPE)
-		return (write(2, " syntax error near unexpected token `|'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `|'\n", 40), return_exit_code(2), 1);
 	return 0;
 }
 
@@ -70,21 +70,21 @@ int quotes_syntax(t_input *cur)	//idk
 		i++;
 	}
 	if (s % 2 != 0 || d % 2 != 0)
-		return(printf("Unexpected end of file\n"), 2);
+		return(printf("Unexpected end of file\n"), return_exit_code(2), 1);
 	return 0;
 }
 
 int check_nl(t_input *first)
 {
 	if (first->type == REDIR_APPEND || first->type == REDIR_IN || first->type == REDIR_OUT || first->type == HERE_DOC)
-		return (write(2, " syntax error near unexpected token `newline'\n", 46), 2);
+		return (write(2, " syntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
 	if (first->type == PIPE)
-		return (write(2, " syntax error near unexpected token `|'\n", 40), 2);
+		return (write(2, " syntax error near unexpected token `|'\n", 40), return_exit_code(2), 1);
 	if (!first->prev)
 		return (0);
 
 	if (first->prev->type == REDIR_APPEND || first->prev->type == REDIR_IN || first->prev->type == REDIR_OUT || first->prev->type == HERE_DOC)
-		return (write(2, " syntax error near unexpected token `newline'\n", 46), 2);
+		return (write(2, " syntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
 	return 0;
 	//unclosed quotes or parenthesis
 }
