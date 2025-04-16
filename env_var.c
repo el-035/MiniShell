@@ -1,24 +1,81 @@
 #include"minishell.h"
 
+
+int return_len_content(char *content)
+{
+	int len = 0;
+
+	while (content[len])
+	{
+		while (content[len] != '$')
+			len++;
+		if (content[len + 1] && (content[len + 1] == '$' || content[len + 1] == '?'))
+			len = len + 2;
+		if (content[len] == '$' && (content[len + 1] != '?' || content[len + 1] != '?'))
+			break ;
+	}
+	return len;
+	
+}
+
+int return_start_len(char *content)
+{
+	int len;
+	int extra;
+
+	len = 0;
+	extra = 0;
+	while (content[len])
+	{
+		while (content[len] != '$')
+			len++;
+		if (content[len + 1] && content[len + 1] == '$')
+		{
+			extra = extra + ft_strlen(ft_itoa(getpid())) - 2;//FORBIDDEN FT!!!!
+			len = len + 2;
+		}
+		if (content[len + 1] && content[len + 1] == '?')	//here if $? skip
+			len += 2;
+		if (content[len] == '$' && (content[len + 1] != '?' || content[len + 1] != '?'))
+			break ;
+	}
+	return (len + extra);
+}
+
 char *save_start(char *content)
 {
 	int i;
 	int len;
 	char *start;
+	int j;
+	char *pid;
+	int x;
 
 	i = 0;
-	len = 0;
-	while (content[len] != '$')
-		len++;
+	j = 0;
+	x = 0;
+	pid = NULL;
+	len = return_start_len(content);
 	if (len == 0)
 		return (ft_strdup(""));
 	start = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!start)
 		return (printf("Allocation failed\n"), NULL); //
-	while (i < len)
+	
+	while(i < len)
 	{
-		start[i] = content[i];
-		i++;
+		while (content[i - x] != '$' || (content[i - x] == '$' && content[i - x + 1] == '?'))
+		{
+			start[i] = content[i - x];
+			i++;
+		}
+		if (content[i] == '$' && content[i + 1] == '$')
+		{
+			pid = ft_itoa(getpid());
+			while(i < len && pid[j])
+				start[i++] = pid[j++];
+			x = x + j - 2;
+		}
 	}
 	return (start);
 }
@@ -31,6 +88,8 @@ char	*extract_var(char *content)
 
 	i = -1;
 	len = 0;
+
+
 	while (content[len] && (ft_isalnum(content[len]) != 0 || content[len] == '_'))
 		len++;
 	var = (char *) ft_calloc((len + 1), sizeof(char));
@@ -48,6 +107,7 @@ char	*save_rest(char *content, char *var)
 	char *rest;
 
 	len = ft_strlen(var);
+
 	if (!content[len])
 		return (ft_strdup(""));
 	i = len;
@@ -60,6 +120,7 @@ char	*save_rest(char *content, char *var)
 	len = 0;
 	while (content[i])
 		rest[len++] = content[i++];
+
 	return (rest);
 }
 
@@ -112,46 +173,65 @@ int	check_quotes(char *content)
 	return 0;
 }
 
-int	expand_var(t_input **cur)
+int	stop_exp(char *content)
+{
+	int i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '$' && (content[i + 1] == '$' || content[i + 1] == '?'))
+			i += 2;
+		if (content[i] == '$' && (content[i + 1] != '$' && content[i + 1] != '?'))
+			return 1;
+		if ((content[i] == '\'' || content[i] == '"') && check_quotes(&content[i]) == 1)
+			return 1;
+		i++;
+		//ceck if in single quotes 
+		//check if $$
+		// check if $?
+	}
+	return (0);
+}
+int	expand_var(t_input **cur, t_data *data)
 {
 	char *start;
 	char *var;
 	char	*end;
 	//int		count;
+	(void)data;
+	//make a check, if only $$ or $? are present, or things in quotes then return
 
-
-	if (ft_strchr((*cur)->content, '"') != 0 || ft_strchr((*cur)->content, '\'') != 0)
-	{
-		if (check_quotes((*cur)->content) == 1)
-			return 0;
-	}
-	/* if (ft_strncmp((*cur)->content, "$?", 2) == 0)	//find better way it could be not first
-		return (5); //idk handle this :( 	also handle more than one $ */
+	if (stop_exp((*cur)->content) == 0)
+		return 0;
 	start = save_start((*cur)->content);
 	if (!start)
 		return (1);
-	var = extract_var(ft_strchr((*cur)->content, '$') + 1);
+	var = extract_var(&(*cur)->content[return_len_content((*cur)->content) + 1]);
 	if (!var)
 		return (free(start), 1);
-	end = save_rest(ft_strchr((*cur)->content, '$') + 1, var);
+
+	end = save_rest(strstr((*cur)->content, var), var);	//forbidden function!!!!
 	if (!end)
 		return (free(start), free(var), 1);
 	if (save_var(cur, start, end, var) == 1)
-		return 1;
+		return 1;	//error or wat ?
 	if (ft_strchr((*cur)->content, '$') != 0)
-		expand_var(cur);
+		expand_var(cur, data);
 	return 0;
 }
 
-int	find_ev(t_input *first)
+int	find_ev(t_input *first, t_data *data)
 {
 	t_input	*cur;
 
 	cur = first;
 	while(cur)
 	{
+		/* if (ft_strchr(cur->content), '\'' || ft_strchr(cur->content, '"'))
+			remove_useless_quotes() */
 		if (ft_strchr(cur->content, '$'))	//handle $$ and /$
-			expand_var(&cur);
+			expand_var(&cur, data);
 		cur = cur->next;
 		if (cur == first)
 			break ;

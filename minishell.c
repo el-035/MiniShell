@@ -49,7 +49,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	// work on quotes
 
 
-	if (find_ev(first) != 0)
+	if (find_ev(first, data) != 0)
 		return (return_exit_code(-1));
 	if (find_cmd(first/* , data */) != 0)
 		return (return_exit_code(-1));
@@ -57,7 +57,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (!parse_tokens(first, data))
 		return (1);
     //freegrepo
-	print_cmds(data);
+	//print_cmds(data);
 	if (!create_pipes(data))
         return (1);
 	if (!get_env_path(data, data->envp))
@@ -143,10 +143,13 @@ int main(int argc, char **argv, char **envp)
 	copy_envp(data, envp);
 	sig.sa_handler = handler;
 	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL); 
-	int i = 1;
-	while (i-- > 0)
+	sigaction(SIGQUIT, &sig, NULL);
+	sig.sa_flags = SA_RESTART;	//double chjeclk
+
+	while (1)
 	{
+		sigaction(SIGINT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL);
 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
@@ -162,14 +165,13 @@ int main(int argc, char **argv, char **envp)
 			continue ;		//error handling
 		return_exit_code(0);
 		parsing(first, data);
-		//printf("%d\n", return_exit_code(-1));
+		test_print(first);
 		add_history(line);
 		free(line);
 		free_list(first);
 		free_all(data);
 	}
 	rl_clear_history();
-	
 	return (free_split(data->envp), free(data), return_exit_code(-1));
 }
 //DO SOME STUFF
