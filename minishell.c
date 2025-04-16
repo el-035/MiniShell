@@ -108,7 +108,7 @@ int	copy_envp(t_data *data, char **envp)
 } */
 
 
-/* void	handler(int sig)
+void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
@@ -121,14 +121,16 @@ int	copy_envp(t_data *data, char **envp)
 	if (sig == SIGQUIT)		//ctrl /
 	{
 	}
-} */
+}
+
+
 
 int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
 	t_input 			*first;
 	t_data				*data;
-	//struct sigaction	sig;
+	struct sigaction	sig;
 	(void)argc;
 	(void)argv;
 
@@ -136,20 +138,26 @@ int main(int argc, char **argv, char **envp)
 	if (!data)
 		return (326482973);		//error
 	ft_memset(data, 0, sizeof(t_data));
+	ft_memset(&sig, 0, sizeof(sig));
 	first = NULL;
 	copy_envp(data, envp);
-	while (1)
+	sig.sa_handler = handler;
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL); 
+	int i = 1;
+	while (i-- > 0)
 	{
-/* 		sig.sa_handler = handler;
-		sigemptyset(&sig.sa_mask);
-		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL);  */
 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
-		/* if (strncmp(line, "exit", 5) == 0)	//needs to be a command
-			return (free(line), 1); */
+		if (!line)	//ctrl d
+		{
+			free_split(data->envp);
+			free_all(data);
+			free(data);
+			return return_exit_code(-1);
+		}
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		return_exit_code(0);
@@ -161,6 +169,7 @@ int main(int argc, char **argv, char **envp)
 		free_all(data);
 	}
 	rl_clear_history();
-	return (free_split(data->envp), return_exit_code(-1));
+	
+	return (free_split(data->envp), free(data), return_exit_code(-1));
 }
 //DO SOME STUFF
