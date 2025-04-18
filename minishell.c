@@ -48,7 +48,6 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	// here doc
 	// work on quotes
 
-
 	if (find_ev(first) != 0)
 		return (return_exit_code(-1));
 	if (find_cmd(first, data) != 0)
@@ -57,7 +56,6 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (!parse_tokens(first, data))
 		return (1);
     //freegrepo
-	print_cmds(data);
 	if (!create_pipes(data))
         return (1);
 	if (!get_env_path(data, data->envp))
@@ -67,7 +65,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (!exec_proc(data, data->envp))
 		return (1);
 	
-	return 0;	//
+	return 0;
 }
 
 
@@ -106,7 +104,14 @@ int	copy_envp(t_data *data, char **envp)
 {
 
 } */
+/* int		return_sig_flag(int flag)
+{
+	static int	t_flag = 0;
 
+	if (flag != -1)
+		t_flag = flag;
+	return (t_flag);
+} */
 
 /* void	handler(int sig)
 {
@@ -127,18 +132,16 @@ int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
 	t_input 			*first;
-	t_data				*data;
+	t_data				data;
 	//struct sigaction	sig;
 	(void)argc;
 	(void)argv;
 
- 	data = ft_calloc(1, sizeof(t_data));
-	if (!data)
-		return (326482973);		//error
-	ft_memset(data, 0, sizeof(t_data));
+	ft_memset(&data, 0, sizeof(t_data));
 	first = NULL;
-	copy_envp(data, envp);
-	while (1)
+	copy_envp(&data, envp);
+	int i = 0;
+	while (i-- > -1)
 	{
 /* 		sig.sa_handler = handler;
 		sigemptyset(&sig.sa_mask);
@@ -153,14 +156,14 @@ int main(int argc, char **argv, char **envp)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		return_exit_code(0);
-		parsing(first, data);
+		parsing(first, &data);
 		//printf("%d\n", return_exit_code(-1));
 		add_history(line);
 		free(line);
 		free_list(first);
-		free_all(data);
+		free_all(&data);
 	}
 	rl_clear_history();
-	return (free_split(data->envp), return_exit_code(-1));
+	return (free_split(data.envp), return_exit_code(-1));
 }
-//DO SOME STUFF
+

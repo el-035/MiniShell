@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/15 15:27:49 by apchelni         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 char	*check_path(t_data *data, char *cmd)
@@ -37,44 +25,38 @@ char	*check_path(t_data *data, char *cmd)
 	return (free(tmp), NULL);
 }
 
-int execute_cmd(t_data *data, char **args, char **envp)
+int	execute_cmd(t_data *data, char **args, char **envp)
 {
-    char *path;
+	char	*path;
 
-    if (!args || !args[0])
-        return (handle_error(NULL, 2), 0);
-    if (args[0][0] == '/' || (args[0][0] == '.' && args[0][1] == '/'))
-    {
-        if (access(args[0], X_OK) == 0)
-            path = args[0];
-        else
-            return (handle_error(args[0], 0), 0);
-    }
-    else
-    {
-        path = check_path(data, args[0]);
-        if (!path)
-            return (handle_error(args[0], 2), 0);
-    }
-    if (execve(path, args, envp) == -1)
-    {
-        perror("Execve");
-        free_all(data);
-        if (path != args[0])
-            free(path);
-        exit(127);
-    }
-    if (path != args[0])
-        free(path);
-    return (1);
+	if (args[0][0] == '/' || (args[0][0] == '.' && args[0][1] == '/'))
+	{
+		if (access(args[0], X_OK) == 0)
+			path = args[0];
+		else
+			return (handle_error(args[0], 0), 0);
+	}
+	else
+	{
+		path = check_path(data, args[0]);
+		if (!path)
+			return (handle_error(args[0], 2), 0);
+	}
+	if (execve(path, args, envp) == -1)
+	{
+		(perror("Execve"), free_all(data));
+		if (path != args[0])
+			free(path);
+		exit(127);
+	}
+	if (path != args[0])
+		free(path);
+	return (1);
 }
 
-int	exec_child(t_data *data, int index, char **envp)
+static void	set_child_fds(t_data *data, t_cmd *cmd, int index)
 {
 	int	i;
-	t_cmd *cmd;
-
-	cmd = &data->cmds[index];
 
 	if (cmd->in)
 		dup2(data->fd1, STDIN_FILENO);
@@ -92,23 +74,29 @@ int	exec_child(t_data *data, int index, char **envp)
 	}
 	if (cmd->in == NULL && data->fd1 != STDIN_FILENO && data->fd1 != -1)
 		close(data->fd1);
-	//CHECK IF CLOSED??
 	if (cmd->out == NULL && data->fd2 != STDOUT_FILENO && data->fd2 != -1)
 		close(data->fd2);
+}
 
+int	exec_child(t_data *data, int index, char **envp)
+{
+	t_cmd	*cmd;
+
+	cmd = &data->cmds[index];
+	set_child_fds(data, cmd, index);
 	if (!cmd->args || !cmd->args[0])
-        exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	if (!execute_cmd(data, cmd->args, envp))
 	{
 		free_all(data);
 		if (data->mod == 3)
-			exit (0);
-		return(0);
+			exit(0);
+		return (0);
 	}
 	return (1);
 }
 
-int exec_proc(t_data *data, char **envp)
+int	exec_proc(t_data *data, char **envp)
 {
 	int	i;
 
@@ -124,17 +112,15 @@ int exec_proc(t_data *data, char **envp)
 		else if (data->pid[i] == 0)
 			if (!exec_child(data, i, envp))
 				return (0);
-		}
+	}
 	i = -1;
 	while (++i < data->cmd_count - 1)
-		close(data->pipes[i][0]), close(data->pipes[i][1]);
+		(close(data->pipes[i][0]), close(data->pipes[i][1]));
 	i = -1;
 	while (++i < data->cmd_count)
 		waitpid(data->pid[i], NULL, 0);
-	//to do: order like in bash??
 	return (free_all(data), 1);
 }
-
 
 int	create_pipes(t_data *data)
 {
@@ -142,21 +128,19 @@ int	create_pipes(t_data *data)
 
 	if (data->cmd_count < 2)
 		return (1);
-	data->pipes = ft_calloc(sizeof (int *), (data->cmd_count));
+	data->pipes = ft_calloc(sizeof(int *), (data->cmd_count));
 	if (!data->pipes)
 		return (perror("Pipes memory alloc: "), free_all(data), 0);
 	i = -1;
 	while (++i < data->cmd_count - 1)
 	{
 		data->pipes[i] = ft_calloc(sizeof(int), 2);
-		if (!data->pipes[i]  || pipe(data->pipes[i]) == -1)
+		if (!data->pipes[i] || pipe(data->pipes[i]) == -1)
 			return (free_all(data), perror("Pipe: "), 0);
 	}
 	data->pipes[i] = NULL;
-	return(1);
+	return (1);
 }
-
-#include <string.h>
 
 /* int main(int argc, char **argv, char **envp)
 {
@@ -191,14 +175,14 @@ int	create_pipes(t_data *data)
 	token11.next = &token12;
 	token12.next = &token13;
 
-	
+
 	memset(&data, 0, sizeof(t_data));
 	if (!parse_tokens(&token0, &data))
 		return (1);
-    //free
+	//free
 	print_cmds(&data);
 	if (!create_pipes(&data))
-        return (1);
+		return (1);
 	if (!get_env_path(&data, envp))
 		return (1);
 	if (!open_files(&data))
