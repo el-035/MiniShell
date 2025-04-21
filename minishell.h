@@ -87,7 +87,7 @@ int	assign_type(t_input **first);
 //env_var
 int	find_ev(t_input *first, t_data *data);
 int	expand_var(t_input **cur, t_data *data);
-char	*extract_var(char *content);
+//char	*extract_var(t_data *data, char *var);
 
 //commands
 

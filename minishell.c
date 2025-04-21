@@ -123,8 +123,6 @@ void	handler(int sig)
 	}
 }
 
-
-
 int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
@@ -165,7 +163,7 @@ int main(int argc, char **argv, char **envp)
 			continue ;		//error handling
 		return_exit_code(0);
 		parsing(first, data);
-		test_print(first);
+		//test_print(first);
 		add_history(line);
 		free(line);
 		free_list(first);
@@ -174,4 +172,5 @@ int main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (free_split(data->envp), free(data), return_exit_code(-1));
 }
-//DO SOME STUFF
+
+//valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
