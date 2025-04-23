@@ -12,33 +12,29 @@
 
 #include "libft.h"
 
-static	int	compare_strings(const char *big, const char *little, size_t len)
+char    *ft_strnstr(const char *big, const char *little, size_t len)
 {
-	size_t	j;
+        size_t  i;
+        size_t  j;
 
-	j = 0;
-	while (big[j] && little[j] && big[j] == little[j] && j < len)
-		j++;
-	if (!little[j])
-		return (1);
-	return (0);
+        i = 0;
+        j = 0;
+        if (little[i] == '\0')
+                return ((char *) &big[i]);
+        while (big[i] && j < len)
+        {
+                j = 0;
+                while (little[j] && big[i + j] == little[j] && j < len)
+                {
+                        j++;
+                        if (little[j] == '\0')
+                                return ((char *) &big[i]);
+                }
+                i++;
+        }
+        return (NULL);
 }
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
-{
-	size_t	i;
-
-	i = 0;
-	if (*little == '\0')
-		return ((char *)big);
-	while (big[i] && i < len)
-	{
-		if (compare_strings(big + i, little, len - i))
-			return ((char *)big + i);
-		i++;
-	}
-	return (0);
-}
 /*
 #include <stdio.h>
 #include <bsd/string.h>

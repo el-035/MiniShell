@@ -55,7 +55,7 @@ int more_syntax(t_input *cur, t_input *first)	//newline erorr
 	return 0;
 }
 
-int quotes_syntax(t_input *cur)	//idk 
+/* int quotes_syntax(t_input *cur)	//idk 
 {
 	int i = 0;
 	int	s = 0;
@@ -72,7 +72,7 @@ int quotes_syntax(t_input *cur)	//idk
 	if (s % 2 != 0 || d % 2 != 0)
 		return(printf("Unexpected end of file\n"), return_exit_code(2), 1);
 	return 0;
-}
+} */
 
 int check_nl(t_input *first)
 {
@@ -89,7 +89,7 @@ int check_nl(t_input *first)
 	//unclosed quotes or parenthesis
 }
 
-int	syntax_check(t_input *first)
+int	syntax_check(t_input *first)	//the exit thing isnt needed anymore
 {
 	t_input *cur;
 	int		size;
@@ -105,7 +105,8 @@ int	syntax_check(t_input *first)
 		exit = more_syntax(cur, first);
 		if (exit != 0)
 			return (exit);
-		exit = quotes_syntax(cur);
+		if (check_quotes(cur->content, ft_strlen(cur->content)) != 0)
+			return(printf("Unexpected end of file\n"), return_exit_code(2), 1);
 		if ((ft_strchr(cur->content, '\'') != NULL || ft_strchr(cur->content, '"') != NULL) && exit != 0)
 			return (exit);
 		cur = cur->next;

@@ -88,6 +88,7 @@ int	assign_type(t_input **first);
 int	find_ev(t_input *first, t_data *data);
 int	expand_var(t_input **cur, t_data *data);
 //char	*extract_var(t_data *data, char *var);
+int	check_quotes(char *content, int len);
 
 //commands
 

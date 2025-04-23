@@ -1,24 +1,76 @@
 #include"minishell.h"
 
-int return_len_content(char *content)
+int	check_quotes(char *content, int len)
 {
-	int len = 0;
+	int	quote;
+	int i;
 
-	while (content[len])
+	i = 0;
+	quote = 0;
+	while (content[i] && i <= len)
 	{
-		while (content[len] && content[len] != '$')
-			len++;
-		if (!content[len])
-			break ;
-		if (content[len + 1] && (content[len + 1] == '$' || content[len + 1] == '?'))
-			len = len + 2;
-		if (!content[len])
-			break ;
-		if (content[len] == '$' && (content[len + 1] != '?' || content[len + 1] != '?'))
-			break ;
+		if (content[i] == '\'' && quote == 0)
+			quote = 1;
+		else if (content[i] == '\'' && quote == 1)
+			quote = 0;
+		else if (content[i] == '"' && quote == 0)
+			quote = 2;
+		else if (content[i] == '"' && quote == 2)
+			quote = 0;
+		i++;
 	}
-	return len;
-	
+	if (quote == 1)
+		return 1;
+	if (quote == 2)
+		return 2;
+	return 0;
+}
+
+int	start_len(char *content)
+{
+	int i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '$')
+		{
+			if (content[i + 1] && (content[i + 1] == '$' /* || content[i + 1] == '?' */))
+				i += 2;
+			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+				i++;
+			else if (check_quotes(content, i) == 1)
+				i++;
+			else
+				return (i);	//variable to be expanded found
+		}
+		else
+			i++;
+	}
+	return i; //nothing left to do
+}
+int	stop(char *content)
+{
+	int i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '$')
+		{
+			if (content[i + 1] && (content[i + 1] == '$' /* || content[i + 1] == '?' */))
+				i += 2;
+			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+				i++;
+			else if (check_quotes(content, i) == 1)
+				i++;
+			else
+				return (1);	//variable to be expanded found
+		}
+		else
+			i++;
+	}
+	return 0; //nothing left to do
 }
 
 char *save_start(char *content)
@@ -28,7 +80,7 @@ char *save_start(char *content)
 	char *start;
 
 	i = 0;
-	len = return_len_content(content);
+	len = start_len(content);
 	if (len == 0)
 		return (ft_strdup(""));
 	start = (char *) ft_calloc((len + 1), sizeof(char));
@@ -57,7 +109,7 @@ char	*save_var(char *content)
 		content++;
 	while (content[len])
 	{
-		if (ft_isalnum(content[len]) || content[len] == '_')
+		if (ft_isalpha(content[len]) || content[len] == '_')
 			len++;
 		else
 			break;
@@ -77,7 +129,8 @@ char	*save_rest(char *content, char *var)
 	char *rest;
 
 	len = ft_strlen(var);
-	if (!content[len])
+
+	if (!content[len] || !content || !*content)
 		return (ft_strdup(""));
 	i = len;
 	while (content[len])
@@ -95,75 +148,23 @@ char	*save_rest(char *content, char *var)
 int	join_all(t_input **cur, char *start, char *end, char *var)
 {
 	char *temp;
-	char *value;
+	char *joint;
 
-	value = var;		//useless?
-	value = ft_strjoin(start, value);
-	if (!value)
+	joint = ft_strjoin(start, var);
+	if (!joint)
 		return (free(start), free(var), free(end), 1);
 	free(start);
-	temp = ft_strjoin(value, end);
-	free(value);
-	value = temp;
-	free(end);
-	if (!value)
-		return (free(var), 1);
-	free((*cur)->content);	
-	(*cur)->content = ft_strdup(value);
 	free(var);
-	free(value);
+	temp = ft_strjoin(joint, end);
+	if (!temp)
+		return (1);
+	free(joint);
+	joint = temp;
+	free(end);
+	free((*cur)->content);	
+	(*cur)->content = ft_strdup(joint);
+	free(joint);
 	return 0;
-}
-
-int	check_quotes(char *content)
-{
-	int i;
-	int f_single;
-	int f_double;
-
-	i = 0;
-	f_double = 0;
-	f_single = 0;
-	while (content[i] && content[i] != '$')
-	{
-		if (content[i] == '\'' && f_single != 1 && f_double != 1)
-			f_single = 1;
-		else if (content[i] == '\'' && f_single == 1 && f_double != 1)
-			f_single = 0;
-		if (content[i] == '"' && f_double != 1 && f_single != 1)
-			f_double = 1;
-		else if (content[i] == '"' && f_double == 1 && f_single != 1)
-			f_double = 0;
-		i++;
-	}
-	if (f_single == 1)
-		return 1;
-	return 0;
-}
-
-int	stop_exp(char *content)
-{
-	int i;
-	int len = ft_strlen(content);
-
-	i = 0;
-	while (i < len)
-	{
-		if (content[i] && content[i + 1] && content[i] == '$' && (content[i + 1] == '?' || content[i + 1] == '$'))
-		{
-			i += 2;
-			if (!content[i])
-				return 0;
-		}
-		else if (content[i] && content[i] == '$')
-			return 1;
-		/* else if ((content[i] == '\'' || content[i] == '"') && check_quotes(&content[i]) == 1)
-			return 1; */
-		else
-			i++;
-		//ceck if in single quotes 
-	}
-	return (0);
 }
 
 char *extract_var(char **envp, char *var)
@@ -173,21 +174,39 @@ char *extract_var(char **envp, char *var)
 	int i;
 
 	i = 0;
+	if (!var || !*var)
+		return (free(var), ft_strdup(""));
+
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
 			value = ft_strdup(temp);
-			printf("value is: %s\n", value);
 			return(free(var), value);
 		}
 		else
 			i++;
 	}
-
 	return (free(var), ft_strdup(""));
 	
+}
+
+char	*search_var(char *content, char *var)
+{
+	char *temp;
+	int	len;
+	
+	len = ft_strlen(content);
+	temp = content;
+	while(temp - content <= len)
+	{
+		temp = ft_strnstr(temp, var, ft_strlen(var));
+		if (check_quotes(content, temp - content) != 1)
+			break;
+		temp++;
+	}
+	return (temp);
 }
 
 int	expand_var(t_input **cur, t_data *data)
@@ -195,17 +214,16 @@ int	expand_var(t_input **cur, t_data *data)
 	char *start;
 	char *var;
 	char	*end;
-	//make a check, if only $$ or $? are present, or things in quotes then return
 
-	if (stop_exp((*cur)->content) == 0)
+	if (stop((*cur)->content) == 0)
 		return 0;
 	start = save_start((*cur)->content);
 	if (!start)
 		return (1);
-	var = save_var(&(*cur)->content[return_len_content((*cur)->content)]);
+	var = save_var(&(*cur)->content[start_len((*cur)->content)]);
 	if (!var)
 		return (free(start), 1);
-	end = save_rest(strstr((*cur)->content, var), var);	//forbidden function!!!!	STRSTR
+	end = save_rest(search_var((*cur)->content, var), var);
 	if (!end)
 		return (free(start), free(var), 1);
 	var = extract_var(data->envp, var);
@@ -223,10 +241,10 @@ int	find_ev(t_input *first, t_data *data)
 	cur = first;
 	while(cur)
 	{
+		if (ft_strchr(cur->content, '$'))
+			expand_var(&cur, data);
 /* 		if (ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
 			remove_useless_quotes(cur->content); */
-		if (ft_strchr(cur->content, '$'))	//handle $$ and /$
-			expand_var(&cur, data);
 		cur = cur->next;
 		if (cur == first)
 			break ;

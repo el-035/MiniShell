@@ -128,7 +128,7 @@ int main(int argc, char **argv, char **envp)
 	char 				*line;
 	t_input 			*first;
 	t_data				*data;
-	struct sigaction	sig;
+	//struct sigaction	sig;
 	(void)argc;
 	(void)argv;
 
@@ -136,29 +136,29 @@ int main(int argc, char **argv, char **envp)
 	if (!data)
 		return (326482973);		//error
 	ft_memset(data, 0, sizeof(t_data));
-	ft_memset(&sig, 0, sizeof(sig));
+	//ft_memset(&sig, 0, sizeof(sig));
 	first = NULL;
 	copy_envp(data, envp);
-	sig.sa_handler = handler;
+/* 	sig.sa_handler = handler;
 	sigaction(SIGINT, &sig, NULL);
 	sigaction(SIGQUIT, &sig, NULL);
-	sig.sa_flags = SA_RESTART;	//double chjeclk
-
-	while (1)
+	sig.sa_flags = SA_RESTART;	//double chjeclk */
+	int i = 2;
+	while (i-- != 0)
 	{
-		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL);
+/* 		sigaction(SIGINT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL); */
 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
-		if (!line)	//ctrl d
+		/* if (!line)	//ctrl d
 		{
 			free_split(data->envp);
 			free_all(data);
 			free(data);
 			return return_exit_code(-1);
-		}
+		} */
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		return_exit_code(0);
@@ -172,5 +172,5 @@ int main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (free_split(data->envp), free(data), return_exit_code(-1));
 }
-
+//to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
