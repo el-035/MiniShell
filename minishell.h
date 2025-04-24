@@ -90,6 +90,17 @@ int	expand_var(t_input **cur, t_data *data);
 //char	*extract_var(t_data *data, char *var);
 int	check_quotes(char *content, int len);
 
+//var utils
+int	start_len(char *content);
+char	*search_var(char *content, char *var);
+int	stop(char *content);
+char *extract_var(char **envp, char *var);
+char	*save_var(char *content);
+
+//quotes
+int	check_quotes(char *content, int len);
+int	remove_useless_quotes(t_input *cur);
+
 //commands
 
 int compare_cmd(t_input *cur, char **commands);
