@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+int exec_heredoc()
+{
+	return 1;
+}
+
 int handle_heredoc(t_input *input, t_data *data)
 {
 	t_input *cur;
@@ -11,7 +16,7 @@ int handle_heredoc(t_input *input, t_data *data)
 	{
 		if (cur->type == HERE_DOC)
 			exec_heredoc();
-		curr = cur->next;
+		cur = cur->next;
 		if (cur == start)
 			break ;
 	}

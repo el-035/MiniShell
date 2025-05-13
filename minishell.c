@@ -45,15 +45,15 @@ int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (return_exit_code(-1));
-	if (!handle_heredoc(first, data))
-			return (1);
+	/* if (!handle_heredoc(first, data))
+			return (1); */
 	
 	
 	// work on quotes
 
-	if (find_ev(first) != 0)
+	if (find_ev(first, data) != 0)
 		return (return_exit_code(-1));
-if (find_cmd(first/* , data */) != 0)
+if (find_cmd(first) != 0)
 		return (return_exit_code(-1));
 
 	if (!parse_tokens(first, data))
@@ -147,16 +147,16 @@ int main(int argc, char **argv, char **envp)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
 		if (!line)	//ctrl d
 		{
-			free_split(data->envp);
-			free_all(data);
-			free(data);
+			free_split(data.envp);
+			free_all(&data);
+			/* free(&data); */
 			return return_exit_code(-1);
 		}
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		//SEGFAULs if /bin/ls and i != 0. But ../bin/ls works
 		return_exit_code(0);
-		parsing(first, data);
+		parsing(first, &data);
 		//printf("%d\n", return_exit_code(-1));
 		add_history(line);
 		free(line);
@@ -164,7 +164,7 @@ int main(int argc, char **argv, char **envp)
 		free_all(&data);
 	}
 	rl_clear_history();
-	return (free_split(data->envp), return_exit_code(-1));
+	return (free_split(data.envp), return_exit_code(-1));
 }
 // SEGFAULT in line 157 when /bin/ls (command not found) as 1st exec command. Doesnt if not the 1st
 // ./minishell takes args. Shouldnt it?
