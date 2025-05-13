@@ -137,4 +137,6 @@ int	create_pipes(t_data *data);
 void print_cmd_list(t_cmd *cmds);
 void print_cmds(t_data *data);
 
+int handle_heredoc(t_input *input, t_data *data);
+
 # endif

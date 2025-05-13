@@ -6,7 +6,7 @@
 /*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/15 15:27:32 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 /* void	free_cmds(t_cmd *cmd)
 {
 	t_cmd	*tmp;
+	int		i;
 
 	while (cmd)
 	{
@@ -24,7 +25,6 @@
 		free(tmp);
 	}
 } */
-
 void	free_cmd(t_cmd *cmd)
 {
 	int	i;
@@ -72,12 +72,17 @@ void	free_pipes(int ***pipes, int count)
 	*pipes = NULL;
 }
 
-void	close_fd(int *fd)
+static void	close_fds(t_data *data)
 {
-	if (*fd >= 0)
+	if (data->fd1 >= 0)
 	{
-		close(*fd);
-		*fd = -1;
+		close(data->fd1);
+		data->fd1 = -1;
+	}
+	if (data->fd2 >= 0)
+	{
+		close(data->fd2);
+		data->fd2 = -1;
 	}
 }
 
@@ -99,16 +104,13 @@ void	free_all(t_data *data)
 	}
 	if (data->cmds)
 	{
-		i = -1;
-		while (++i < data->cmd_count)
+		i = data->cmd_count;
+		while (--i >= 0)
 			free_cmd(&data->cmds[i]);
 		free(data->cmds);
 		data->cmds = NULL;
 	}
-	if (data->fd1 >= 0)
-		close_fd(&data->fd1);
-	if (data->fd2 >= 0)
-		close_fd(&data->fd2);
+	close_fds(data);
 }
 
 void	handle_error(char *str, int error_code)
