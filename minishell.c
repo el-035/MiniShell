@@ -45,25 +45,28 @@ int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (return_exit_code(-1));
-	// here doc
+	if (!handle_heredoc(first, data))
+			return (1);
+	
+	
 	// work on quotes
 
-	if (find_ev(first) != 0)
-		return (return_exit_code(-1));
-	if (find_cmd(first, data) != 0)
-		return (return_exit_code(-1));
+		if (find_ev(first) != 0)
+			return (return_exit_code(-1));
+		if (find_cmd(first, data) != 0)
+			return (return_exit_code(-1));
 
-	if (!parse_tokens(first, data))
-		return (1);
-    //freegrepo
-	if (!create_pipes(data))
-        return (1);
-	if (!get_env_path(data, data->envp))
-		return (1);
-	if (!open_files(data))
-		return (1);
-	if (!exec_proc(data, data->envp))
-		return (1);
+		if (!parse_tokens(first, data))
+			return (1);
+		//freegrepo
+		if (!create_pipes(data))
+			return (1);
+		if (!get_env_path(data, data->envp))
+			return (1);
+		if (!open_files(data))
+			return (1);
+		if (!exec_proc(data, data->envp))
+			return (1);
 	
 	return 0;
 }
@@ -137,10 +140,10 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
-	ft_memset(&data, 0, sizeof(t_data));
 	first = NULL;
+	ft_memset(&data, 0, sizeof(t_data));
 	copy_envp(&data, envp);
-	int i = 0;
+	int i = 2;
 	while (i-- > -1)
 	{
 /* 		sig.sa_handler = handler;
@@ -155,6 +158,7 @@ int main(int argc, char **argv, char **envp)
 			return (free(line), 1); */
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
+		//SEGFAULs if /bin/ls and i != 0. But ../bin/ls works
 		return_exit_code(0);
 		parsing(first, &data);
 		//printf("%d\n", return_exit_code(-1));
@@ -167,3 +171,5 @@ int main(int argc, char **argv, char **envp)
 	return (free_split(data.envp), return_exit_code(-1));
 }
 
+// SEGFAULT in line 157 when /bin/ls (command not found) as 1st exec command. Doesnt if not the 1st
+// ./minishell takes args. Shouldnt it?
