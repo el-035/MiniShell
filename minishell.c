@@ -56,6 +56,9 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (find_cmd(first) != 0)
 		return (return_exit_code(-1));
 
+	//expand $?
+	find_exit(first, data);
+
 	if (!parse_tokens(first, data))
 		return (1);
     //freegrepo

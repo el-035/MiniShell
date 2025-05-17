@@ -95,7 +95,7 @@ int	exec_child(t_data *data, int index, char **envp)
 			exit(0);*/
 		exit (127);
 	}
-	exit (333);
+	exit (EXIT_SUCCESS);
 }
 
 int	exec_proc(t_data *data, char **envp)

@@ -108,6 +108,9 @@ int	remove_useless_quotes(t_input *cur);
 int compare_cmd(t_input *cur, char **commands);
 int	find_cmd(t_input *first/* , t_data *data */);
 
+//exit exp
+int	find_exit(t_input *first, t_data *data);
+
 //tests
 const char *get_type_str(enum e_type type);
 void	test_print(t_input *first);
