@@ -88,17 +88,21 @@ int	exec_child(t_data *data, int index, char **envp)
 		exit(EXIT_FAILURE);
 	if (!execute_cmd(data, cmd->args, envp))
 	{
+		// Invalid arg - 2
+		// not found 127
 		free_all(data);
-		if (data->mod == 3)
-			exit(0);
-		return (0);
+		/*if (data->mod == 3)
+			exit(0);*/
+		exit (127);
 	}
-	return (1);
+	exit (333);
 }
 
 int	exec_proc(t_data *data, char **envp)
 {
 	int	i;
+	int	status;
+	int code;
 
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
@@ -110,15 +114,25 @@ int	exec_proc(t_data *data, char **envp)
 		if (data->pid[i] == -1)
 			return (free_all(data), perror("Fork: "), 0);
 		else if (data->pid[i] == 0)
-			if (!exec_child(data, i, envp))
-				return (0);
+			exec_child(data, i, envp);
 	}
 	i = -1;
 	while (++i < data->cmd_count - 1)
 		(close(data->pipes[i][0]), close(data->pipes[i][1]));
 	i = -1;
 	while (++i < data->cmd_count)
-		waitpid(data->pid[i], NULL, 0);
+	{
+		waitpid(data->pid[i], &status, 0);
+		//ADD CONDITION? 
+		code = WEXITSTATUS(status);
+		/* else if (WIFSIGNALED(status))
+			return_exit_code(128 + WTERMSIG(status)); */
+	}
+	if (WIFEXITED(status))
+		{
+			if (code != 0)
+				return_exit_code(/* WEXITSTATUS(status) */code);
+		}
 	return (free_all(data), 1);
 }
 

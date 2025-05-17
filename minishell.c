@@ -53,13 +53,13 @@ int	parsing(t_input *first, t_data *data)	//return value?
 
 	if (find_ev(first, data) != 0)
 		return (return_exit_code(-1));
-if (find_cmd(first) != 0)
+	if (find_cmd(first) != 0)
 		return (return_exit_code(-1));
 
 	if (!parse_tokens(first, data))
 		return (1);
     //freegrepo
-	print_cmds(data);
+	//print_cmds(data);
 	if (!create_pipes(data))
         return (1);
 	if (!get_env_path(data, data->envp))
@@ -73,14 +73,6 @@ if (find_cmd(first) != 0)
 }
 
 
-int	return_exit_code(int exit)	//pass negative to just read the current exit code, any other value will update it
-{
-	static int f_exit = 0;
-
-	if (exit >= 0)
-		f_exit = exit;
-	return (f_exit);
-}
 
 int	copy_envp(t_data *data, char **envp)
 {
@@ -125,6 +117,31 @@ void	handler(int sig)
 	}
 }
 
+int	return_exit_code(int exit)
+{
+	//0			updates previous and resets exit to 0
+	// > 0		update cur and return
+	// -2		return cur without updating
+	// -1		return old
+
+	static int cur_exit = 0;
+	static int old_exit = 0;
+
+	if (exit > 0)
+		cur_exit = exit;
+	else if (exit == 0)
+	{
+		old_exit = cur_exit;
+		cur_exit = exit;
+	}
+	else if (exit == -1)
+		return (old_exit);
+	else if (exit == -2)	//do we even ever need this??
+		return (cur_exit);
+
+	return (cur_exit);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
@@ -141,6 +158,8 @@ int main(int argc, char **argv, char **envp)
 	{
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
+		return_exit_code(0);
+		
 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
@@ -149,15 +168,13 @@ int main(int argc, char **argv, char **envp)
 		{
 			free_split(data.envp);
 			free_all(&data);
-			/* free(&data); */
-			return return_exit_code(-1);
+			return (return_exit_code(1));	//	???
 		}
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
-		//SEGFAULs if /bin/ls and i != 0. But ../bin/ls works
-		return_exit_code(0);
 		parsing(first, &data);
-		//printf("%d\n", return_exit_code(-1));
+ 		printf("previous: %d\n", return_exit_code(-1));
+		printf("current: %d\n", return_exit_code(-2));
 		add_history(line);
 		free(line);
 		free_list(first);
@@ -166,7 +183,6 @@ int main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (free_split(data.envp), return_exit_code(-1));
 }
-// SEGFAULT in line 157 when /bin/ls (command not found) as 1st exec command. Doesnt if not the 1st
 // ./minishell takes args. Shouldnt it?
 
 //to run valgrind without readline leaks

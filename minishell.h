@@ -47,6 +47,8 @@ typedef struct s_cmd
     char *in;
     char *out;
     int append;
+	int heredoc_fd;
+	char *limiter;
 }               t_cmd;
 
 typedef struct s_data
@@ -59,7 +61,7 @@ typedef struct s_data
     int           fd2;
     t_cmd 			*cmds;
     int           cmd_count;
-    int           mod;
+    //int           mod;
 }                 t_data;
 
 //main
@@ -112,6 +114,8 @@ void	test_print(t_input *first);
 
 //Split test
 char	**mini_split(char const *s);
+
+int	return_exit_code(int exit);
 
 //Exec
 int	check_permission(t_data *data, char *fd_name, int file_order);
