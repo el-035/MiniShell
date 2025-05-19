@@ -44,11 +44,13 @@ int  save_input(char *line, t_input **first)
 int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
-		return (return_exit_code(-1));
+		return (1);
+
 	/* if (!handle_heredoc(first, data))
 			return (1); */
-	
-	
+	if (find_exit(first, data) != 0)
+		return (1);
+
 	// work on quotes
 
 	if (find_ev(first, data) != 0)
@@ -104,7 +106,6 @@ int	copy_envp(t_data *data, char **envp)
 
 } */
 
-
 void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
@@ -123,7 +124,7 @@ void	handler(int sig)
 int	return_exit_code(int exit)
 {
 	//0			updates previous and resets exit to 0
-	// > 0		update cur and return
+	// > 0		update cur and return it
 	// -2		return cur without updating
 	// -1		return old
 
@@ -154,34 +155,50 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
- 	first = NULL;
 	ft_memset(&data, 0, sizeof(t_data));
 	copy_envp(&data, envp);
+	ft_memset(&sig, 0, sizeof(struct sigaction));
+	sig.sa_handler = &handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
 	while (1)
 	{
+		first = NULL;
+		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
-		return_exit_code(0);
-		
-		if (return_exit_code(-1) == 0)
+
+		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be fixed
+        {
+            /* Interactive mode: use readline with colored prompt */
+            if (return_exit_code(-1) == 0)
+                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
+            else
+                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
+        }
+        else
+        {
+            /* Non-interactive mode: read a raw line with GNL and trim newline */
+            char *tmp = get_next_line(fileno(stdin));
+            if (!tmp)
+                break; /* EOF reached */
+            line = ft_strtrim(tmp, "\n");
+            free(tmp);
+        }
+/* 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
-			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
+			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check */
 		if (!line)	//ctrl d
-		{
-			free_split(data.envp);
-			free_all(&data);
-			return (return_exit_code(1));	//	???
-		}
+			break ;
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		parsing(first, &data);
- 		printf("previous: %d\n", return_exit_code(-1));
-		printf("current: %d\n", return_exit_code(-2));
+		
 		add_history(line);
 		free(line);
 		free_list(first);
-		free_all(&data);
+		//free_all(&data);		//error somewhere
 	}
 	rl_clear_history();
 	return (free_split(data.envp), return_exit_code(-1));
@@ -190,3 +207,8 @@ int main(int argc, char **argv, char **envp)
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
+
+/* 		if (isatty(STDIN_FILENO))
+  		  printf("2stdin is open ✅\n");
+		else
+		    printf("2stdin is closed ❌\n"); */

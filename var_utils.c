@@ -56,6 +56,8 @@ int	stop(char *content)
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
+			else if (!content[i + 1])
+				return 0;
 			else
 				return (1);	//variable to be expanded found
 		}
