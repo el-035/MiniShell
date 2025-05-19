@@ -100,6 +100,8 @@ int	find_ev(t_input *first, t_data *data)
 	{
 		if (ft_strchr(cur->content, '$'))
 			expand_var(&cur, data);
+		if (ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
+			expand_exit(&cur, data);
 		if (ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
 			remove_useless_quotes(cur);
 		cur = cur->next;

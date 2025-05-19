@@ -93,7 +93,7 @@ int	expand_var(t_input **cur, t_data *data);
 //char	*extract_var(t_data *data, char *var);
 int	check_quotes(char *content, int len);
 int	join_all(t_input **cur, char *start, char *end, char *var);
-
+int	expand_exit(t_input **cur, t_data *data);
 //var utils
 int	start_len(char *content);
 char	*search_var(char *content, char *var);
@@ -119,6 +119,9 @@ void	test_print(t_input *first);
 
 //Split test
 char	**mini_split(char const *s);
+
+//builtinss
+void	*ft_echo(t_cmd *cmd);
 
 int	return_exit_code(int exit);
 

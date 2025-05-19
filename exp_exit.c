@@ -45,6 +45,7 @@ char *save_end(char *content, int len)
 	}
 	return (end);
 }
+
 int	no_more(char *content)
 {
 	int	i;
@@ -59,13 +60,14 @@ int	no_more(char *content)
 			else if (!content[i + 1])
 				return 0;
 			else
-				return (1);	//variable to be expanded found
+				return (1);
 		}
 		else
 			i++;
 	}
 	return 0;
 }
+
 int	expand_exit(t_input **cur, t_data *data)
 {
 	char *start;
@@ -87,21 +89,5 @@ int	expand_exit(t_input **cur, t_data *data)
 		return 1;	//error or wat ?
 	if (ft_strnstr((*cur)->content, "$?", ft_strlen((*cur)->content)))
 	 	expand_exit(cur, data);
-	return 0;
-}
-
-int	find_exit(t_input *first, t_data *data)
-{
-	t_input	*cur;
-
-	cur = first;
-	while(cur)
-	{
-		if (ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
-			expand_exit(&cur, data);
-		cur = cur->next;
-		if (cur == first)
-			break ;
-	}
 	return 0;
 }

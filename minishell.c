@@ -48,34 +48,26 @@ int	parsing(t_input *first, t_data *data)	//return value?
 
 	/* if (!handle_heredoc(first, data))
 			return (1); */
-	
-	// work on quotes
-
 	if (find_ev(first, data) != 0)
 		return (return_exit_code(-1));
-	if (find_exit(first, data) != 0)
-		return (1);
 	if (find_cmd(first) != 0)
 		return (return_exit_code(-1));
 
-
 	if (!parse_tokens(first, data))
 		return (1);
+	ft_echo(data->cmds);
     //freegrepo
 	//print_cmds(data);
-	if (!create_pipes(data))
+/* 	if (!create_pipes(data))
         return (1);
 	if (!get_env_path(data, data->envp))
 		return (1);
 	if (!open_files(data))
 		return (1);
 	if (!exec_proc(data, data->envp))
-		return (1);
-	
+		return (1); */
 	return 0;
 }
-
-
 
 int	copy_envp(t_data *data, char **envp)
 {
@@ -103,12 +95,24 @@ int	copy_envp(t_data *data, char **envp)
 {
 
 } */
+/* int return_sig_flag(int flag)
+{
+	static int f_flag = 0;
+	int			temp;
 
+	if (flag == 1)
+		f_flag = 1;
+	temp = f_flag;
+	if (flag == 0)
+		f_flag = 0;
+	return temp;
+} */
 void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
-		return_exit_code(130);
+		return_exit_code(130);		// :((
+		//return_sig_flag(1);
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -118,6 +122,7 @@ void	handler(int sig)
 	{
 	}
 }
+
 
 int	return_exit_code(int exit)
 {
@@ -166,7 +171,7 @@ int main(int argc, char **argv, char **envp)
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
 
-		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be fixed
+		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
         {
             /* Interactive mode: use readline with colored prompt */
             if (return_exit_code(-1) == 0)
@@ -189,7 +194,7 @@ int main(int argc, char **argv, char **envp)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check */
 		if (!line)	//ctrl d
 			break ;
-		if (!*line || !save_input(line, &first))
+		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
 			continue ;		//error handling
 		parsing(first, &data);
 		
@@ -205,8 +210,9 @@ int main(int argc, char **argv, char **envp)
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
-
 /* 		if (isatty(STDIN_FILENO))
   		  printf("2stdin is open ✅\n");
 		else
 		    printf("2stdin is closed ❌\n"); */
+
+//free input after my part in parsing
