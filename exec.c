@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+int ft_strcmp(const char *s1, const char *s2)
+{
+    while (*s1 && (*s1 == *s2))
+	{
+        s1++;
+        s2++;
+    }
+    return (unsigned char)*s1 - (unsigned char)*s2;
+}
+
 char	*check_path(t_data *data, char *cmd)
 {
 	char	*path;
@@ -29,6 +39,7 @@ int	execute_cmd(t_data *data, char **args, char **envp)
 {
 	char	*path;
 
+	//if () Cond for builtin
 	if (args[0][0] == '/' || (args[0][0] == '.' && args[0][1] == '/'))
 	{
 		if (access(args[0], X_OK) == 0)
@@ -78,11 +89,26 @@ static void	set_child_fds(t_data *data, t_cmd *cmd, int index)
 		close(data->fd2);
 }
 
+void	exec_builtin_child(t_cmd *cmd)//, t_data *data
+{
+	if (ft_strcmp(cmd->args[0], "echo") == 0)
+    	ft_echo(cmd);
+	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
+        printf("hey in child\n");
+    else if (ft_strcmp(cmd->args[0], "env") == 0)
+        printf("hey in child\n");
+}
+
 int	exec_child(t_data *data, int index, char **envp)
 {
 	t_cmd	*cmd;
 
 	cmd = &data->cmds[index];
+	if (cmd->is_builtin)
+    {
+		exec_builtin_child(cmd);
+		exit(EXIT_SUCCESS);
+    }
 	set_child_fds(data, cmd, index);
 	if (!cmd->args || !cmd->args[0])
 		exit(EXIT_FAILURE);
@@ -95,7 +121,27 @@ int	exec_child(t_data *data, int index, char **envp)
 			exit(0);*/
 		exit (127);
 	}
-	exit (333);
+	exit (EXIT_SUCCESS);
+}
+
+int	exec_builtin_parent(t_cmd *cmd)//, t_data *data
+{
+	//Maybe use exit_code to set EC immediately?
+	if (ft_strcmp(cmd->args[0], "cd") == 0)
+		//ft_cd();
+		printf("hey\n");
+	else if (ft_strcmp(cmd->args[0], "export") == 0)
+		//ft_export();
+		printf("hey\n");
+	else if (ft_strcmp(cmd->args[0], "unset") == 0)
+		//ft_unset();
+		printf("hey\n");
+	else if (ft_strcmp(cmd->args[0], "exit") == 0)
+		//ft_exit();
+		printf("hey\n");
+	else
+		return (1);
+	return (0);
 }
 
 int	exec_proc(t_data *data, char **envp)
@@ -103,6 +149,7 @@ int	exec_proc(t_data *data, char **envp)
 	int	i;
 	int	status;
 	int code;
+	t_cmd *cmd;
 
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
@@ -110,6 +157,13 @@ int	exec_proc(t_data *data, char **envp)
 	i = -1;
 	while (++i < data->cmd_count)
 	{
+		cmd = &data->cmds[i];
+		if (cmd->is_builtin)
+			if (!exec_builtin_parent(cmd))
+			{
+				data->pid[i] = -2;
+				continue;
+			}
 		data->pid[i] = fork();
 		if (data->pid[i] == -1)
 			return (free_all(data), perror("Fork: "), 0);

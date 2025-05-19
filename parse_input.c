@@ -43,6 +43,8 @@ static void	handle_token(t_cmd *cmd, t_input **cur, int *j)
 				&& (*cur)->prev->type != REDIR_APPEND)))
 	{
 		cmd->args[(*j)++] = ft_strdup((*cur)->content);
+		if ((*cur)->type == CMD)
+			cmd->is_builtin = (*cur)->is_builtin;
 	}
 	else if ((*cur)->type == REDIR_IN && (*cur)->next)
 	{
@@ -94,6 +96,7 @@ int	parse_tokens(t_input *tokens, t_data *data)
 	while (cur && ++i < data->cmd_count)
 	{
 		cmd = &data->cmds[i];
+		ft_memset(cmd, 0, sizeof(t_cmd));
 		cmd->args = ft_calloc(count_args(cur) + 1, sizeof(char *));
 		if (!cmd->args)
 			return (perror("Malloc: "), 0);

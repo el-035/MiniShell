@@ -46,6 +46,7 @@ typedef struct s_cmd
     char 			**args;        // [ls, -l, NULL]
     char *in;
     char *out;
+	int	is_builtin;
     int append;
 	int heredoc_fd;
 	char *limiter;
@@ -142,5 +143,8 @@ void print_cmd_list(t_cmd *cmds);
 void print_cmds(t_data *data);
 
 int handle_heredoc(t_input *input, t_data *data);
+
+//Builtins
+void	*ft_echo(t_cmd *cmd);
 
 # endif
