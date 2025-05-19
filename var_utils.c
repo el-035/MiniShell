@@ -50,7 +50,7 @@ int	stop(char *content)
 	{
 		if (content[i] == '$')
 		{
-			if (content[i + 1] && (content[i + 1] == '$' /* || content[i + 1] == '?' */))
+			if (content[i + 1] && (content[i + 1] == '$'))
 				i += 2;
 			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
 				i++;

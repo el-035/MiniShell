@@ -48,18 +48,16 @@ int	parsing(t_input *first, t_data *data)	//return value?
 
 	/* if (!handle_heredoc(first, data))
 			return (1); */
-	if (find_exit(first, data) != 0)
-		return (1);
-
+	
 	// work on quotes
 
 	if (find_ev(first, data) != 0)
 		return (return_exit_code(-1));
+	if (find_exit(first, data) != 0)
+		return (1);
 	if (find_cmd(first) != 0)
 		return (return_exit_code(-1));
 
-	//expand $?
-	find_exit(first, data);
 
 	if (!parse_tokens(first, data))
 		return (1);

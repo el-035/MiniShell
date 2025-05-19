@@ -7,12 +7,11 @@ char *beg(char *content)
 	char *beg;
 
 	len = 0;
-	i = 0;
-	
+	i = -1;
 	while (content[len])
 	{
 		if (content[len] == '$')
-			if (content[len + 1] && (content[len + 1] == '?'))
+			if (content[len + 1] && (content[len + 1] == '?') && check_quotes(content, len) != 1)
 				break ;
 		len++;
 	}
@@ -21,11 +20,8 @@ char *beg(char *content)
 	beg = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!beg)
 		return (printf("Allocation failed\n"), NULL); //
-	while(i < len)
-	{
+	while(++i < len)
 		beg[i] = content[i];
-		i++;
-	}
 	return (beg);
 }
 
@@ -49,13 +45,35 @@ char *save_end(char *content, int len)
 	}
 	return (end);
 }
+int	no_more(char *content)
+{
+	int	i;
 
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '$')
+		{
+			if (content[i + 1] && (content[i + 1] == '?') && check_quotes(content, i) == 1)
+				i += 2;
+			else if (!content[i + 1])
+				return 0;
+			else
+				return (1);	//variable to be expanded found
+		}
+		else
+			i++;
+	}
+	return 0;
+}
 int	expand_exit(t_input **cur, t_data *data)
 {
 	char *start;
 	char *var;
 	char	*end;
 
+	if (no_more((*cur)->content) == 0)
+		return 0;
 	start = beg((*cur)->content);
 	if (!start)
 		return (1);
