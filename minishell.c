@@ -60,10 +60,9 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 
 	/* FREE INPUT */
 	//extract_var(data->envp, "HOME");
-	ft_cd(data, data->cmds);
 
 	free_list(first);
-	//ft_exit(data);
+	//ft_cd(data, data->cmds);
     //freegrepo
 	//print_cmds(data);
 	if (!create_pipes(data))

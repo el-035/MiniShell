@@ -43,7 +43,7 @@ then  updating pwd  */
 #include <stdio.h>
 #include <string.h>
 
-void print_pwd_oldpwd(char **envp)
+/* void print_pwd_oldpwd(char **envp)
 {
     int i = 0;
 
@@ -53,7 +53,7 @@ void print_pwd_oldpwd(char **envp)
             printf("%s\n", envp[i]);
         i++;
     }
-}
+} */
 void	update_envp(char **envp, char *var, char *value)
 {
 	int i;
@@ -81,7 +81,7 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	char *new_pwd;
 	char *home;
 
-	old_pwd = getcwd(NULL, 0);	//its mallocd
+	old_pwd = getcwd(NULL, 0);
 	if (!cmd->args[1])
 	{
 		home = extract_var(data->envp, ft_strdup("HOME"));
@@ -95,8 +95,6 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 			handle_error(cmd->args[1], 1); 		//not sure what number
 	}
 	new_pwd = getcwd(NULL, 0);
-
-	//UPDATE ENVP
 	update_envp(data->envp, "OLDPWD=", old_pwd);
 	update_envp(data->envp, "PWD=", new_pwd);
 	free(old_pwd);
