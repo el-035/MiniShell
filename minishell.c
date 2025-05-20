@@ -43,22 +43,23 @@ int  save_input(char *line, t_input **first)
 
 int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
+	add_history(line);
+	free(line);
 	if (assign_type(&first) != 0)
-		return (1);
+		return (free_list(first), 1);
 
 	/* if (!handle_heredoc(first, data))
 			return (1); */
 	if (find_ev(first, data) != 0)
-		return (return_exit_code(-1));
+		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
-		return (return_exit_code(-1));
+		return (free_list(first), 1);
 
 	if (!parse_tokens(first, data))
-		return (1);
+		return (free_list(first), 1);
 
 	/* FREE INPUT */
-	add_history(line);
-	free(line);
+
 	free_list(first);
 	//ft_exit(data);
     //freegrepo
