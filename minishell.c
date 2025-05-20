@@ -41,7 +41,7 @@ int  save_input(char *line, t_input **first)
 	return(1);
 }
 
-int	parsing(t_input *first, t_data *data)	//return value?
+int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (1);
@@ -55,17 +55,22 @@ int	parsing(t_input *first, t_data *data)	//return value?
 
 	if (!parse_tokens(first, data))
 		return (1);
-	ft_echo(data->cmds);
+
+	/* FREE INPUT */
+	add_history(line);
+	free(line);
+	free_list(first);
+	//ft_exit(data);
     //freegrepo
 	//print_cmds(data);
-/* 	if (!create_pipes(data))
+	if (!create_pipes(data))
         return (1);
 	if (!get_env_path(data, data->envp))
 		return (1);
 	if (!open_files(data))
 		return (1);
 	if (!exec_proc(data, data->envp))
-		return (1); */
+		return (1);
 	return 0;
 }
 
@@ -95,6 +100,7 @@ int	copy_envp(t_data *data, char **envp)
 {
 
 } */
+
 /* int return_sig_flag(int flag)
 {
 	static int f_flag = 0;
@@ -196,13 +202,12 @@ int main(int argc, char **argv, char **envp)
 			break ;
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
 			continue ;		//error handling
-		parsing(first, &data);
-		
-		add_history(line);
-		free(line);
-		free_list(first);
-		//free_all(&data);		//error somewhere
+		parsing(first, &data, line);
+		free_all(&data);		//error somewhere
 	}
+	if (first)
+		free_list(first);
+	free_all(&data);
 	rl_clear_history();
 	return (free_split(data.envp), return_exit_code(-1));
 }

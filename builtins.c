@@ -25,3 +25,10 @@ void	*ft_echo(t_cmd *cmd)
 		printf("\n");
 	return (NULL);
 }
+
+void	ft_exit(t_data *data/* , t_cmd *cmd */)
+{
+	/* FREE DATA AND CMD */
+	free_all(data);
+	exit(return_exit_code(-1));	//or 1
+}
