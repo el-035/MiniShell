@@ -59,6 +59,8 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 		return (free_list(first), 1);
 
 	/* FREE INPUT */
+	//extract_var(data->envp, "HOME");
+	ft_cd(data, data->cmds);
 
 	free_list(first);
 	//ft_exit(data);
