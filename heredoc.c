@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int exec_heredoc(t_input *here_doc, t_data *data)
+/* int exec_heredoc(t_input *here_doc, t_data *data)
 {
 	char	*lim;
 	char *line;
@@ -39,3 +39,4 @@ int handle_heredoc(t_input *input, t_data *data)
 	}
 	return (-1);
 }
+ */
