@@ -89,14 +89,14 @@ static void	set_child_fds(t_data *data, t_cmd *cmd, int index)
 		close(data->fd2);
 }
 
-void	exec_builtin_child(t_cmd *cmd)//, t_data *data
+void	exec_builtin_child(t_cmd *cmd, t_data *data)
 {
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
     	ft_echo(cmd);
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
-        printf("hey in child\n");
+        ft_pwd();
     else if (ft_strcmp(cmd->args[0], "env") == 0)
-        printf("hey in child\n");
+		ft_env(data->envp);
 }
 
 int	exec_child(t_data *data, int index, char **envp)
@@ -104,12 +104,13 @@ int	exec_child(t_data *data, int index, char **envp)
 	t_cmd	*cmd;
 
 	cmd = &data->cmds[index];
+	set_child_fds(data, cmd, index);
+
 	if (cmd->is_builtin)
     {
-		exec_builtin_child(cmd);
+		exec_builtin_child(cmd, data);
 		exit(EXIT_SUCCESS);
     }
-	set_child_fds(data, cmd, index);
 	if (!cmd->args || !cmd->args[0])
 		exit(EXIT_FAILURE);
 	if (!execute_cmd(data, cmd->args, envp))
@@ -209,55 +210,3 @@ int	create_pipes(t_data *data)
 	data->pipes[i] = NULL;
 	return (1);
 }
-
-/* int main(int argc, char **argv, char **envp)
-{
-	t_data data;
-
-	t_input token0 = {"cat", CMD, 0, NULL, NULL};
-	t_input token1 = {"test", ARG, 1, NULL, &token0};
-	t_input token2 = {"|", PIPE, 2, NULL, &token1};
-	t_input token3 = {"grep", CMD, 3, NULL, &token2};
-	t_input token4 = {"error", ARG, 4, NULL, &token3};
-	t_input token5 = {"|", PIPE, 5, NULL, &token4};
-	t_input token6 = {"sort", CMD, 6, NULL, &token5};
-	t_input token7 = {"|", PIPE, 7, NULL, &token6};
-	t_input token8 = {"uniq", CMD, 8, NULL, &token7};
-	t_input token9 = {"|", PIPE, 9, NULL, &token8};
-	t_input token10 = {"wc", CMD, 10, NULL, &token9};
-	t_input token11 = {"-l", ARG, 11, NULL, &token10};
-	t_input token12 = {">", REDIR_OUT, 12, NULL, &token11};
-	t_input token13 = {"out2", ARG, 13, NULL, &token12};
-
-	token0.next = &token1;
-	token1.next = &token2;
-	token2.next = &token3;
-	token3.next = &token4;
-	token4.next = &token5;
-	token5.next = &token6;
-	token6.next = &token7;
-	token7.next = &token8;
-	token8.next = &token9;
-	token9.next = &token10;
-	token10.next = &token11;
-	token11.next = &token12;
-	token12.next = &token13;
-
-
-	memset(&data, 0, sizeof(t_data));
-	if (!parse_tokens(&token0, &data))
-		return (1);
-	//free
-	print_cmds(&data);
-	if (!create_pipes(&data))
-		return (1);
-	if (!get_env_path(&data, envp))
-		return (1);
-	if (!open_files(&data))
-		return (1);
-	if (!exec_proc(&data, envp))
-		return (1);
-	free_all(&data);
-	return(0);
-} */
-// TODO 2 outputs for 2 files
