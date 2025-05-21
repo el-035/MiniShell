@@ -47,10 +47,14 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 
 	if (assign_type(&first) != 0)
+
 		return (free_list(first), 1);
 
 	/* if (!handle_heredoc(first, data))
 			return (1); */
+
+	// work on quotes
+
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
 	if (find_cmd(first) != 0)

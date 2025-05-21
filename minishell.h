@@ -47,6 +47,7 @@ typedef struct s_cmd
     char 			**args;        // [ls, -l, NULL]
     char *in;
     char *out;
+	int	is_builtin;
     int append;
 	int heredoc_fd;
 	char *limiter;
@@ -143,6 +144,7 @@ void	handle_error(char *str, int error_code);
 
 int	parse_tokens(t_input *tokens, t_data *data);
 
+int ft_strcmp(const char *s1, const char *s2);
 char	*check_path(t_data *data, char *cmd);
 int execute_cmd(t_data *data, char **args, char **envp);
 int	exec_child(t_data *data, int index, char **envp);
@@ -153,5 +155,11 @@ void print_cmd_list(t_cmd *cmds);
 void print_cmds(t_data *data);
 
 int handle_heredoc(t_input *input, t_data *data);
+
+
+//Builtins
+void	*ft_echo(t_cmd *cmd);
+void ft_pwd();
+void ft_env(char **env);
 
 # endif
