@@ -35,17 +35,11 @@ void	ft_exit(t_data *data/* , t_cmd *cmd */)
 	free_all(data);
 	exit(return_exit_code(-1));	//or 1
 }
-/* calling getcwd to later  store what OLDPWD in envp contains
-if cd with no arg call chdir with looking for  $HOME in envp
-if cd with path call chdir with input
-if chdir fails because the path specified does not exist perror or strerror
-
-then  updating pwd  */
-/* #include <stdio.h>
-#include <string.h> */
 
 /* void print_pwd_oldpwd(char **envp)
 {
+	#include <stdio.h>
+	#include <string.h>
     int i = 0;
 
     while (envp[i])
@@ -55,13 +49,14 @@ then  updating pwd  */
         i++;
     }
 } */
+
 void	update_envp(char **envp, char *var, char *value)
 {
 	int i;
 
 	i = 0;
 	if (!envp[i])
-		printf("WTF\n");	//erioror
+		return ;	//erioror
 	while(envp[i])
 	{
 		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
@@ -101,4 +96,47 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	free(old_pwd);
 	free(new_pwd);
 	//print_pwd_oldpwd(data->envp);
+}
+/* void print_unset(char **envp)
+{
+	#include <stdio.h>
+	#include <string.h>
+    int i = 0;
+
+    while (envp[i])
+    {
+        if (strncmp(envp[i], "PWD=", 4) == 0 || strncmp(envp[i], "OLDPWD=", 7) == 0)
+            printf("%s\n", envp[i]);
+        i++;
+    }
+}  */
+
+void	ft_unset(t_data *data, t_cmd *cmd)
+{
+	int i;
+
+	i = 0;
+	// print_unset(data->envp);
+	printf("unset starting\n");
+	if (!cmd->args[1])
+		return ;		//unset: not enough arguments on strerr + exit code 1
+	while(data->envp[i])
+	{
+		if (ft_strncmp(data->envp[i], cmd->args[1], ft_strlen(cmd->args[1])) == 0)
+			break ;
+		i++;
+	}
+	//need to add a check if var is not found
+	if (!data->envp[i + 1])
+		return ;
+	while(data->envp[i])
+	{
+		free(data->envp[i]);
+		if (data->envp[i + 1])
+			data->envp[i] = ft_strdup(data->envp[i + 1]);
+		i++;
+	}
+	printf("unset done\n");
+	// print_unset(data->envp);
+
 }
