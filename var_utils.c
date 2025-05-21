@@ -50,12 +50,14 @@ int	stop(char *content)
 	{
 		if (content[i] == '$')
 		{
-			if (content[i + 1] && (content[i + 1] == '$' /* || content[i + 1] == '?' */))
+			if (content[i + 1] && (content[i + 1] == '$'))
 				i += 2;
 			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
+			else if (!content[i + 1])
+				return 0;
 			else
 				return (1);	//variable to be expanded found
 		}

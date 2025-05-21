@@ -19,11 +19,6 @@ int	check_quotes(char *content, int len)
 			quote = 0;
 		i++;
 	}
-	/* if (quote == 1)
-		return 1;
-	if (quote == 2)
-		return 2;
-	return 0; */
 	return (quote);
 }
 

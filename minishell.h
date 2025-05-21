@@ -2,6 +2,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
+# include "libft/get_next_line.h"
 # include <fcntl.h>
 # include <stdlib.h>
 # include <signal.h>
@@ -92,7 +93,8 @@ int	find_ev(t_input *first, t_data *data);
 int	expand_var(t_input **cur, t_data *data);
 //char	*extract_var(t_data *data, char *var);
 int	check_quotes(char *content, int len);
-
+int	join_all(t_input **cur, char *start, char *end, char *var);
+int	expand_exit(t_input **cur, t_data *data);
 //var utils
 int	start_len(char *content);
 char	*search_var(char *content, char *var);
@@ -109,12 +111,21 @@ int	remove_useless_quotes(t_input *cur);
 int compare_cmd(t_input *cur, char **commands);
 int	find_cmd(t_input *first/* , t_data *data */);
 
+//exit exp
+int	find_exit(t_input *first, t_data *data);
+
 //tests
 const char *get_type_str(enum e_type type);
 void	test_print(t_input *first);
 
 //Split test
 char	**mini_split(char const *s);
+
+//builtinss
+void	ft_echo(t_cmd *cmd);
+void	ft_exit(t_data *data/* , t_cmd *cmd */);
+void	ft_cd(t_data *data, t_cmd *cmd);
+void	ft_unset(t_data *data, t_cmd *cmd);
 
 int	return_exit_code(int exit);
 
@@ -144,6 +155,7 @@ void print_cmd_list(t_cmd *cmds);
 void print_cmds(t_data *data);
 
 int handle_heredoc(t_input *input, t_data *data);
+
 
 //Builtins
 void	*ft_echo(t_cmd *cmd);

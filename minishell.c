@@ -41,32 +41,46 @@ int  save_input(char *line, t_input **first)
 	return(1);
 }
 
-int	parsing(t_input *first, t_data *data)	//return value?
+
+
+int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
+
 	if (assign_type(&first) != 0)
-		return (return_exit_code(-1));
+
+		return (free_list(first), 1);
+
+	/* if (!handle_heredoc(first, data))
+			return (1); */
+
 	// work on quotes
+
 	if (find_ev(first, data) != 0)
-		return (return_exit_code(-1));
+		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
-		return (return_exit_code(-1));
+		return (free_list(first), 1);
+
 	if (!parse_tokens(first, data))
-		return (1);
+		return (free_list(first), 1);
+
+	/* FREE INPUT */
+	//extract_var(data->envp, "HOME");
+
+	free_list(first);
+
     //freegrepo
 	//print_cmds(data);
 	if (!create_pipes(data))
         return (1);
+	
 	if (!get_env_path(data, data->envp))
 		return (1);
 	if (!open_files(data))
 		return (1);
 	if (!exec_proc(data, data->envp))
 		return (1);
-	
 	return 0;
 }
-
-
 
 int	copy_envp(t_data *data, char **envp)
 {
@@ -95,12 +109,24 @@ int	copy_envp(t_data *data, char **envp)
 
 } */
 
+/* int return_sig_flag(int flag)
+{
+	static int f_flag = 0;
+	int			temp;
 
+	if (flag == 1)
+		f_flag = 1;
+	temp = f_flag;
+	if (flag == 0)
+		f_flag = 0;
+	return temp;
+} */
 void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
-		return_exit_code(130);
+		return_exit_code(130);		// :((
+		//return_sig_flag(1);
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
@@ -111,10 +137,11 @@ void	handler(int sig)
 	}
 }
 
+
 int	return_exit_code(int exit)
 {
 	//0			updates previous and resets exit to 0
-	// > 0		update cur and return
+	// > 0		update cur and return it
 	// -2		return cur without updating
 	// -1		return old
 
@@ -145,35 +172,34 @@ int main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
- 	first = NULL;
 	ft_memset(&data, 0, sizeof(t_data));
 	copy_envp(&data, envp);
+	ft_memset(&sig, 0, sizeof(struct sigaction));
+	sig.sa_handler = &handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
 	while (1)
 	{
+		first = NULL;
+		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
-		return_exit_code(0);
-		
 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
 		if (!line)	//ctrl d
-		{
-			free_split(data.envp);
-			free_all(&data);
-			return (return_exit_code(1));	//	???
-		}
-		if (!*line || !save_input(line, &first))
+			break ;
+		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
 			continue ;		//error handling
-		parsing(first, &data);
- 		printf("previous: %d\n", return_exit_code(-1));
-		printf("current: %d\n", return_exit_code(-2));
+		parsing(first, &data, line);
 		add_history(line);
 		free(line);
-		free_list(first);
-		free_all(&data);
+		free_all(&data);		//error somewhere 
 	}
+	if (first)
+		free_list(first);
+	free_all(&data);
 	rl_clear_history();
 	return (free_split(data.envp), return_exit_code(-1));
 }
@@ -181,3 +207,29 @@ int main(int argc, char **argv, char **envp)
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
+/* 		if (isatty(STDIN_FILENO))
+  		  printf("2stdin is open ✅\n");
+		else
+		    printf("2stdin is closed ❌\n"); */
+
+//free input after my part in parsing
+
+
+
+
+/* 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
+        {
+            if (return_exit_code(-1) == 0)
+                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
+            else
+                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
+        }
+        else
+        {
+
+            char *tmp = get_next_line(fileno(stdin));
+            if (!tmp)
+                break; 
+            line = ft_strtrim(tmp, "\n");
+            free(tmp);
+        } */

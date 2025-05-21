@@ -55,24 +55,6 @@ int more_syntax(t_input *cur, t_input *first)	//newline erorr
 	return 0;
 }
 
-/* int quotes_syntax(t_input *cur)	//idk 
-{
-	int i = 0;
-	int	s = 0;
-	int d = 0;
-
-	while(cur->content[i])
-	{
-		if (cur->content[i] == '\'')
-			s++;
-		if (cur->content[i] == '"')
-			d++;
-		i++;
-	}
-	if (s % 2 != 0 || d % 2 != 0)
-		return(printf("Unexpected end of file\n"), return_exit_code(2), 1);
-	return 0;
-} */
 
 int check_nl(t_input *first)
 {
