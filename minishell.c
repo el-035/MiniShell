@@ -43,8 +43,7 @@ int  save_input(char *line, t_input **first)
 
 int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
-	add_history(line);
-	free(line);
+
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
 
@@ -62,11 +61,13 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	//extract_var(data->envp, "HOME");
 
 	free_list(first);
+
 	//ft_cd(data, data->cmds);
     //freegrepo
 	//print_cmds(data);
 	if (!create_pipes(data))
         return (1);
+	
 	if (!get_env_path(data, data->envp))
 		return (1);
 	if (!open_files(data))
@@ -178,10 +179,8 @@ int main(int argc, char **argv, char **envp)
 		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
-
 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
         {
-            /* Interactive mode: use readline with colored prompt */
             if (return_exit_code(-1) == 0)
                 line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
             else
@@ -189,14 +188,14 @@ int main(int argc, char **argv, char **envp)
         }
         else
         {
-            /* Non-interactive mode: read a raw line with GNL and trim newline */
+
             char *tmp = get_next_line(fileno(stdin));
             if (!tmp)
-                break; /* EOF reached */
+                break; 
             line = ft_strtrim(tmp, "\n");
             free(tmp);
-        }
-/* 		if (return_exit_code(-1) == 0)
+        } 
+		/* if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
 			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check */
@@ -205,7 +204,9 @@ int main(int argc, char **argv, char **envp)
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
 			continue ;		//error handling
 		parsing(first, &data, line);
-		free_all(&data);		//error somewhere
+		add_history(line);
+		free(line);
+		free_all(&data);		//error somewhere 
 	}
 	if (first)
 		free_list(first);
@@ -223,3 +224,23 @@ int main(int argc, char **argv, char **envp)
 		    printf("2stdin is closed ❌\n"); */
 
 //free input after my part in parsing
+
+
+
+
+/* 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
+        {
+            if (return_exit_code(-1) == 0)
+                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
+            else
+                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
+        }
+        else
+        {
+
+            char *tmp = get_next_line(fileno(stdin));
+            if (!tmp)
+                break; 
+            line = ft_strtrim(tmp, "\n");
+            free(tmp);
+        } */

@@ -31,6 +31,7 @@ void	ft_echo(t_cmd *cmd)
 void	ft_exit(t_data *data/* , t_cmd *cmd */)
 {
 	/* FREE DATA AND CMD */
+	free_split(data->envp);
 	free_all(data);
 	exit(return_exit_code(-1));	//or 1
 }
@@ -40,8 +41,8 @@ if cd with path call chdir with input
 if chdir fails because the path specified does not exist perror or strerror
 
 then  updating pwd  */
-#include <stdio.h>
-#include <string.h>
+/* #include <stdio.h>
+#include <string.h> */
 
 /* void print_pwd_oldpwd(char **envp)
 {
@@ -86,7 +87,7 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	{
 		home = extract_var(data->envp, ft_strdup("HOME"));
 		if (chdir(home) == -1)
-			handle_error(cmd->args[1], 1); 		//not sure what number
+			handle_error(cmd->args[1], 2); 		//not sure what number
 		free(home);
 	}
 	else if (cmd->args[1])
@@ -99,5 +100,5 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	update_envp(data->envp, "PWD=", new_pwd);
 	free(old_pwd);
 	free(new_pwd);
-	print_pwd_oldpwd(data->envp);
+	//print_pwd_oldpwd(data->envp);
 }
