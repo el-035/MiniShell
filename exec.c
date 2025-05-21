@@ -125,21 +125,18 @@ int	exec_child(t_data *data, int index, char **envp)
 	exit (EXIT_SUCCESS);
 }
 
-int	exec_builtin_parent(t_cmd *cmd)//, t_data *data
+int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 {
 	//Maybe use exit_code to set EC immediately?
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		//ft_cd();
-		printf("hey\n");
+		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		//ft_export();
 		printf("hey\n");
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-		//ft_unset();
-		printf("hey\n");
+		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		//ft_exit();
-		printf("hey\n");
+		ft_exit(data);
 	else
 		return (1);
 	return (0);
@@ -160,7 +157,7 @@ int	exec_proc(t_data *data, char **envp)
 	{
 		cmd = &data->cmds[i];
 		if (cmd->is_builtin)
-			if (!exec_builtin_parent(cmd))
+			if (!exec_builtin_parent(cmd, data))
 			{
 				data->pid[i] = -2;
 				continue;

@@ -158,7 +158,6 @@ int handle_heredoc(t_input *input, t_data *data);
 
 
 //Builtins
-void	*ft_echo(t_cmd *cmd);
 void ft_pwd();
 void ft_env(char **env);
 

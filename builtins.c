@@ -97,7 +97,8 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	free(new_pwd);
 	//print_pwd_oldpwd(data->envp);
 }
-/* void print_unset(char **envp)
+
+void print_unset(char **envp)
 {
 	#include <stdio.h>
 	#include <string.h>
@@ -109,14 +110,14 @@ void	ft_cd(t_data *data, t_cmd *cmd)
             printf("%s\n", envp[i]);
         i++;
     }
-}  */
+} 
 
 void	ft_unset(t_data *data, t_cmd *cmd)
 {
 	int i;
 
 	i = 0;
-	// print_unset(data->envp);
+	print_unset(data->envp);
 	printf("unset starting\n");
 	if (!cmd->args[1])
 		return ;		//unset: not enough arguments on strerr + exit code 1
@@ -137,6 +138,6 @@ void	ft_unset(t_data *data, t_cmd *cmd)
 		i++;
 	}
 	printf("unset done\n");
-	// print_unset(data->envp);
+	print_unset(data->envp);
 
 }
