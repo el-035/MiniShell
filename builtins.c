@@ -28,27 +28,44 @@ void	ft_echo(t_cmd *cmd)
 		printf("\n");
 }
 
-void	ft_exit(t_data *data/* , t_cmd *cmd */)
+int	error_n(char *err)
 {
-	/* FREE DATA AND CMD */
-	free_split(data->envp);
-	free_all(data);
-	exit(return_exit_code(-1));	//or 1
+	int	n;
+
+	n = ft_atoi(err);
+	while (n < 0)
+		n += 256;
+	while (n > 255)
+		n -= 256;
+	return (return_exit_code(n));
 }
 
-/* void print_pwd_oldpwd(char **envp)
+void	ft_exit(t_data *data, t_cmd *cmd)
 {
-	#include <stdio.h>
-	#include <string.h>
-    int i = 0;
+	printf("exit\n");
+	if (cmd->args[1])
+	{		
+		if (ft_str_digit(cmd->args[1]) != 0)
+		{
+			write(2, "exit: ", 6);
+			write(2, cmd->args[1], ft_strlen(cmd->args[1]));
+			write(2, ": numeric argument required\n", 28);
+			return_exit_code(2);
+		}
+		else if (cmd->args[2] && ft_str_digit(cmd->args[1]) == 0)
+		{
+			write(2, "exit: too many arguments\n", 25);
+			return_exit_code(1);
+		}
+		else
+			error_n(cmd->args[1]);
 
-    while (envp[i])
-    {
-        if (strncmp(envp[i], "PWD=", 4) == 0 || strncmp(envp[i], "OLDPWD=", 7) == 0)
-            printf("%s\n", envp[i]);
-        i++;
-    }
-} */
+	}
+	free_split(data->envp);
+	free_all(data);
+	exit(return_exit_code(-2));	//or 1
+}
+
 
 void	update_envp(char **envp, char *var, char *value)
 {
@@ -77,67 +94,112 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	char *new_pwd;
 	char *home;
 
+	if (cmd->args[2])
+	{
+		write(2, "cd: ", 4);
+		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
+		write(2, ": too many arguments\n", 21);
+		return_exit_code(1);
+	}
 	old_pwd = getcwd(NULL, 0);
 	if (!cmd->args[1])
 	{
 		home = extract_var(data->envp, ft_strdup("HOME"));
 		if (chdir(home) == -1)
-			handle_error(cmd->args[1], 2); 		//not sure what number
+		{
+			return_exit_code(1);
+		}
 		free(home);
 	}
 	else if (cmd->args[1])
 	{
 		if(chdir(cmd->args[1]) == -1)
-			handle_error(cmd->args[1], 1); 		//not sure what number
+		{
+			write(2, "cd: ", 4);
+			write(2, cmd->args[1], ft_strlen(cmd->args[1]));
+			write(2, ": No such file or directory\n", 28);
+			return_exit_code(1);
+		}
+		//	handle_error(cmd->args[1], 1); 		//not sure what number
 	}
 	new_pwd = getcwd(NULL, 0);
 	update_envp(data->envp, "OLDPWD=", old_pwd);
 	update_envp(data->envp, "PWD=", new_pwd);
 	free(old_pwd);
 	free(new_pwd);
-	//print_pwd_oldpwd(data->envp);
 }
 
-void print_unset(char **envp)
-{
-	#include <stdio.h>
-	#include <string.h>
-    int i = 0;
-
-    while (envp[i])
-    {
-        if (strncmp(envp[i], "PWD=", 4) == 0 || strncmp(envp[i], "OLDPWD=", 7) == 0)
-            printf("%s\n", envp[i]);
-        i++;
-    }
-} 
-
-void	ft_unset(t_data *data, t_cmd *cmd)
+int arr_len(char **arr)
 {
 	int i;
 
 	i = 0;
-	print_unset(data->envp);
-	printf("unset starting\n");
-	if (!cmd->args[1])
-		return ;		//unset: not enough arguments on strerr + exit code 1
-	while(data->envp[i])
-	{
-		if (ft_strncmp(data->envp[i], cmd->args[1], ft_strlen(cmd->args[1])) == 0)
-			break ;
+	while(arr[i])
 		i++;
-	}
-	//need to add a check if var is not found
-	if (!data->envp[i + 1])
-		return ;
-	while(data->envp[i])
-	{
-		free(data->envp[i]);
-		if (data->envp[i + 1])
-			data->envp[i] = ft_strdup(data->envp[i + 1]);
-		i++;
-	}
-	printf("unset done\n");
-	print_unset(data->envp);
+	return i;
+}
 
+int		var_count(char **envp, char **args)
+{
+	int i;
+	int j;
+	int count;
+
+	i = 0;
+	count = 0;
+	while (envp[i])
+	{
+		j = 1;
+		while (args[j])
+		{
+			if (ft_strncmp(envp[i], args[j], ft_strlen(args[j])) == 0 && envp[i][ft_strlen(args[j])] == '=')
+			{
+				count++;
+				break ;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (count);
+}
+
+int		copy_var(char *envp, char **var)
+{
+	int i;
+
+	i = 1;
+	while (var[i])
+	{
+		if (ft_strncmp(envp, var[i], ft_strlen(var[i])) == 0 && (envp[ft_strlen(var[i])] == '='))
+			return 0;
+		i++;
+	}
+	return (1);
+}
+
+void	ft_unset(t_data *data, t_cmd *cmd)
+{
+	int i;
+	int j;
+	char **tmp;
+
+	if (!cmd->args[1])
+		return ;
+	i = var_count(data->envp, cmd->args);
+	if (i == 0)
+		return ; //var not found
+	tmp = ft_calloc(arr_len(data->envp) - i , sizeof(char *));
+	if (!tmp)
+		return ; //errorr
+	i = 0;
+	j = 0;
+	while(data->envp[i])
+	{
+		if (copy_var(data->envp[i], cmd->args) == 1)
+			tmp[j++] =  ft_strdup(data->envp[i]);
+		i++;
+	}
+	free_split(data->envp);
+	data->envp = tmp;
 }

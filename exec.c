@@ -136,7 +136,7 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		ft_exit(data);
+		ft_exit(data, cmd);
 	else
 		return (1);
 	return (0);

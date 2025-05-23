@@ -47,13 +47,10 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 
 	if (assign_type(&first) != 0)
-
 		return (free_list(first), 1);
 
 	/* if (!handle_heredoc(first, data))
 			return (1); */
-
-	// work on quotes
 
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
@@ -184,15 +181,35 @@ int main(int argc, char **argv, char **envp)
 		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
-		if (return_exit_code(-1) == 0)
+
+		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
+        {
+            if (return_exit_code(-1) == 0)
+                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
+            else
+                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
+        }
+        else
+        {
+
+            char *tmp = get_next_line(fileno(stdin));
+            if (!tmp)
+                break; 
+            line = ft_strtrim(tmp, "\n");
+            free(tmp);
+        }
+
+
+/* 		if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
-			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
+			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check */
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
 			continue ;		//error handling
 		parsing(first, &data, line);
+
 		add_history(line);
 		free(line);
 		free_all(&data);		//error somewhere 
@@ -214,7 +231,14 @@ int main(int argc, char **argv, char **envp)
 
 //free input after my part in parsing
 
-
+/* Minishell: unset HOME
+---- Before unset ----
+---- After unset ----
+==51055== Conditional jump or move depends on uninitialised value(s)
+==51055==    at 0x10ACE3: exec_proc (exec.c:183)
+==51055==    by 0x1097A0: parsing (minishell.c:80)
+==51055==    by 0x109AE6: main (minishell.c:195)
+==51055==  */
 
 
 /* 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
