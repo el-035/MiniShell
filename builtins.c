@@ -42,7 +42,7 @@ int	error_n(char *err)
 
 void	ft_exit(t_data *data, t_cmd *cmd)
 {
-	printf("exit\n");
+	//printf("exit\n");		//i think it should be there but the tester doesnt like it
 	if (cmd->args[1])
 	{		
 		if (ft_str_digit(cmd->args[1]) != 0)
@@ -94,13 +94,7 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	char *new_pwd;
 	char *home;
 
-	if (cmd->args[2])
-	{
-		write(2, "cd: ", 4);
-		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
-		write(2, ": too many arguments\n", 21);
-		return_exit_code(1);
-	}
+
 	old_pwd = getcwd(NULL, 0);
 	if (!cmd->args[1])
 	{
@@ -111,7 +105,14 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 		}
 		free(home);
 	}
-	else if (cmd->args[1])
+	else if (cmd->args[2])
+	{
+		write(2, "cd: ", 4);
+		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
+		write(2, ": too many arguments\n", 21);
+		return_exit_code(1);
+	}
+	else /* (cmd->args[1]) */
 	{
 		if(chdir(cmd->args[1]) == -1)
 		{
@@ -134,6 +135,8 @@ int arr_len(char **arr)
 	int i;
 
 	i = 0;
+/* 	if (!arr || !*arr)
+		return -1; */
 	while(arr[i])
 		i++;
 	return i;
@@ -147,6 +150,8 @@ int		var_count(char **envp, char **args)
 
 	i = 0;
 	count = 0;
+/* 	if (!envp || !*envp)
+		return -1; */
 	while (envp[i])
 	{
 		j = 1;
@@ -189,7 +194,7 @@ void	ft_unset(t_data *data, t_cmd *cmd)
 	i = var_count(data->envp, cmd->args);
 	if (i == 0)
 		return ; //var not found
-	tmp = ft_calloc(arr_len(data->envp) - i , sizeof(char *));
+	tmp = ft_calloc((arr_len(data->envp) - i) + 1, sizeof(char *));
 	if (!tmp)
 		return ; //errorr
 	i = 0;

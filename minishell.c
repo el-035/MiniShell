@@ -59,7 +59,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-
+	//test_print(first);
 	/* FREE INPUT */
 	//extract_var(data->envp, "HOME");
 
