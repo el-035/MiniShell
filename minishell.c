@@ -47,32 +47,22 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 
 	if (assign_type(&first) != 0)
-
 		return (free_list(first), 1);
-
-	/* if (!handle_heredoc(first, data))
-			return (1); */
-
 	// work on quotes
-
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
-
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-
+	
 	/* FREE INPUT */
 	//extract_var(data->envp, "HOME");
-
 	free_list(first);
-
     //freegrepo
 	//print_cmds(data);
 	if (!create_pipes(data))
         return (1);
-	
 	if (!get_env_path(data, data->envp))
 		return (1);
 	if (!open_files(data))
@@ -233,3 +223,9 @@ int main(int argc, char **argv, char **envp)
             line = ft_strtrim(tmp, "\n");
             free(tmp);
         } */
+
+
+
+
+		// CAN BE ANY COMMANDS IN THE MIDDLE?
+		//HANDLE when the heredoc file is empty

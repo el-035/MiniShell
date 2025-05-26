@@ -48,8 +48,10 @@ typedef struct s_cmd
     char *in;
     char *out;
 	int	is_builtin;
+	int	is_heredoc;
     int append;
-	int heredoc_fd;
+//	int heredoc_fd;
+	char **hd_content;
 	char *limiter;
 }               t_cmd;
 
@@ -154,8 +156,7 @@ int	create_pipes(t_data *data);
 void print_cmd_list(t_cmd *cmds);
 void print_cmds(t_data *data);
 
-int handle_heredoc(t_input *input, t_data *data);
-
+int	handle_heredoc(t_cmd *cmd, t_input **cur);
 
 //Builtins
 void ft_pwd();
