@@ -59,7 +59,7 @@ int	syntax_check(t_input *first)
 			return(1);
 		if (check_quotes(cur->content, ft_strlen(cur->content)) != 0)
 			return(printf("Unexpected end of file\n"), return_exit_code(2), 1);
-		if ((ft_strchr(cur->content, '\'') != NULL || ft_strchr(cur->content, '"') != NULL) && exit != 0)
+		if ((ft_strchr(cur->content, '\'') != NULL || ft_strchr(cur->content, '"') != NULL))
 			return (1);
 		cur = cur->next;
 	}
