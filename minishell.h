@@ -48,9 +48,8 @@ typedef struct s_cmd
     char *in;
     char *out;
 	int	is_builtin;
-	int	is_heredoc;
     int append;
-//	int heredoc_fd;
+	int	is_hd;
 	char **hd_content;
 	char *limiter;
 }               t_cmd;

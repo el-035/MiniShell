@@ -54,13 +54,11 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 int	create_heredoc(t_cmd *cmd)
 {
 	char *line;
-	//int pipefd[2];
 	int count;
 	char **new_lines;
 	int	i;
 
 	count = 0;
-	cmd->hd_content = NULL;
 	while (1)
 	{
 		line = readline("> ");
@@ -86,18 +84,11 @@ int	create_heredoc(t_cmd *cmd)
 int	handle_heredoc(t_cmd *cmd, t_input **cur)
 {
 	if (!(*cur)->next)
-		return (0);  // error: no limiter
+		return (0);
 	cmd->limiter = ft_strdup((*cur)->next->content);
 	if (!create_heredoc(cmd))
 		return (0);
-	/* int i = 0;
-	while (cmd->hd_content[i])
-	{
-		printf("[%d]: %s\n", i, cmd->hd_content[i]);
-		i++;
-	} */
-for (int i = 0; cmd->hd_content[i]; i++)
-    printf("Line[%d]: '%s'\n", i, cmd->hd_content[i]);
+	cmd->is_hd = 1;
 	*cur = (*cur)->next;
 	return (1);
 }

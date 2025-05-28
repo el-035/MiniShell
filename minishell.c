@@ -229,3 +229,5 @@ int main(int argc, char **argv, char **envp)
 
 		// CAN BE ANY COMMANDS IN THE MIDDLE?
 		//HANDLE when the heredoc file is empty
+		//Minishell: hey < test.txt
+		//test.txt: no such file or directory - EXITS SHELL
