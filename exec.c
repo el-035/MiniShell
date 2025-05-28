@@ -99,29 +99,76 @@ void	exec_builtin_child(t_cmd *cmd, t_data *data)
 		ft_env(data->envp);
 }
 
+int	create_hd_filename(char *name, size_t size)
+{
+	int	hd_id;
+	char	*id_str;
+	int	fd;
+
+	hd_id = 0;
+	while (1)
+	{
+		id_str = ft_itoa(getpid()); //CHABNGE IT!!!!!!!!!!!!!!!!!!!
+		if (!id_str)
+			return (0);
+		if (ft_strlen("/tmp/heredoc_") + ft_strlen(id_str) + 1 > size)
+			return (free(id_str), -1);
+		ft_strlcpy(name, "/tmp/heredoc_", size), ft_strlcat(name, id_str, size), free(id_str);
+		fd = open(name, O_CREAT | O_EXCL | O_RDWR, 0600);
+		if (fd != -1)
+			return (fd);
+		if (hd_id > 10000) // RANDOM!!! RESEARCH??
+			break ;
+	}
+	return (perror ("Open: "), -1);
+}
+
+int	set_heredoc_fds(t_cmd *cmd)
+{
+	char	tmp_name[64];
+	int		fd;
+	int		i;
+
+	fd = create_hd_filename(tmp_name, sizeof(tmp_name));
+	if (fd < 0)
+		return (perror("Open heredoc file: "), 0);
+	cmd->in = ft_strdup(tmp_name);
+	i = -1;
+	while (cmd->hd_content && cmd->hd_content[++i])
+	{
+		write (fd, cmd->hd_content[i], ft_strlen(cmd->hd_content[i]));
+		write (fd, "\n", 1);
+	}
+	close (fd);
+	return (1);
+}
+
 int	exec_child(t_data *data, int index, char **envp)
 {
 	t_cmd	*cmd;
+	int		fd;
 
 	cmd = &data->cmds[index];
 	set_child_fds(data, cmd, index);
-
+	if (cmd->is_hd == 1)
+	{
+		if (cmd->hd_content)
+		{
+			if (!set_heredoc_fds(cmd))
+				exit(EXIT_FAILURE);
+			fd = open(cmd->in, O_RDONLY);
+			if (fd < 0)
+				perror("Opening heredoc tmp file: "), exit (EXIT_FAILURE);
+			dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->in);
+		} else
+			exit(EXIT_SUCCESS);
+	}
 	if (cmd->is_builtin)
-    {
-		exec_builtin_child(cmd, data);
-		exit(EXIT_SUCCESS);
-    }
+		exec_builtin_child(cmd, data), exit(EXIT_SUCCESS);
 	if (!cmd->args || !cmd->args[0])
 		exit(EXIT_FAILURE);
 	if (!execute_cmd(data, cmd->args, envp))
-	{
-		// Invalid arg - 2
-		// not found 127
-		free_all(data);
-		/*if (data->mod == 3)
-			exit(0);*/
-		exit (127);
-	}
+		free_all(data),	exit (127);
 	exit (EXIT_SUCCESS);
 }
 
