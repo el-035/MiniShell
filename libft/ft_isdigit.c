@@ -17,6 +17,22 @@ int	ft_isdigit(int c)
 	else
 		return (0);
 }
+
+int	ft_str_digit(char *str)
+{
+	int i;
+
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	while(str[i])
+	{
+		if (!ft_isdigit(str[i++]))
+			return (2048);
+	}
+	return (0);
+}
+
 /*
 #include <ctype.h>
 #include <stdio.h>

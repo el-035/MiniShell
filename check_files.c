@@ -37,8 +37,8 @@ int	get_env_path(t_data *data, char **envp)
 			break ;
 		}
 	}
-	if (!data->env_path)
-		return (write(2, "PATH not found\n", 15), free_all(data), 0);
+/* 	if (!data->env_path)
+		return (write(2, "PATH not found\n", 15), free_all(data), 0); */
 	return (1);
 }
 

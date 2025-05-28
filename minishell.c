@@ -48,14 +48,13 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-	// work on quotes
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-	
+		//test_print(first);
 	/* FREE INPUT */
 	//extract_var(data->envp, "HOME");
 	free_list(first);
@@ -183,6 +182,7 @@ int main(int argc, char **argv, char **envp)
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
 			continue ;		//error handling
 		parsing(first, &data, line);
+
 		add_history(line);
 		free(line);
 		free_all(&data);		//error somewhere 
@@ -204,7 +204,14 @@ int main(int argc, char **argv, char **envp)
 
 //free input after my part in parsing
 
-
+/* Minishell: unset HOME
+---- Before unset ----
+---- After unset ----
+==51055== Conditional jump or move depends on uninitialised value(s)
+==51055==    at 0x10ACE3: exec_proc (exec.c:183)
+==51055==    by 0x1097A0: parsing (minishell.c:80)
+==51055==    by 0x109AE6: main (minishell.c:195)
+==51055==  */
 
 
 /* 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
