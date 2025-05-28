@@ -1,32 +1,5 @@
 #include"minishell.h"
 
-//HOW THE SHELL WORKS
-//first checks how many commands there are
-//each command is a token
-//checks the syntax of all, if any error will not start
-//evaluate variables
-//it now checks if the token represents a build in command or external one
-//if external it goes to the path
-//sets up redirections including pipes (needs to be ready before command starts)
-//execution starts
-
-/*
-
-Set up redirections and pipes:
-Open/close file descriptors for redirections (<, >, >>)
-Set up pipes between commands if needed
-Fork and execute:
-
-If built-in → execute directly in the parent process
-If external → fork, execute in the child process, and wait for the result
-Handle signals:
-
-Handle CTRL+C, CTRL+D, CTRL+\
-Restore terminal state if needed
-Clean up:
-Free memory and close file descriptors */
-
-
 int is_red(t_input *cur)
 {
 	if (cur->type != REDIR_APPEND && cur->type != HERE_DOC && cur->type != REDIR_IN && cur->type != REDIR_OUT)
@@ -59,38 +32,35 @@ int more_syntax(t_input *cur, t_input *first)	//newline erorr
 int check_nl(t_input *first)
 {
 	if (first->type == REDIR_APPEND || first->type == REDIR_IN || first->type == REDIR_OUT || first->type == HERE_DOC)
-		return (write(2, " syntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
+		return (write(2, " 0yntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
 	if (first->type == PIPE)
 		return (write(2, " syntax error near unexpected token `|'\n", 40), return_exit_code(2), 1);
 	if (!first->prev)
 		return (0);
 
 	if (first->prev->type == REDIR_APPEND || first->prev->type == REDIR_IN || first->prev->type == REDIR_OUT || first->prev->type == HERE_DOC)
-		return (write(2, " syntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
+		return (write(2, " 1yntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
 	return 0;
 	//unclosed quotes or parenthesis
 }
 
-int	syntax_check(t_input *first)	//the exit thing isnt needed anymore
+int	syntax_check(t_input *first)
 {
 	t_input *cur;
 	int		size;
-	int		exit;
 
 	cur = first;
 	size = list_size(first) - 1;
-	exit = check_nl(first);
-	if (exit != 0)
-		return (exit);
+	if (check_nl(first) != 0)
+		return (1);
 	while (size-- >= 0)
 	{
-		exit = more_syntax(cur, first);
-		if (exit != 0)
-			return (exit);
+		if (more_syntax(cur, first) != 0)
+			return(1);
 		if (check_quotes(cur->content, ft_strlen(cur->content)) != 0)
 			return(printf("Unexpected end of file\n"), return_exit_code(2), 1);
 		if ((ft_strchr(cur->content, '\'') != NULL || ft_strchr(cur->content, '"') != NULL) && exit != 0)
-			return (exit);
+			return (1);
 		cur = cur->next;
 	}
 	return 0;
@@ -131,8 +101,8 @@ int	assign_type(t_input **first)
 		else if (cur->prev->type == REDIR_APPEND || cur->prev->type == REDIR_IN || cur->prev->type == REDIR_OUT || cur->prev->type == HERE_DOC)
 			cur->type = ARG;
 		is_red_or_pipe(cur);	//double check this
-		if (cur->type == UNKNOWN)	//fixxxxxxxx bitchhhh
-			cur->type = ARG;
+		/* if (cur->type == UNKNOWN)	//fixxxxxxxx bitchhhh
+			cur->type = ARG; */
 		cur = cur->next;
 	}
 	return(syntax_check(*first));
