@@ -20,9 +20,9 @@
 	}
 	close(pipefd[1]);
 	return 1;
-}
+} */
 
-int handle_heredoc(t_input *input, t_data *data)
+/* int handle_heredoc(t_input *input, t_data *data)
 {
 	t_input *cur;
 	t_input *start;
@@ -32,11 +32,10 @@ int handle_heredoc(t_input *input, t_data *data)
 	while (1)
 	{
 		if (cur->type == HERE_DOC)
-			return (exec_heredoc(cur, data);
+			exec_heredoc(cur, data);
 		cur = cur->next;
 		if (cur == start)
 			break ;
 	}
-	return (-1);
-}
- */
+	return (0);
+} */
