@@ -162,6 +162,8 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	ft_memset(&data, 0, sizeof(t_data));
+	data.fd1 = -1;
+	data.fd2 = -1;
 	copy_envp(&data, envp);
 	ft_memset(&sig, 0, sizeof(struct sigaction));
 	sig.sa_handler = &handler;
@@ -235,6 +237,11 @@ int main(int argc, char **argv, char **envp)
 
 
 		// CAN BE ANY COMMANDS IN THE MIDDLE?
-		//HANDLE when the heredoc file is empty
-		//Minishell: hey < test.txt
-		//test.txt: no such file or directory - EXITS SHELL
+		//SHOULD WE HANDLE CHMOD
+
+		//FOR saving lines:
+/* 		while (data->a.top->index != min)
+			if (pos <= find_stack_size(&data->a) / 2)
+				rotate(&data->a, 1);
+		else
+			rev_rotate(&data->a, 1); */

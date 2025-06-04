@@ -13,7 +13,7 @@ int	check_permission(t_data *data, char *fd_name, int file_order)
 		{
 			handle_error(fd_name, 0);
 			free_all(data);
-			exit(0);
+			return (0);
 		}
 	}
 	else if (access(fd_name, F_OK) != -1)
@@ -49,8 +49,6 @@ int	open_files(t_data *data)
 
 	first = &data->cmds[0];
 	last = &data->cmds[data->cmd_count - 1];
-	data->fd1 = -1;
-	data->fd2 = -1;
 	if (first->in)
 	{
 		if (!check_permission(data, first->in, 1))
