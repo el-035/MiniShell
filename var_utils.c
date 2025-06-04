@@ -41,6 +41,20 @@ char	*search_var(char *content, char *var)
 	return (temp);
 }
 
+int even_odd(char *content, int i)
+{
+	int count;
+
+	count = 1;
+	while(i-- > 0)
+	{
+		if (content[i] != '\\')
+			break ;
+		count++;
+	}
+	return (count);
+}
+
 int	stop(char *content)
 {
 	int i;
@@ -71,25 +85,27 @@ char *extract_var(char **envp, char *var)
 {
 	char *value;
 	char *temp;
+	char *full;
 	int i;
 
 	i = 0;
 	if (!var || !*var)
-		return (free(var), ft_strdup(""));
-
+		return (free(var), ft_strdup(""));	//protect
+	full = ft_strjoin(var, "=");
+	if (!full)
+		return NULL; //errroee
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
+		if (ft_strncmp(envp[i], full, ft_strlen(full)) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
 			value = ft_strdup(temp);
-			return(free(var), value);
+			return(free(var), free(full), value);
 		}
 		else
 			i++;
 	}
-	return (free(var), ft_strdup(""));
-	
+	return (free(var), free(full), ft_strdup(""));
 }
 
 char	*save_var(char *content)

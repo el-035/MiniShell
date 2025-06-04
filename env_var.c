@@ -95,7 +95,6 @@ int	find_ev(t_input *first, t_data *data)
 {
 	t_input	*cur;
 
-	
 	cur = first;
 	while(cur)
 	{
