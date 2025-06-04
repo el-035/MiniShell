@@ -54,7 +54,6 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 		return (free_list(first), 1);
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-		//test_print(first);
 	/* FREE INPUT */
 	//extract_var(data->envp, "HOME");
 	free_list(first);
@@ -173,10 +172,27 @@ int main(int argc, char **argv, char **envp)
 		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
-		if (return_exit_code(-1) == 0)
+		
+		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
+        {
+            if (return_exit_code(-1) == 0)
+                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
+            else
+                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
+        }
+        else
+        {
+
+            char *tmp = get_next_line(fileno(stdin));
+            if (!tmp)
+                break; 
+            line = ft_strtrim(tmp, "\n");
+            free(tmp);
+        }
+		/* if (return_exit_code(-1) == 0)
 			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
 		else if (return_exit_code(-1) != 0)
-			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
+			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check */
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)

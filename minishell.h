@@ -102,6 +102,7 @@ char	*search_var(char *content, char *var);
 int	stop(char *content);
 char *extract_var(char **envp, char *var);
 char	*save_var(char *content);
+int even_odd(char *content, int i);
 
 //quotes
 int	check_quotes(char *content, int len);
