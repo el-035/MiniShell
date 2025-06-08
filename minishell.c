@@ -28,21 +28,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 }
 
 
-void	handler(int sig)
-{
-	if (sig == SIGINT)		//crtl C
-	{
-		return_exit_code(130);		// :((
-		//return_sig_flag(1);
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	if (sig == SIGQUIT)		//ctrl /
-	{
-	}
-}
+
 
 int	return_exit_code(int exit)
 {
@@ -69,6 +55,36 @@ int	return_exit_code(int exit)
 	return (cur_exit);
 }
 
+/* int	return_sig_flag(int f)
+{
+	static int flag = 0;
+
+	if (f == 1)
+		flag = 1;
+	else if (f == 0)
+	{
+		f = flag;
+		flag = 0;	
+		return (f);
+	}
+	return (flag);	
+} */
+
+void	handler(int sig)
+{
+	if (sig == SIGINT)		//crtl C
+	{
+		return_exit_code(130);		// :((
+	//	return_sig_flag(1);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	if (sig == SIGQUIT)		//ctrl /
+	{
+	}
+}
 char *prompt_join(t_data *data)
 {
 	char *prompt;
@@ -134,30 +150,13 @@ int main(int argc, char **argv, char **envp)
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
-
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL);
 	while (1)
 	{
 		first = NULL;
 		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
-		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL);
-		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
-        {
-            if (return_exit_code(-1) == 0)
-                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
-            else
-                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
-        }
-        else
-        {
-
-            char *tmp = get_next_line(fileno(stdin));
-            if (!tmp)
-                break; 
-            line = ft_strtrim(tmp, "\n");
-            free(tmp);
-        } 
-		//line = prompt(&data);
+		line = prompt(&data);
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
@@ -177,13 +176,11 @@ int main(int argc, char **argv, char **envp)
 //EXIT CODE FOR ALLOCATION FAILED?
 //SHLVL not increased when running minishell inside of minishell
 // ./minishell takes args. Shouldnt it?
+//change bash to mnishell
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
-/* 		if (isatty(STDIN_FILENO))
-  		  printf("2stdin is open ✅\n");
-		else
-		    printf("2stdin is closed ❌\n"); */
+
 
 //free input after my part in parsing
 
@@ -195,27 +192,6 @@ int main(int argc, char **argv, char **envp)
 ==51055==    by 0x1097A0: parsing (minishell.c:80)
 ==51055==    by 0x109AE6: main (minishell.c:195)
 ==51055==  */
-
-
-/* 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
-        {
-            if (return_exit_code(-1) == 0)
-                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
-            else
-                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
-        }
-        else
-        {
-
-            char *tmp = get_next_line(fileno(stdin));
-            if (!tmp)
-                break; 
-            line = ft_strtrim(tmp, "\n");
-            free(tmp);
-        } */
-
-
-
 
 		// CAN BE ANY COMMANDS IN THE MIDDLE?
 		//SHOULD WE HANDLE CHMOD
