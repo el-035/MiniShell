@@ -90,16 +90,16 @@ char *extract_var(char **envp, char *var)
 
 	i = 0;
 	if (!var || !*var)
-		return (free(var), ft_strdup(""));	//protect
+		return(free(var), ft_strdup(""));	//protect
 	full = ft_strjoin(var, "=");
 	if (!full)
 		return NULL; //errroee
-	while (envp[i])
+	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], full, ft_strlen(full)) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
-			value = ft_strdup(temp);
+			value = ft_strdup(temp);			//not protected
 			return(free(var), free(full), value);
 		}
 		else

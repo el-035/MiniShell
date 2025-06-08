@@ -21,12 +21,6 @@ typedef enum e_type
 	REDIR_OUT,   // Output redirection (">")
 	REDIR_APPEND,// Append redirection (">>")
 	HERE_DOC,    // Here document ("<<")
-	//ENV_VAR,     // Environment variable ("$HOME")
-	//S_QUOTE,     // Quoted string ('...')
-	//D_QUOTE,	 // Quoted string ("...")
-	//SEP,         // Separator (e.g., ";")
-	//OPERATOR,    // Logical operators ("&&", "||")
-	//SUBSHELL,     // Subshell ("(cmd)")
 	UNKNOWN
 }	t_type;
 
@@ -68,9 +62,13 @@ typedef struct s_data
 }                 t_data;
 
 //main
+
+int	return_exit_code(int exit);
+
+//init
 void init_input(t_input *first);
 int  save_input(char *line, t_input **first);
-int	return_exit_code(int exit);
+int	copy_envp(t_data *data, char **envp);
 
 //free
 void free_split(char **split);
@@ -96,6 +94,7 @@ int	expand_var(t_input **cur, t_data *data);
 int	check_quotes(char *content, int len);
 int	join_all(t_input **cur, char *start, char *end, char *var);
 int	expand_exit(t_input **cur, t_data *data);
+
 //var utils
 int	start_len(char *content);
 char	*search_var(char *content, char *var);
@@ -128,6 +127,7 @@ void	ft_echo(t_cmd *cmd);
 void	ft_exit(t_data *data, t_cmd *cmd);
 void	ft_cd(t_data *data, t_cmd *cmd);
 void	ft_unset(t_data *data, t_cmd *cmd);
+int arr_len(char **arr);
 
 int	return_exit_code(int exit);
 

@@ -135,8 +135,9 @@ int arr_len(char **arr)
 	int i;
 
 	i = 0;
-/* 	if (!arr || !*arr)
-		return -1; */
+	
+	if (!arr)
+		return 0;
 	while(arr[i])
 		i++;
 	return i;
@@ -202,7 +203,7 @@ void	ft_unset(t_data *data, t_cmd *cmd)
 	while(data->envp[i])
 	{
 		if (copy_var(data->envp[i], cmd->args) == 1)
-			tmp[j++] =  ft_strdup(data->envp[i]);
+			tmp[j++] =  ft_strdup(data->envp[i]);	//protect
 		i++;
 	}
 	free_split(data->envp);

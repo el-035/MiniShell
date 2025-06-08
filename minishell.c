@@ -1,48 +1,5 @@
 #include "minishell.h"
 
-void init_input(t_input *first)
-{
-	first->content = NULL;
-	first->type = UNKNOWN;	
-	first->position = -1;
-	first->next = NULL;
-	first->prev = NULL;
-	first->is_builtin = -1;
-	first->cmd_path = NULL;
-}
-
-int  save_input(char *line, t_input **first)
-{
-	t_input	*cur;
-	char 	**split;
-	int 	pos = 0;
-	
-	split = mini_split(line);
-	if (!split)
-		return 0;
-	*first = make_new_node(split[pos], pos);
-	if (!*first)
-		return (free_split(split), printf("Error\nAllocation failed\n"), 0);
-	pos++;
-	cur = *first;
-	while(split[pos])
-	{
-		cur = add_new(split[pos], pos, cur);
-		if (!cur)
-			return (free_split(split), free_list(*first), printf("Error\nAllocation failed\n"), 0);
-		pos++;
-	}
-	if (pos > 1)
-	{
-		cur->next = *first;
-		(*first)->prev = cur;
-	}
-	free_split(split);
-	return(1);
-}
-
-
-
 int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 
@@ -70,45 +27,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	return 0;
 }
 
-int	copy_envp(t_data *data, char **envp)
-{
-	int i;
 
-	i = 0;
-	if (!*envp)			//handle this
-		return (printf("no env\n"), 1556);
-	while (envp[i])
-		i++;
-	data->envp = (char **) ft_calloc(i + 1, sizeof(char *));
-	if (!data->envp)
-		return 1561;		//error
-	i = 0;
-	while (envp[i])
-	{
-		data->envp[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	return 0;
-}
-
-
-/* char	*prompt(t_data *data)
-{
-
-} */
-
-/* int return_sig_flag(int flag)
-{
-	static int f_flag = 0;
-	int			temp;
-
-	if (flag == 1)
-		f_flag = 1;
-	temp = f_flag;
-	if (flag == 0)
-		f_flag = 0;
-	return temp;
-} */
 void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
@@ -124,7 +43,6 @@ void	handler(int sig)
 	{
 	}
 }
-
 
 int	return_exit_code(int exit)
 {
@@ -151,6 +69,53 @@ int	return_exit_code(int exit)
 	return (cur_exit);
 }
 
+char *prompt_join(t_data *data)
+{
+	char *prompt;
+	char *tmp;
+	char *var;
+	char *col;
+
+	var = extract_var(data->envp, ft_strdup("USER"));
+	if (!var)
+		return (write(2, "Allocation failed\n", 18), NULL);	//exit code for malloc failed???
+	tmp = ft_strjoin(var, ":~");
+	free(var);
+	if (!tmp)
+		return (write(2, "Allocation failed\n", 18), NULL);
+	var = extract_var(data->envp, ft_strdup("PWD"));
+	if (!var)
+		return (write(2, "Allocation failed\n", 18), free(tmp), NULL);
+	prompt = ft_strjoin(tmp, var);
+	free(tmp); free(var);
+	if (!prompt)
+		return (write(2, "Allocation failed\n", 18), NULL);
+	return (prompt);
+}
+
+char	*prompt(t_data *data)
+{
+	char *line;
+	char *tmp;
+	char *prompt;
+
+	prompt = prompt_join(data);
+	if (!prompt)
+		return (NULL);
+	if (return_exit_code(-1) == 0)
+		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
+	else if (return_exit_code(-1) != 0)
+		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
+	free(prompt);
+	if (!tmp)
+		return (write(2, "Allocation failed\n", 18), NULL);
+	prompt =ft_strjoin(tmp, "\001\033[0m\002 ");
+	if (!prompt)
+		return (write(2, "Allocation failed\n", 18), free(tmp), NULL);
+	line = readline(prompt);
+	return (free(prompt), free(tmp), line);
+}
+
 int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
@@ -164,17 +129,18 @@ int main(int argc, char **argv, char **envp)
 	data.fd1 = -1;
 	data.fd2 = -1;
 	copy_envp(&data, envp);
+
 	ft_memset(&sig, 0, sizeof(struct sigaction));
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
+
 	while (1)
 	{
 		first = NULL;
 		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);
-		
 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
         {
             if (return_exit_code(-1) == 0)
@@ -190,11 +156,8 @@ int main(int argc, char **argv, char **envp)
                 break; 
             line = ft_strtrim(tmp, "\n");
             free(tmp);
-        }
-		/* if (return_exit_code(-1) == 0)
-			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
-		else if (return_exit_code(-1) != 0)
-			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check */
+        } 
+		//line = prompt(&data);
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
@@ -203,7 +166,7 @@ int main(int argc, char **argv, char **envp)
 
 		add_history(line);
 		free(line);
-		free_all(&data);		//error somewhere 
+		free_all(&data);
 	}
 	if (first)
 		free_list(first);
@@ -211,6 +174,8 @@ int main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (free_split(data.envp), return_exit_code(-1));
 }
+//EXIT CODE FOR ALLOCATION FAILED?
+//SHLVL not increased when running minishell inside of minishell
 // ./minishell takes args. Shouldnt it?
 
 //to run valgrind without readline leaks

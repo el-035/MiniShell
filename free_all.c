@@ -90,11 +90,6 @@ void	free_all(t_data *data)
 {
 	int	i;
 
-	/* if (data->envp != NULL)
-	{
-		free_str_arr(data->envp);
-		data->envp = NULL;
-	} */
 	if (data->env_path != NULL)
 	{
 		free_str_arr(data->env_path);
