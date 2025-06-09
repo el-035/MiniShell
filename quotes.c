@@ -57,6 +57,7 @@ int	dollar_sign(t_input *cur)
 		return 1;	//error alloc
 	free (cur->content);
 	cur->content = temp;
+	return 0;
 }
 
 int	remove_useless_quotes(t_input *cur)

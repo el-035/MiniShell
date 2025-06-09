@@ -41,10 +41,10 @@ int more_syntax(t_input *cur, t_input *first)	//newline erorr
 
 int check_nl(t_input *first)
 {
-	if (first->type == REDIR_IN || first->type == REDIR_OUT || first->type == HERE_DOC)
+	if (first->type == REDIR_IN || first->type == HERE_DOC)
 		return (write(2, "bash: syntax error near unexpected token\n", 42), return_exit_code(2), 1);
 		//return (write(2, " 0yntax error near unexpected token `newline'\n", 46), return_exit_code(2), 1);
-	if (first->type == REDIR_APPEND && !first->next)
+	if ((first->type == REDIR_APPEND || first->type == REDIR_OUT) && !first->next)
 		return (write(2, "bash: syntax error near unexpected token\n", 42), return_exit_code(2), 1);
 	if (first->type == PIPE)
 		return (write(2, "bash: syntax error near unexpected token\n", 42), return_exit_code(2), 1);

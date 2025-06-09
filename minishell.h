@@ -12,6 +12,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+
 typedef enum e_type
 {
 	CMD,         // Command (e.g., "ls", "cat")
