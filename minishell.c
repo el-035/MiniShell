@@ -159,7 +159,8 @@ int main(int argc, char **argv, char **envp)
 	{
 		first = NULL;
 
-		return_exit_code(0);		
+		return_exit_code(0);
+		return_sig_flag(0);		
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
