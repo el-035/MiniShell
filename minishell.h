@@ -65,6 +65,7 @@ typedef struct s_data
 //main
 
 int	return_exit_code(int exit);
+int	return_sig_flag(int sig);
 
 //init
 void init_input(t_input *first);

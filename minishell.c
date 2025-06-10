@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+int	return_sig_flag(int sig)
+{
+	static int flag = 0;
+
+	if (sig >= 0)
+		flag = sig;
+	return (flag);
+}
+
 int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 
@@ -27,9 +36,6 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	return 0;
 }
 
-
-
-
 int	return_exit_code(int exit)
 {
 	//0			updates previous and resets exit to 0
@@ -55,36 +61,23 @@ int	return_exit_code(int exit)
 	return (cur_exit);
 }
 
-/* int	return_sig_flag(int f)
-{
-	static int flag = 0;
-
-	if (f == 1)
-		flag = 1;
-	else if (f == 0)
-	{
-		f = flag;
-		flag = 0;	
-		return (f);
-	}
-	return (flag);	
-} */
-
 void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
-		return_exit_code(130);		// :((
-	//	return_sig_flag(1);
+		//return_exit_code(130);		// this actually does not work :(
+		return_sig_flag(1);
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+
 	}
 	if (sig == SIGQUIT)		//ctrl /
 	{
 	}
 }
+
 char *prompt_join(t_data *data)
 {
 	char *prompt;
@@ -109,19 +102,27 @@ char *prompt_join(t_data *data)
 	return (prompt);
 }
 
-char	*prompt(t_data *data)
+/* 	if (return_exit_code(-1) == 0 || return_sig_flag(-1) != 0)
+	{
+		//return_sig_flag(0);
+		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
+	}
+	else if (return_exit_code(-1) != 0)
+		tmp = ft_strjoin("\001\033[1;31m\002", prompt); */
+
+
+char	*prompt(t_data *data, char **envp)
 {
 	char *line;
 	char *tmp;
 	char *prompt;
 
+	if (!*envp)
+		return (readline("\001\033[1;34m\002Minishell:\001\033[0m\002 "));
 	prompt = prompt_join(data);
 	if (!prompt)
 		return (NULL);
-	if (return_exit_code(-1) == 0)
-		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
-	else if (return_exit_code(-1) != 0)
-		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
+	tmp = ft_strjoin("\001\033[1;34m\002", prompt);  
 	free(prompt);
 	if (!tmp)
 		return (write(2, "Allocation failed\n", 18), NULL);
@@ -131,6 +132,8 @@ char	*prompt(t_data *data)
 	line = readline(prompt);
 	return (free(prompt), free(tmp), line);
 }
+
+
 
 int main(int argc, char **argv, char **envp)
 {
@@ -155,11 +158,13 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		first = NULL;
-		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
-		line = prompt(&data);
+
+		return_exit_code(0);		
+		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
-		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
+			
+		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		parsing(first, &data, line);
 
