@@ -117,12 +117,18 @@ char	*prompt(t_data *data, char **envp)
 	char *tmp;
 	char *prompt;
 
+	return_exit_code(0);
+	return_sig_flag(0);
 	if (!*envp)
 		return (readline("\001\033[1;34m\002Minishell:\001\033[0m\002 "));
 	prompt = prompt_join(data);
 	if (!prompt)
 		return (NULL);
-	tmp = ft_strjoin("\001\033[1;34m\002", prompt);  
+	if (return_exit_code(-1) == 0 )						//color is fucked up for ctrl c
+		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
+	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
+		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
+//	tmp = ft_strjoin("\001\033[1;34m\002", prompt);  
 	free(prompt);
 	if (!tmp)
 		return (write(2, "Allocation failed\n", 18), NULL);
@@ -158,17 +164,12 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		first = NULL;
-
-		return_exit_code(0);
-		return_sig_flag(0);		
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
-			
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		parsing(first, &data, line);
-
 		add_history(line);
 		free(line);
 		free_all(&data);
