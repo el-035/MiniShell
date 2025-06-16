@@ -172,8 +172,8 @@ int main(int argc, char **argv, char **envp)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		parsing(first, &data, line);
-		//add_history(line);
-		//free(line);
+		add_history(line);
+		free(line);
 		free_all(&data);
 	}
 	if (first)

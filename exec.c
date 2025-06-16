@@ -178,8 +178,8 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
-		//ft_export();
-		printf("hey\n");
+		ft_export(data, cmd);
+		//printf("hey\n");
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)

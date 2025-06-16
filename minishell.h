@@ -134,7 +134,7 @@ int arr_len(char **arr);
 //export
 int	add_env(t_data *data, char *var, char *content);
 char *double_join(char *s1, char *s2, char *s3);
-
+void	ft_export(t_data *data, t_cmd *cmd);
 int	return_exit_code(int exit);
 
 //Exec

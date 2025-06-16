@@ -1,4 +1,4 @@
-#include "minishell.h"
+/* #include "minishell.h"
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -182,8 +182,8 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
-		//ft_export();
-		printf("hey\n");
+		ft_export(data, cmd);
+		//printf("hey\n");
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
@@ -228,8 +228,8 @@ int	exec_proc(t_data *data, char **envp)
 		waitpid(data->pid[i], &status, 0);
 		//ADD CONDITION? 
 		//code = WEXITSTATUS(status);
-		/* else if (WIFSIGNALED(status))
-			return_exit_code(128 + WTERMSIG(status)); */
+		// else if (WIFSIGNALED(status))
+		// 	return_exit_code(128 + WTERMSIG(status));
 		if (!WIFEXITED(status))
 		{
 			if(WIFSIGNALED(status))
@@ -266,3 +266,4 @@ int	create_pipes(t_data *data)
 	data->pipes[i] = NULL;
 	return (1);
 }
+ */
