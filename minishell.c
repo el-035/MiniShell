@@ -165,12 +165,8 @@ int main(int argc, char **argv, char **envp)
 	{
 		first = NULL;
 		/* printf("%d\n", return_sig_flag(-1)); */
-		if (return_sig_flag(-1) != 2)
-		{
-			//printf("hoa\n");
-			line = prompt(&data, envp);
-		}
-
+/* 		if (return_sig_flag(-1) != 2) */
+		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first))

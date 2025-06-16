@@ -131,6 +131,10 @@ void	ft_cd(t_data *data, t_cmd *cmd);
 void	ft_unset(t_data *data, t_cmd *cmd);
 int arr_len(char **arr);
 
+//export
+int	add_env(t_data *data, char *var, char *content);
+char *double_join(char *s1, char *s2, char *s3);
+
 int	return_exit_code(int exit);
 
 //Exec

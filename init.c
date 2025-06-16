@@ -41,20 +41,8 @@ int  save_input(char *line, t_input **first)
 	return(1);
 }
 
-char *double_join(char *s1, char *s2, char *s3)	//those are not allocated
-{
-	char *tmp;
-	char *final;
 
-	tmp = ft_strjoin(s1, s2);
-	if (!tmp)
-		return (write(2, "Allocation failed\n", 18), NULL);
-	final = ft_strjoin(tmp, s3);
-	if (!final)
-		return (write(2, "Allocation failed\n", 18), free(tmp), NULL);
-	return (free(tmp), final);
-}
-
+/* 
 int	add_env(t_data *data, char *var, char *content)
 {
 	int len;
@@ -78,7 +66,7 @@ int	add_env(t_data *data, char *var, char *content)
 	free_split(data->envp);
 	data->envp = tmp;
 	return 0;
-}
+} */
 
 int	no_env(t_data *data)
 {
