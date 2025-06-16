@@ -143,15 +143,11 @@ int	set_heredoc_fds(t_cmd *cmd)
 	return (1);
 }
 
-
 int	exec_child(t_data *data, int index, char **envp)
 {
 	t_cmd	*cmd;
 	int		fd;
-	struct sigaction	sig;
 
-	sigaction(SIG_IGN, &sig, NULL);
-	sigaction(SIG_DFL, &sig, NULL);
 	cmd = &data->cmds[index];
 	set_child_fds(data, cmd, index);
 	if (cmd->is_hd == 1)
@@ -227,23 +223,15 @@ int	exec_proc(t_data *data, char **envp)
 	{
 		waitpid(data->pid[i], &status, 0);
 		//ADD CONDITION? 
-		//code = WEXITSTATUS(status);
+		code = WEXITSTATUS(status);
 		/* else if (WIFSIGNALED(status))
 			return_exit_code(128 + WTERMSIG(status)); */
-		if (!WIFEXITED(status))
-		{
-			if(WIFSIGNALED(status))
-			{
-				return_sig_flag(2);
-			}
-			break ;
-		}
 	}
 	if (WIFEXITED(status))
-	{
-		code = WEXITSTATUS(status);
-		return_exit_code(code);
-	}
+		{
+			if (code != 0)
+				return_exit_code(/* WEXITSTATUS(status) */code);
+		}
 	return (free_all(data), 1);
 }
 

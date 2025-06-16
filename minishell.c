@@ -164,14 +164,20 @@ int main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		first = NULL;
-		line = prompt(&data, envp);
+		/* printf("%d\n", return_sig_flag(-1)); */
+		if (return_sig_flag(-1) != 2)
+		{
+			//printf("hoa\n");
+			line = prompt(&data, envp);
+		}
+
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 		parsing(first, &data, line);
-		add_history(line);
-		free(line);
+		//add_history(line);
+		//free(line);
 		free_all(&data);
 	}
 	if (first)

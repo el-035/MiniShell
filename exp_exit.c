@@ -79,7 +79,7 @@ int	expand_exit(t_input **cur, t_data *data)
 	start = beg((*cur)->content);
 	if (!start)
 		return (1);
-	if (return_sig_flag(-1) == 1)
+	if (return_sig_flag(-1) != 0)
 	{
 		var = ft_strdup(ft_itoa(130));
 		return_sig_flag(0);
