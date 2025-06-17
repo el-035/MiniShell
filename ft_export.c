@@ -6,7 +6,8 @@ int ft_is_valid(char *str)
 
 	i = 0;
 	if(!ft_isalpha(str[i]) && str[i] != '_')
-		return (1);	
+		return (1);
+	i++;
 	while (str[i])
 	{
 		if(!ft_isalnum(str[i]) && str[i] != '_')
@@ -24,13 +25,13 @@ char	*get_var(char *str)
 	i = 0;
 	if (!ft_strchr(str, '='))
 		return (ft_strdup(str));
-	while (str[i] != '=' && str[i] != '+')
+	while (str[i] != '='/*  && str[i] != '+' */)
 		i++;
 	var = ft_calloc(i + 1, sizeof(char));
 	if (!var)
 		return (NULL); //erroere
 	i = 0;
-	while (str[i] != '=' && str[i] != '+')
+	while (str[i] != '='/*  && str[i] != '+' */)
 	{
 		var[i] = str[i];
 		i++;
@@ -88,6 +89,7 @@ char	*append_replace(char *arg, char *var, char *content, char *prev)
 		app = ft_strjoin(prev, content);
 			//protect this sht
 		free(prev);
+
 	}
 	return (app);
 }
@@ -101,13 +103,6 @@ void	export_helper(t_data *data, t_cmd *cmd, int i, char *var)
 	content = get_content(cmd->args[i]);
 	if (!content)
 		return ;
-	if (ft_is_valid(var) != 0)
-	{
-		write(2, "bash: export: `", 15);
-		write(2, cmd->args[i], ft_strlen(cmd->args[i]));
-		write(2, "': not a valid identifier\n", 27);
-		return_exit_code(1);
-	}
 	else if (find_var(data->envp, var) != -1)
 	{
 		j = find_var(data->envp, var);
@@ -132,8 +127,19 @@ void	ft_export(t_data *data, t_cmd *cmd)
 	while (cmd->args[++i])
 	{
 		var = get_var(cmd->args[i]);	//protect
-		export_helper(data, cmd, i, var);
-		free(var);
+
+		if (ft_is_valid(var) != 0)
+		{
+			write(2, "bash: export: `", 15);
+			write(2, cmd->args[i], ft_strlen(cmd->args[i]));
+			write(2, "': not a valid identifier\n", 26);
+			return_exit_code(1);
+		}
+		else
+		{
+			export_helper(data, cmd, i, var);
+			free(var);
+		}
 	}
 }
 //if only export print all exported var with declare x in ascii order, not _=/usr/bin/env
