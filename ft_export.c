@@ -17,47 +17,6 @@ int ft_is_valid(char *str)
 	return (0);
 }
 
-char	*get_var(char *str)
-{
-	int i;
-	char *var;
-
-	i = 0;
-	if (!ft_strchr(str, '='))
-		return (ft_strdup(str));
-	while (str[i] != '='/*  && str[i] != '+' */)
-		i++;
-	var = ft_calloc(i + 1, sizeof(char));
-	if (!var)
-		return (NULL); //erroere
-	i = 0;
-	while (str[i] != '='/*  && str[i] != '+' */)
-	{
-		var[i] = str[i];
-		i++;
-	}
-	return (var);
-}
-
-char	*get_content(char *str)
-{
-	int i;
-	int len;
-	char *conetnt;
-
-	if (!ft_strchr(str, '='))
-		return (NULL);
-	len = ft_strlen(ft_strchr(str, '=') + 1);
-	conetnt = ft_calloc(len + 1, sizeof(char));
-	if (!conetnt)
-		return (NULL); //erroere
-	str = ft_strchr(str, '=') + 1;
-	i = -1;
-	while (str[++i])
-		conetnt[i] = str[i];
-	return (conetnt);
-}
-
 int find_var(char **envp, char *str)
 {
 	char *var;
@@ -123,7 +82,8 @@ void	ft_export(t_data *data, t_cmd *cmd)
 
 	i = 0;
 	if (!cmd->args[1])
-		printf("print all var declare x ascii order no_...\n");
+		print_export(data->envp);	
+	//printf("print all var declare x ascii order no_...\n");
 	while (cmd->args[++i])
 	{
 		var = get_var(cmd->args[i]);	//protect
@@ -142,8 +102,3 @@ void	ft_export(t_data *data, t_cmd *cmd)
 		}
 	}
 }
-//if only export print all exported var with declare x in ascii order, not _=/usr/bin/env
-//check syntax
-// (accept more variables in one)
-//if var already exits update
-//else add

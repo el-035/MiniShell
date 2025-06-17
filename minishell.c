@@ -11,13 +11,14 @@ int	return_sig_flag(int sig)
 
 int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
-
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
+	
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
+	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
 	/* FREE INPUT */
@@ -25,12 +26,16 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
+	
 	if (!create_pipes(data))
         return (1);
+	
 	if (!get_env_path(data, data->envp))
 		return (1);
+	
 	if (!open_files(data))
 		return (1);
+	
 	if (!exec_proc(data, data->envp))
 		return (1);
 	return 0;
@@ -171,6 +176,7 @@ int main(int argc, char **argv, char **envp)
 			break ;
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
+	//	test_print(first);
 		parsing(first, &data, line);
 		add_history(line);
 		free(line);

@@ -18,10 +18,10 @@ typedef enum e_type
 	CMD,         // Command (e.g., "ls", "cat")
 	ARG,         // Argument (e.g., "-a", "file.txt")
 	PIPE,        // Pipe ("|")
-	REDIR_IN,    // Input redirection ("<")
-	REDIR_OUT,   // Output redirection (">")
-	REDIR_APPEND,// Append redirection (">>")
-	HERE_DOC,    // Here document ("<<")
+	REDIR_IN,    //< Input redirection ("<")
+	REDIR_OUT,   //> Output redirection (">")
+	REDIR_APPEND,//>> Append redirection (">>")
+	HERE_DOC,    //<< Here document ("<<")
 	UNKNOWN
 }	t_type;
 
@@ -136,6 +136,9 @@ int	add_env(t_data *data, char *var, char *content);
 char *double_join(char *s1, char *s2, char *s3);
 void	ft_export(t_data *data, t_cmd *cmd);
 int	return_exit_code(int exit);
+char	*get_var(char *str);
+char	*get_content(char *str);
+int	print_export(char **envp);
 
 //Exec
 int	check_permission(t_data *data, char *fd_name, int file_order);

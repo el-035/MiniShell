@@ -13,7 +13,6 @@ static int	ft_word_count(char *s)
 {
 	int	i;
 	int	wc;
-	char	c;
 
 	i = 0;
 	wc = 0;
@@ -23,9 +22,11 @@ static int	ft_word_count(char *s)
 		{
 			if (is_delimitor(s[i]) == 2)
 			{
-				c = s[i];
-				while (s[i] == c)
+				if (s[i] == s[i + 1])
 					i++;
+				/* c = s[i];
+				while (s[i] == c)
+					i++; */
 				wc++;
 			}
 			i++;
@@ -40,30 +41,30 @@ static int	ft_word_count(char *s)
 			i++;
 		}
 	}
+//	printf("wc: %d\n", wc);
 	return (wc);
 }
 
 static int word_len(char *s, int i)
 {
 	int		j;
-	int		flag;
 
 	j = i;
-	flag = -1;
 	while ((s[i] == 32 || s[i] == 9))
 		i++;
 	if (!s[i])
 		return 0;
-	if (is_delimitor(s[i]) == 2)
-		flag = s[i];
+	if (is_delimitor(s[i]) == 2 && check_quotes(s, i) == 0)
+	{
+		if (s[i] == s[i + 1])
+			return 2;
+		else
+			return 1;
+	}
 	while(s[i])
 	{
 		if (is_delimitor(s[i]) != 0 && check_quotes(s, i) == 0)
-		{
-			while(s[i] == flag)
-				i++;
 			break ;
-		}
 		i++;
 	}
 	return (i - j);
@@ -106,22 +107,23 @@ char	**mini_split(char const *s)
 	{
 		split[j] = ft_word((char *)s, i);
 		if (!split[j++])
-			return (free_split(split), NULL);
+			return (/* free_split(split),  */NULL);
 		while ((s[i] == 32 || s[i] == 9) && s[i])
 			i++;
 		i = i + ft_strlen(split[j - 1]);
 	}
-	split[j] = 0;
+	//split[j] = 0;
 	return (split);
 }
-
-/* int main (void)
+/* 
+int main (void)
 {
-	char *s = "hey|||>>ho  <echo> how< bci wtf		oo";
+	char *s = "cat 42 42";
 	char **split = mini_split(s);
 	int i = 0;
 	while (split[i])
 	{
+
 		printf("%s\n", split[i++]);
 	}
 } */
