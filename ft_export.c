@@ -5,9 +5,11 @@ int ft_is_valid(char *str)
 	int i;
 
 	i = 0;
+	if(!ft_isalpha(str[i]) && str[i] != '_')
+		return (1);	
 	while (str[i])
 	{
-		if(!ft_isalpha(str[i]) && str[i] != '_')
+		if(!ft_isalnum(str[i]) && str[i] != '_')
 			return (1);	
 		i++;
 	}
@@ -72,29 +74,50 @@ int find_var(char **envp, char *str)
 	return (-1);
 }
 
-char	*append_replace(char *arg, char *var, char *content)
+char	*append_replace(char *arg, char *var, char *content, char *prev)
 {
 	char *tmp;
 	char *app;
 
 	tmp = ft_strchr(arg, '+');
 	if (!tmp)
-		return (content);
+		return (ft_strdup(content));
 	tmp++;
 	if (tmp[0] == '=')
 	{
-		app = ft_strjoin(++tmp, content);
+		app = ft_strjoin(prev, content);
 			//protect this sht
-/* 		free(content);
-		content = app; */
+		free(prev);
 	}
 	return (app);
 }
 
-void	update_var(char **envp, int i, char *content, char *var)
+void	export_helper(t_data *data, t_cmd *cmd, int i, char *var)
 {
-	free(envp[i]);
-	envp[i] = double_join(var, "=", content);
+	char *content;
+	char *tmp;
+	int j;
+
+	content = get_content(cmd->args[i]);
+	if (!content)
+		return ;
+	if (ft_is_valid(var) != 0)
+	{
+		write(2, "bash: export: `", 15);
+		write(2, cmd->args[i], ft_strlen(cmd->args[i]));
+		write(2, "': not a valid identifier\n", 27);
+		return_exit_code(1);
+	}
+	else if (find_var(data->envp, var) != -1)
+	{
+		j = find_var(data->envp, var);
+		tmp = append_replace(cmd->args[i], var, content, get_content(data->envp[j]));
+		free(data->envp[j]);
+		data->envp[j] = double_join(var, "=", tmp);
+		free(tmp);
+	}
+	else
+		add_env(data, var, content);
 	free(content);
 }
 
@@ -102,33 +125,15 @@ void	ft_export(t_data *data, t_cmd *cmd)
 {
 	int i;
 	char *var;
-	char *content;
-	char *tmp;
 
 	i = 0;
 	if (!cmd->args[1])
 		printf("print all var declare x ascii order no_...\n");
 	while (cmd->args[++i])
 	{
-		content = get_content(cmd->args[i]);
-		if (!content)
-			continue ;
-		var = get_var(cmd->args[i]);
-/* 		printf("var: %s\n", var);
-		printf("cointent: %s\n", content); */
-		if (ft_is_valid(var) != 0)
-		{
-			write(2, "minishell: export: `", 21);
-			write(2, cmd->args[i], ft_strlen(cmd->args[i]));
-			write(2, "' : not a valid identifier\n", 28);
-		}
-		else if (find_var(data->envp, var) != -1)
-			update_var(data->envp, find_var(data->envp, var), append_replace(cmd->args[i], var, content), var);
-		else
-			add_env(data, var, content);
-		free(var); free(content);
-		var = NULL;
-		content = NULL;
+		var = get_var(cmd->args[i]);	//protect
+		export_helper(data, cmd, i, var);
+		free(var);
 	}
 }
 //if only export print all exported var with declare x in ascii order, not _=/usr/bin/env

@@ -1,4 +1,4 @@
-/* #include "minishell.h"
+#include "minishell.h"
 
 int ft_strcmp(const char *s1, const char *s2)
 {
@@ -148,10 +148,10 @@ int	exec_child(t_data *data, int index, char **envp)
 {
 	t_cmd	*cmd;
 	int		fd;
-	struct sigaction	sig;
+	/* struct sigaction	sig;
 
 	sigaction(SIG_IGN, &sig, NULL);
-	sigaction(SIG_DFL, &sig, NULL);
+	sigaction(SIG_DFL, &sig, NULL); */
 	cmd = &data->cmds[index];
 	set_child_fds(data, cmd, index);
 	if (cmd->is_hd == 1)
@@ -266,4 +266,3 @@ int	create_pipes(t_data *data)
 	data->pipes[i] = NULL;
 	return (1);
 }
- */

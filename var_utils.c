@@ -11,7 +11,7 @@ int	start_len(char *content)
 		{
 			if (content[i + 1] && (content[i + 1] == '$' /* || content[i + 1] == '?' */))
 				i += 2;
-			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content[i + 1] == '_'))
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
@@ -66,7 +66,7 @@ int	stop(char *content)
 		{
 			if (content[i + 1] && (content[i + 1] == '$'))
 				i += 2;
-			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content[i + 1] == '_'))
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
@@ -123,7 +123,7 @@ char	*save_var(char *content)
 		content++;
 	while (content[len])
 	{
-		if (ft_isalpha(content[len]) || content[len] == '_')
+		if (ft_isalnum(content[len]) || content[len] == '_')
 			len++;
 		else
 			break;
