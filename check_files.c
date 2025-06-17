@@ -12,7 +12,7 @@ int	check_permission(t_data *data, char *fd_name, int file_order)
 		else
 		{
 			handle_error(fd_name, 0);
-			free_all(data);
+//			free_all(data);
 			return (0);
 		}
 	}
@@ -42,28 +42,39 @@ int	get_env_path(t_data *data, char **envp)
 	return (1);
 }
 
+void	add_skip_flag(t_cmd *cmd)
+{
+	cmd->error_skip = 1;
+}
+
 int	open_files(t_data *data)
 {
 	t_cmd	*first;
 	t_cmd	*last;
+	int		flags;
 
 	first = &data->cmds[0];
 	last = &data->cmds[data->cmd_count - 1];
+	flags = O_CREAT | O_WRONLY;
 	if (first->in)
 	{
 		if (!check_permission(data, first->in, 1))
-			return (free_all(data), 0);
+			return (add_skip_flag(first), 0);//free_all(data), 
 		data->fd1 = open(first->in, O_RDONLY);
 		if (data->fd1 == -1)
-			return (handle_error(first->in, 0), free_all(data), 0);
+			return (add_skip_flag(first), handle_error(first->in, 0),  0);//free_all(data),
 	}
 	if (last->out)
 	{
 		if (!check_permission(data, last->out, 2))
-			return (free_all(data), 0);
-		data->fd2 = open(last->out, O_CREAT | O_RDWR | O_TRUNC, 0666);
+			return (add_skip_flag(last), 0);
+		if (last->append)
+			flags |= O_APPEND;
+		else
+			flags |= O_TRUNC;
+		data->fd2 = open(last->out, flags, 0666);
 		if (data->fd2 == -1)
-			return (handle_error(last->out, 0), free_all(data), 0);
+			return (add_skip_flag(last), handle_error(last->out, 0), 0);
 	}
 	return (1);
 }

@@ -203,6 +203,11 @@ int	exec_proc(t_data *data, char **envp)
 	while (++i < data->cmd_count)
 	{
 		cmd = &data->cmds[i];
+		if (cmd->error_skip)
+		{
+			data->pid[i] = -2;
+			continue;
+		}
 		if (cmd->is_builtin)
 			if (!exec_builtin_parent(cmd, data))
 			{

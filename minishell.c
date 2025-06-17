@@ -41,13 +41,11 @@ int  save_input(char *line, t_input **first)
 	return(1);
 }
 
-
-
-int	parsing(t_input *first, t_data *data, char *line)	//return value?
-{	
-
+//return value?
+int	parsing(t_input *first, t_data *data, char *line)
+{
 	if (assign_type(&first) != 0)
-		return (free_list(first), 1);
+		return (free_list(first), 1);	
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
@@ -63,13 +61,13 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	if (!create_pipes(data))
         return (1);
 	if (!get_env_path(data, data->envp))
-		return (1);
-	if (!open_files(data))
-		return (1);
+		return (1); //shouldnt return 1, might still work
+	open_files(data);
 	if (!exec_proc(data, data->envp))
 		return (1);
-	return 0;
+	return (0);
 }
+
 
 int	copy_envp(t_data *data, char **envp)
 {
@@ -245,3 +243,37 @@ int main(int argc, char **argv, char **envp)
 				rotate(&data->a, 1);
 		else
 			rev_rotate(&data->a, 1); */
+
+	//FREE_ALL func if cmd line fails, FREE_CMD if a single command fails
+
+
+/* 
+	export should redir output to file
+*/
+
+
+//EXPORT PATH="::" - have to check
+
+/* 
+Minishell: ./minishell
+Minishell: exit | exit
+Minishell: exit | exit
+@TheTalkingFox ➜ /workspaces/MiniShell (sasha) $ 
+exits when it shouldnt */
+
+/* Minishell: echo hez > tewst
+tewst: Permission denied
+Minishell: echo $?
+0
+EC should be 1 */
+
+//heredoc if ctrl + c EC 130 & does nothing
+
+/* Minishell: cat << ok << ok <<
+bash: syntax error near unexpected token
+@TheTalkingFox ➜ /workspaces/MiniShell (sasha) $ cat << ok << ok <<
+> sdfds
+> dsfds
+> ok
+> ok
+bash: syntax error near unexpected token `newline' */
