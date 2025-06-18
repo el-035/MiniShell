@@ -62,6 +62,7 @@ typedef struct s_data
     //int           mod;
 }                 t_data;
 
+void	fail_mall(void);
 //main
 
 int	return_exit_code(int exit);

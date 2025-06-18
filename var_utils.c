@@ -90,16 +90,16 @@ char *extract_var(char **envp, char *var)
 
 	i = 0;
 	if (!var || !*var)
-		return(free(var), ft_strdup(""));	//protect
+		return(free(var), ft_strdup(""));
 	full = ft_strjoin(var, "=");
 	if (!full)
-		return NULL; //errroee
+		return (free(var), NULL);
 	while (envp && envp[i])
 	{
 		if (ft_strncmp(envp[i], full, ft_strlen(full)) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
-			value = ft_strdup(temp);			//not protected
+			value = ft_strdup(temp);
 			return(free(var), free(full), value);
 		}
 		else
@@ -130,7 +130,7 @@ char	*save_var(char *content)
 	}
 	var = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!var)
-		return (printf("Allocation failed\n"), NULL); //
+		return (fail_mall(), NULL); //
 	while (++i < len)
 		var[i] = content[i];
 	return (var);

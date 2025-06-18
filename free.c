@@ -2,6 +2,12 @@
 
 //void	free_everything();
 
+void	fail_mall(void)
+{
+	write(2, "Allocation failed\n", 18);
+	return_exit_code(1);
+}
+
 void free_split(char **split)
 {
 	int	word;

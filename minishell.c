@@ -13,7 +13,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-	if (find_ev(first, data) != 0)
+	if (find_ev(first, data) != 0)		//continue checking from here
 		return (free_list(first), 1);
 	
 	if (find_cmd(first) != 0)
@@ -92,20 +92,22 @@ char *prompt_join(t_data *data)
 
 	var = extract_var(data->envp, ft_strdup("USER"));
 	if (!var)
-		return (write(2, "Allocation failed\n", 18), NULL);	//exit code for malloc failed???
+		return (fail_mall(), NULL);
 	tmp = ft_strjoin(var, ":~");
 	free(var);
 	if (!tmp)
-		return (write(2, "Allocation failed\n", 18), NULL);
+		return (fail_mall(), NULL);
 	var = extract_var(data->envp, ft_strdup("PWD"));
 	if (!var)
-		return (write(2, "Allocation failed\n", 18), free(tmp), NULL);
+		return (free(tmp), fail_mall(), NULL);
 	prompt = ft_strjoin(tmp, var);
 	free(tmp); free(var);
 	if (!prompt)
-		return (write(2, "Allocation failed\n", 18), NULL);
+		return (fail_mall(), NULL);
 	return (prompt);
 }
+
+
 
 /* 	if (return_exit_code(-1) == 0 || return_sig_flag(-1) != 0)
 	{
@@ -128,18 +130,18 @@ char	*prompt(t_data *data, char **envp)
 		return (readline("\001\033[1;34m\002Minishell:\001\033[0m\002 "));
 	prompt = prompt_join(data);
 	if (!prompt)
-		return (NULL);
+		return (fail_mall(), NULL);
 	if (return_exit_code(-1) == 0 )						//color is fucked up for ctrl c
 		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
 	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
 		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
-//	tmp = ft_strjoin("\001\033[1;34m\002", prompt);  
+//	tmp = ft_strjoin("\001\033[1;34m\002", prompt); 
 	free(prompt);
 	if (!tmp)
-		return (write(2, "Allocation failed\n", 18), NULL);
-	prompt =ft_strjoin(tmp, "\001\033[0m\002 ");
+		return (fail_mall(), NULL);
+	prompt = ft_strjoin(tmp, "\001\033[0m\002 ");
 	if (!prompt)
-		return (write(2, "Allocation failed\n", 18), free(tmp), NULL);
+		return (fail_mall(), free(tmp), NULL);
 	line = readline(prompt);
 	return (free(prompt), free(tmp), line);
 }
@@ -158,8 +160,8 @@ int main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	data.fd1 = -1;
 	data.fd2 = -1;
-	copy_envp(&data, envp);
-
+	if (copy_envp(&data, envp) == -1)
+		return (write(2, "Allocation failed\n", 18), 1);	//not sure here
 	ft_memset(&sig, 0, sizeof(struct sigaction));
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
