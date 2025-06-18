@@ -62,8 +62,11 @@ int	create_heredoc(t_cmd *cmd)
 	while (1)
 	{
 		line = readline("> ");
+		//FOR THE EOF + ctrl D (EOF char)
+		/* if (*line == 26)
+			return (printf("hey\n"), 0); */
 		if (!line || ft_strcmp(line, cmd->limiter) == 0)
-			break;
+			break ;
 		new_lines = ft_calloc(sizeof(char *), count + 2);
 		if (!new_lines)
 			return (perror("Malloc: "), 0);
@@ -79,7 +82,6 @@ int	create_heredoc(t_cmd *cmd)
 	free(line);
 	return (1);
 } 
-
 
 int	handle_heredoc(t_cmd *cmd, t_input **cur)
 {

@@ -30,7 +30,7 @@ typedef struct	s_input
 	char 			*content;
 	enum e_type		type;
 	int				is_builtin;
-	char			*cmd_path;		//needs to be added to free ft
+	char			 *cmd_path;		//needs to be added to free ft
 	int				position;
 	struct s_input		*next;
 	struct s_input		*prev;
@@ -38,8 +38,7 @@ typedef struct	s_input
 
 typedef struct s_cmd
 {
-   // struct s_cmd    *next;
-    char 			**args;        // [ls, -l, NULL]
+    char 			**args;
     char *in;
     char *out;
 	int	is_builtin;
@@ -47,6 +46,7 @@ typedef struct s_cmd
 	int	is_hd;
 	char **hd_content;
 	char *limiter;
+	int	error_skip;
 }               t_cmd;
 
 typedef struct s_data
@@ -59,7 +59,6 @@ typedef struct s_data
     int           fd2;
     t_cmd 			*cmds;
     int           cmd_count;
-    //int           mod;
 }                 t_data;
 
 void	fail_mall(void);

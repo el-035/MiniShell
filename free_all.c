@@ -25,6 +25,18 @@
 		free(tmp);
 	}
 } */
+
+void	free_str_arr(char **str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+		free(str[i]);
+	free(str);
+	str = NULL;
+}
+
 void	free_cmd(t_cmd *cmd)
 {
 	int	i;
@@ -33,12 +45,7 @@ void	free_cmd(t_cmd *cmd)
 	if (!cmd)
 		return ;
 	if (cmd->args)
-	{
-		while (cmd->args[++i])
-			free(cmd->args[i]);
-		free(cmd->args);
-		cmd->args = NULL;
-	}
+		free_str_arr(cmd->args);
 	if (cmd->in)
 	{
 		free(cmd->in);
@@ -49,16 +56,10 @@ void	free_cmd(t_cmd *cmd)
 		free(cmd->out);
 		cmd->out = NULL;
 	}
-}
-
-void	free_str_arr(char **str)
-{
-	int	i;
-
-	i = -1;
-	while (str[++i])
-		free(str[i]);
-	free(str);
+	if (cmd->hd_content)
+		free_str_arr(cmd->hd_content);
+	if (cmd->limiter)
+		free(cmd->limiter);
 }
 
 void	free_pipes(int ***pipes, int count)
