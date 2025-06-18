@@ -909,7 +909,7 @@ exit
 [1m[35m  97:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:234[0m  
 [1m[35m  98:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:236[0m  
 [1m[35m  99:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:239[0m  
-[1m[35m  100:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:243[0m  
+[1m[35m  100:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:243[0m  
 [1m[35m  101:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:247[0m  
 [1m[35m  102:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:251[0m  
 [1m[35m  103:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:255[0m  
@@ -1051,8 +1051,8 @@ exit
 🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁
 🏁                                    [1m[31mRESULT[0m                                    🏁
 🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁
-                     [1m[35mTOTAL TEST COUNT: 977[0m  [1m[32mTESTS PASSED: 752[0m
-               [1m[34mSTD_OUT:[0m [1m[31m80[0m  [1m[33mSTD_ERR:[0m [1m[31m172[0m  [1m[36mEXIT_CODE:[0m [1m[31m38[0m  [1m[31mCRASHING: 1[0m
+                     [1m[35mTOTAL TEST COUNT: 977[0m  [1m[32mTESTS PASSED: 751[0m
+               [1m[34mSTD_OUT:[0m [1m[31m81[0m  [1m[33mSTD_ERR:[0m [1m[31m172[0m  [1m[36mEXIT_CODE:[0m [1m[31m38[0m  [1m[31mCRASHING: 1[0m
                           [1m[33mTOTAL FAILED AND PASSED CASES:[0m
-[1m[31m                                      ❌ 291 [0m
-[1m[32m                                      ✅ 2641 [0m
+[1m[31m                                      ❌ 292 [0m
+[1m[32m                                      ✅ 2640 [0m

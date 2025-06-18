@@ -21,7 +21,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-	/* FREE INPUT */
+	
 	//extract_var(data->envp, "HOME");
 	free_list(first);
     //freegrepo
@@ -145,7 +145,6 @@ char	*prompt(t_data *data, char **envp)
 	line = readline(prompt);
 	return (free(prompt), free(tmp), line);
 }
-
 
 
 int main(int argc, char **argv, char **envp)

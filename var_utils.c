@@ -66,7 +66,7 @@ int	stop(char *content)
 		{
 			if (content[i + 1] && (content[i + 1] == '$'))
 				i += 2;
-			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content[i + 1] == '_'))
+			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
