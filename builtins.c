@@ -42,11 +42,12 @@ int	error_n(char *err)
 
 void	ft_exit(t_data *data, t_cmd *cmd)
 {
-	//printf("exit\n");		//i think it should be there but the tester doesnt like it
+	printf("exit\n");		//i think it should be there but the tester doesnt like it
 	if (cmd->args[1])
 	{		
 		if (ft_str_digit(cmd->args[1]) != 0)
 		{
+			write(2, "bash: ", 6);
 			write(2, "exit: ", 6);
 			write(2, cmd->args[1], ft_strlen(cmd->args[1]));
 			write(2, ": numeric argument required\n", 28);
@@ -88,7 +89,7 @@ void	update_envp(char **envp, char *var, char *value)
 	}
 }
 
-void	ft_cd(t_data *data, t_cmd *cmd)
+void	ft_cd(t_data *data, t_cmd *cmd)		//handle -
 {
 	char *old_pwd;
 	char *new_pwd;
@@ -107,9 +108,10 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	}
 	else if (cmd->args[2])
 	{
+		write(2, "bash: ", 6);
 		write(2, "cd: ", 4);
-		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
-		write(2, ": too many arguments\n", 21);
+		//write(2, cmd->args[1], ft_strlen(cmd->args[1]));
+		write(2, "too many arguments\n", 19);
 		return_exit_code(1);
 	}
 	else /* (cmd->args[1]) */
@@ -135,8 +137,9 @@ int arr_len(char **arr)
 	int i;
 
 	i = 0;
-/* 	if (!arr || !*arr)
-		return -1; */
+	
+	if (!arr)
+		return 0;
 	while(arr[i])
 		i++;
 	return i;
@@ -202,7 +205,7 @@ void	ft_unset(t_data *data, t_cmd *cmd)
 	while(data->envp[i])
 	{
 		if (copy_var(data->envp[i], cmd->args) == 1)
-			tmp[j++] =  ft_strdup(data->envp[i]);
+			tmp[j++] =  ft_strdup(data->envp[i]);	//protect
 		i++;
 	}
 	free_split(data->envp);

@@ -46,6 +46,20 @@ int return_final_len(char *str)
 	return (j);
 }
 
+int	dollar_sign(t_input *cur)
+{
+	char *temp;
+
+	if (ft_strncmp(cur->content, "$\"", 2) != 0)
+		return 0;
+	temp = ft_strdup(cur->content + 1);
+	if (!temp)
+		return 1;	//error alloc
+	free (cur->content);
+	cur->content = temp;
+	return 0;
+}
+
 int	remove_useless_quotes(t_input *cur)
 {
 	int i;
@@ -53,6 +67,7 @@ int	remove_useless_quotes(t_input *cur)
 	char *final;
 
 	i = 0;
+	dollar_sign(cur);
 	j = return_final_len(cur->content);
 	final = (char *) ft_calloc(j + 1, sizeof(char));
 	j = 0;

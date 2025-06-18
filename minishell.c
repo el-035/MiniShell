@@ -1,129 +1,45 @@
 #include "minishell.h"
 
-void init_input(t_input *first)
+int	return_sig_flag(int sig)
 {
-	first->content = NULL;
-	first->type = UNKNOWN;	
-	first->position = -1;
-	first->next = NULL;
-	first->prev = NULL;
-	first->is_builtin = -1;
-	first->cmd_path = NULL;
+	static int flag = 0;
+
+	if (sig >= 0)
+		flag = sig;
+	return (flag);
 }
 
-int  save_input(char *line, t_input **first)
-{
-	t_input	*cur;
-	char 	**split;
-	int 	pos = 0;
-	
-	split = mini_split(line);
-	if (!split)
-		return 0;
-	*first = make_new_node(split[pos], pos);
-	if (!*first)
-		return (free_split(split), printf("Error\nAllocation failed\n"), 0);
-	pos++;
-	cur = *first;
-	while(split[pos])
-	{
-		cur = add_new(split[pos], pos, cur);
-		if (!cur)
-			return (free_split(split), free_list(*first), printf("Error\nAllocation failed\n"), 0);
-		pos++;
-	}
-	if (pos > 1)
-	{
-		cur->next = *first;
-		(*first)->prev = cur;
-	}
-	free_split(split);
-	return(1);
-}
-
-//return value?
-int	parsing(t_input *first, t_data *data, char *line)
-{
+int	parsing(t_input *first, t_data *data, char *line)	//return value?
+{	
 	if (assign_type(&first) != 0)
-		return (free_list(first), 1);	
-	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
+	if (find_ev(first, data) != 0)		//continue checking from here
+		return (free_list(first), 1);
+	
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
+	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-		//test_print(first);
-	/* FREE INPUT */
+	
 	//extract_var(data->envp, "HOME");
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
+	
 	if (!create_pipes(data))
         return (1);
+	
 	if (!get_env_path(data, data->envp))
-		return (1); //shouldnt return 1, might still work
-	open_files(data);
+		return (1);
+	
+	if (!open_files(data))
+		return (1);
+	
 	if (!exec_proc(data, data->envp))
 		return (1);
 	return (0);
 }
-
-
-int	copy_envp(t_data *data, char **envp)
-{
-	int i;
-
-	i = 0;
-	if (!*envp)			//handle this
-		return (printf("no env\n"), 1556);
-	while (envp[i])
-		i++;
-	data->envp = (char **) ft_calloc(i + 1, sizeof(char *));
-	if (!data->envp)
-		return 1561;		//error
-	i = 0;
-	while (envp[i])
-	{
-		data->envp[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	return 0;
-}
-
-
-/* char	*prompt(t_data *data)
-{
-
-} */
-
-/* int return_sig_flag(int flag)
-{
-	static int f_flag = 0;
-	int			temp;
-
-	if (flag == 1)
-		f_flag = 1;
-	temp = f_flag;
-	if (flag == 0)
-		f_flag = 0;
-	return temp;
-} */
-void	handler(int sig)
-{
-	if (sig == SIGINT)		//crtl C
-	{
-		return_exit_code(130);		// :((
-		//return_sig_flag(1);
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-	if (sig == SIGQUIT)		//ctrl /
-	{
-	}
-}
-
 
 int	return_exit_code(int exit)
 {
@@ -150,6 +66,87 @@ int	return_exit_code(int exit)
 	return (cur_exit);
 }
 
+void	handler(int sig)
+{
+	if (sig == SIGINT)		//crtl C
+	{
+		//return_exit_code(130);		// this actually does not work :(
+		return_sig_flag(1);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+
+	}
+	if (sig == SIGQUIT)		//ctrl /
+	{
+	}
+}
+
+char *prompt_join(t_data *data)
+{
+	char *prompt;
+	char *tmp;
+	char *var;
+	char *col;
+
+	var = extract_var(data->envp, ft_strdup("USER"));
+	if (!var)
+		return (fail_mall(), NULL);
+	tmp = ft_strjoin(var, ":~");
+	free(var);
+	if (!tmp)
+		return (fail_mall(), NULL);
+	var = extract_var(data->envp, ft_strdup("PWD"));
+	if (!var)
+		return (free(tmp), fail_mall(), NULL);
+	prompt = ft_strjoin(tmp, var);
+	free(tmp); free(var);
+	if (!prompt)
+		return (fail_mall(), NULL);
+	return (prompt);
+}
+
+
+
+/* 	if (return_exit_code(-1) == 0 || return_sig_flag(-1) != 0)
+	{
+		//return_sig_flag(0);
+		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
+	}
+	else if (return_exit_code(-1) != 0)
+		tmp = ft_strjoin("\001\033[1;31m\002", prompt); */
+
+
+char	*prompt(t_data *data, char **envp)
+{
+	char *line;
+	char *tmp;
+	char *prompt;
+
+	return_exit_code(0);
+	return_sig_flag(0);
+	if (!*envp)
+		return (readline("\001\033[1;34m\002Minishell:\001\033[0m\002 "));
+	prompt = prompt_join(data);
+	if (!prompt)
+		return (fail_mall(), NULL);
+	if (return_exit_code(-1) == 0 )						//color is fucked up for ctrl c
+		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
+	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
+		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
+//	tmp = ft_strjoin("\001\033[1;34m\002", prompt); 
+	free(prompt);
+	if (!tmp)
+		return (fail_mall(), NULL);
+	prompt = ft_strjoin(tmp, "\001\033[0m\002 ");
+	if (!prompt)
+		return (fail_mall(), free(tmp), NULL);
+	line = readline(prompt);
+	return (free(prompt), free(tmp), line);
+}
+
+
 int main(int argc, char **argv, char **envp)
 {
 	char 				*line;
@@ -162,30 +159,29 @@ int main(int argc, char **argv, char **envp)
 	ft_memset(&data, 0, sizeof(t_data));
 	data.fd1 = -1;
 	data.fd2 = -1;
-	copy_envp(&data, envp);
+	if (copy_envp(&data, envp) == -1)
+		return (write(2, "Allocation failed\n", 18), 1);	//not sure here
 	ft_memset(&sig, 0, sizeof(struct sigaction));
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL);
 	while (1)
 	{
 		first = NULL;
-		return_exit_code(0);	//ctrlc works but when used the exit code is updated one loop later
-		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL);
-		if (return_exit_code(-1) == 0)
-			line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");	//double check
-		else if (return_exit_code(-1) != 0)
-			line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");	//double check
+		/* printf("%d\n", return_sig_flag(-1)); */
+/* 		if (return_sig_flag(-1) != 2) */
+		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
-		if (!*line || !save_input(line, &first)/*  || return_sig_flag(0) == 1 */)
+		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
+	//	test_print(first);
 		parsing(first, &data, line);
-
 		add_history(line);
 		free(line);
-		free_all(&data);		//error somewhere 
+		free_all(&data);
 	}
 	if (first)
 		free_list(first);
@@ -193,14 +189,14 @@ int main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	return (free_split(data.envp), return_exit_code(-1));
 }
+//EXIT CODE FOR ALLOCATION FAILED?
+//SHLVL not increased when running minishell inside of minishell
 // ./minishell takes args. Shouldnt it?
+//change bash to mnishell
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
-/* 		if (isatty(STDIN_FILENO))
-  		  printf("2stdin is open ✅\n");
-		else
-		    printf("2stdin is closed ❌\n"); */
+
 
 //free input after my part in parsing
 
@@ -212,27 +208,6 @@ int main(int argc, char **argv, char **envp)
 ==51055==    by 0x1097A0: parsing (minishell.c:80)
 ==51055==    by 0x109AE6: main (minishell.c:195)
 ==51055==  */
-
-
-/* 		if (isatty(fileno(stdin)))		//chatgpt just for testing, needs to be deleted
-        {
-            if (return_exit_code(-1) == 0)
-                line = readline("\001\033[1;32m\002Minishell:\001\033[0m\002 ");
-            else
-                line = readline("\001\033[1;31m\002Minishell:\001\033[0m\002 ");
-        }
-        else
-        {
-
-            char *tmp = get_next_line(fileno(stdin));
-            if (!tmp)
-                break; 
-            line = ft_strtrim(tmp, "\n");
-            free(tmp);
-        } */
-
-
-
 
 		// CAN BE ANY COMMANDS IN THE MIDDLE?
 		//SHOULD WE HANDLE CHMOD

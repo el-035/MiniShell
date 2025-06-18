@@ -12,21 +12,16 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+
 typedef enum e_type
 {
 	CMD,         // Command (e.g., "ls", "cat")
 	ARG,         // Argument (e.g., "-a", "file.txt")
 	PIPE,        // Pipe ("|")
-	REDIR_IN,    // Input redirection ("<")
-	REDIR_OUT,   // Output redirection (">")
-	REDIR_APPEND,// Append redirection (">>")
-	HERE_DOC,    // Here document ("<<")
-	//ENV_VAR,     // Environment variable ("$HOME")
-	//S_QUOTE,     // Quoted string ('...')
-	//D_QUOTE,	 // Quoted string ("...")
-	//SEP,         // Separator (e.g., ";")
-	//OPERATOR,    // Logical operators ("&&", "||")
-	//SUBSHELL,     // Subshell ("(cmd)")
+	REDIR_IN,    //< Input redirection ("<")
+	REDIR_OUT,   //> Output redirection (">")
+	REDIR_APPEND,//>> Append redirection (">>")
+	HERE_DOC,    //<< Here document ("<<")
 	UNKNOWN
 }	t_type;
 
@@ -66,10 +61,16 @@ typedef struct s_data
     int           cmd_count;
 }                 t_data;
 
+void	fail_mall(void);
 //main
+
+int	return_exit_code(int exit);
+int	return_sig_flag(int sig);
+
+//init
 void init_input(t_input *first);
 int  save_input(char *line, t_input **first);
-int	return_exit_code(int exit);
+int	copy_envp(t_data *data, char **envp);
 
 //free
 void free_split(char **split);
@@ -95,12 +96,14 @@ int	expand_var(t_input **cur, t_data *data);
 int	check_quotes(char *content, int len);
 int	join_all(t_input **cur, char *start, char *end, char *var);
 int	expand_exit(t_input **cur, t_data *data);
+
 //var utils
 int	start_len(char *content);
 char	*search_var(char *content, char *var);
 int	stop(char *content);
 char *extract_var(char **envp, char *var);
 char	*save_var(char *content);
+int even_odd(char *content, int i);
 
 //quotes
 int	check_quotes(char *content, int len);
@@ -126,8 +129,16 @@ void	ft_echo(t_cmd *cmd);
 void	ft_exit(t_data *data, t_cmd *cmd);
 void	ft_cd(t_data *data, t_cmd *cmd);
 void	ft_unset(t_data *data, t_cmd *cmd);
+int arr_len(char **arr);
 
+//export
+int	add_env(t_data *data, char *var, char *content);
+char *double_join(char *s1, char *s2, char *s3);
+void	ft_export(t_data *data, t_cmd *cmd);
 int	return_exit_code(int exit);
+char	*get_var(char *str);
+char	*get_content(char *str);
+int	print_export(char **envp);
 
 //Exec
 int	check_permission(t_data *data, char *fd_name, int file_order);

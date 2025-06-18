@@ -13,7 +13,7 @@ if [ -f "dif_test/new_test.txt" ]; then
 fi
 
 source ~/.bashrc
-bash /home/el/42_minishell_tester/tester.sh m > dif_test/new_test.txt
+bash /home/efittant/42_minishell_tester/tester.sh m > dif_test/new_test.txt
 
 if [ -f "dif_test/old_test.txt" ]; then
 	diff "dif_test/old_test.txt" "dif_test/new_test.txt" > "dif_test/diff.txt"

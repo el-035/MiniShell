@@ -11,7 +11,7 @@ int	start_len(char *content)
 		{
 			if (content[i + 1] && (content[i + 1] == '$' /* || content[i + 1] == '?' */))
 				i += 2;
-			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i + 1] == '_'))
+			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content[i + 1] == '_'))
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
@@ -39,6 +39,20 @@ char	*search_var(char *content, char *var)
 		temp++;
 	}
 	return (temp);
+}
+
+int even_odd(char *content, int i)
+{
+	int count;
+
+	count = 1;
+	while(i-- > 0)
+	{
+		if (content[i] != '\\')
+			break ;
+		count++;
+	}
+	return (count);
 }
 
 int	stop(char *content)
@@ -71,25 +85,27 @@ char *extract_var(char **envp, char *var)
 {
 	char *value;
 	char *temp;
+	char *full;
 	int i;
 
 	i = 0;
 	if (!var || !*var)
-		return (free(var), ft_strdup(""));
-
-	while (envp[i])
+		return(free(var), ft_strdup(""));
+	full = ft_strjoin(var, "=");
+	if (!full)
+		return (free(var), NULL);
+	while (envp && envp[i])
 	{
-		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
+		if (ft_strncmp(envp[i], full, ft_strlen(full)) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
 			value = ft_strdup(temp);
-			return(free(var), value);
+			return(free(var), free(full), value);
 		}
 		else
 			i++;
 	}
-	return (free(var), ft_strdup(""));
-	
+	return (free(var), free(full), ft_strdup(""));
 }
 
 char	*save_var(char *content)
@@ -107,14 +123,14 @@ char	*save_var(char *content)
 		content++;
 	while (content[len])
 	{
-		if (ft_isalpha(content[len]) || content[len] == '_')
+		if (ft_isalnum(content[len]) || content[len] == '_')
 			len++;
 		else
 			break;
 	}
 	var = (char *) ft_calloc((len + 1), sizeof(char));
 	if (!var)
-		return (printf("Allocation failed\n"), NULL); //
+		return (fail_mall(), NULL); //
 	while (++i < len)
 		var[i] = content[i];
 	return (var);
