@@ -13,9 +13,8 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-	if (find_ev(first, data) != 0)		//continue checking from here
+	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
-	
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
 	
@@ -107,8 +106,6 @@ char *prompt_join(t_data *data)
 	return (prompt);
 }
 
-
-
 /* 	if (return_exit_code(-1) == 0 || return_sig_flag(-1) != 0)
 	{
 		//return_sig_flag(0);
@@ -116,7 +113,6 @@ char *prompt_join(t_data *data)
 	}
 	else if (return_exit_code(-1) != 0)
 		tmp = ft_strjoin("\001\033[1;31m\002", prompt); */
-
 
 char	*prompt(t_data *data, char **envp)
 {
@@ -178,7 +174,7 @@ int main(int argc, char **argv, char **envp)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 	//	test_print(first);
-		parsing(first, &data, line);
+		parsing(first, &data, line);	//here?
 		add_history(line);
 		free(line);
 		free_all(&data);
@@ -196,9 +192,6 @@ int main(int argc, char **argv, char **envp)
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
-
-
-//free input after my part in parsing
 
 /* Minishell: unset HOME
 ---- Before unset ----

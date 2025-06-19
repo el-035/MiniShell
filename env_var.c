@@ -1,19 +1,19 @@
-#include"minishell.h"
+#include "minishell.h"
 
-char *save_start(char *content)
+char	*save_start(char *content)
 {
-	int i;
-	int len;
-	char *start;
+	int		i;
+	int		len;
+	char	*start;
 
 	i = 0;
 	len = start_len(content);
 	if (len == 0)
 		return (ft_strdup(""));
-	start = (char *) ft_calloc((len + 1), sizeof(char));
+	start = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!start)
-		return (printf("Allocation failed\n"), NULL); //
-	while(i < len)
+		return (NULL);
+	while (i < len)
 	{
 		start[i] = content[i];
 		i++;
@@ -23,21 +23,20 @@ char *save_start(char *content)
 
 char	*save_rest(char *content, char *var)
 {
-	int i;
-	int len;
-	char *rest;
+	int		i;
+	int		len;
+	char	*rest;
 
 	len = ft_strlen(var);
-
 	if (!content[len] || !content || !*content)
 		return (ft_strdup(""));
 	i = len;
 	while (content[len])
 		len++;
 	len = len - i;
-	rest = (char *) ft_calloc((len + 1), sizeof(char));
+	rest = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!rest)
-		return (printf("Allocation failed\n"), NULL); //
+		return (NULL); //
 	len = 0;
 	while (content[i])
 		rest[len++] = content[i++];
@@ -46,8 +45,8 @@ char	*save_rest(char *content, char *var)
 
 int	join_all(char **content, char *start, char *end, char *var)
 {
-	char *temp;
-	char *joint;
+	char	*temp;
+	char	*joint;
 
 	joint = ft_strjoin(start, var);
 	if (!joint)
@@ -56,39 +55,43 @@ int	join_all(char **content, char *start, char *end, char *var)
 	free(var);
 	temp = ft_strjoin(joint, end);
 	if (!temp)
-		return (1);
+		return (free(end), free(joint), 1);
 	free(joint);
 	joint = temp;
 	free(end);
-	free(*content);	
+	free(*content);
 	*content = ft_strdup(joint);
 	free(joint);
-	return 0;
+	if (!*content)
+		return (1);
+	return (0);
 }
 
 int	expand_var(char **content, char **envp)
 {
-	char *start;
-	char *var;
-	char *end;
+	char	*start;
+	char	*var;
+	char	*end;
 
 	if (stop(*content) == 0)
-		return 0;
-	start = save_start(*content);
+		return (0);
+	start = save_start(*content); // HERE malloc faisl ???+
 	if (!start)
-		return (1);
+		return (fail_mall(), 1);
 	var = save_var(&(*content)[start_len(*content)]);
 	if (!var)
 		return (free(start), 1);
 	end = save_rest(search_var(*content, var), var);
 	if (!end)
-		return (free(start), free(var), 1);
+		return (free(start), free(var), fail_mall(), 1);
 	var = extract_var(envp, var);
+	if (!var)
+		return (free(start), free(end), fail_mall(), 1);
 	if (join_all(content, start, end, var) == 1)
-		return 1;
+		return (fail_mall(), 1);
 	if (ft_strchr(*content, '$') != 0)
 		expand_var(content, envp);
-	return 0;
+	return (0);
 }
 
 int	find_ev(t_input *first, t_data *data)
@@ -96,17 +99,26 @@ int	find_ev(t_input *first, t_data *data)
 	t_input	*cur;
 
 	cur = first;
-	while(cur)
+	while (cur)
 	{
 		if (ft_strchr(cur->content, '$'))
-			expand_var(&(cur->content), data->envp);
+		{
+			if (expand_var(&(cur->content), data->envp) != 0)
+				return (1);
+		}
 		if (ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
-			expand_exit(&cur, data);
+		{
+			if (expand_exit(&cur, data) != 0)
+				return (1);
+		}
 		if (ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
-			remove_useless_quotes(cur);
+		{
+			if (remove_useless_quotes(cur) != 0)		//HERE
+				return (1);
+		}
 		cur = cur->next;
 		if (cur == first)
 			break ;
 	}
-	return 0;
+	return (0);
 }
