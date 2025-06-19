@@ -16,6 +16,7 @@ int	save_input(char *line, t_input **first)
 	t_input	*cur;
 	char	**split;
 	int		pos;
+	char *exp;
 
 	pos = 0;
 	split = mini_split(line);

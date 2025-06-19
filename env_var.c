@@ -44,7 +44,7 @@ char	*save_rest(char *content, char *var)
 	return (rest);
 }
 
-int	join_all(t_input **cur, char *start, char *end, char *var)
+int	join_all(char **content, char *start, char *end, char *var)
 {
 	char *temp;
 	char *joint;
@@ -60,34 +60,34 @@ int	join_all(t_input **cur, char *start, char *end, char *var)
 	free(joint);
 	joint = temp;
 	free(end);
-	free((*cur)->content);	
-	(*cur)->content = ft_strdup(joint);
+	free(*content);	
+	*content = ft_strdup(joint);
 	free(joint);
 	return 0;
 }
 
-int	expand_var(t_input **cur, t_data *data)
+int	expand_var(char **content, char **envp)
 {
 	char *start;
 	char *var;
-	char	*end;
+	char *end;
 
-	if (stop((*cur)->content) == 0)
+	if (stop(*content) == 0)
 		return 0;
-	start = save_start((*cur)->content);
+	start = save_start(*content);
 	if (!start)
 		return (1);
-	var = save_var(&(*cur)->content[start_len((*cur)->content)]);
+	var = save_var(&(*content)[start_len(*content)]);
 	if (!var)
 		return (free(start), 1);
-	end = save_rest(search_var((*cur)->content, var), var);
+	end = save_rest(search_var(*content, var), var);
 	if (!end)
 		return (free(start), free(var), 1);
-	var = extract_var(data->envp, var);
-	if (join_all(cur, start, end, var) == 1)
-		return 1;	//error or wat ?
-	if (ft_strchr((*cur)->content, '$') != 0)
-		expand_var(cur, data);
+	var = extract_var(envp, var);
+	if (join_all(content, start, end, var) == 1)
+		return 1;
+	if (ft_strchr(*content, '$') != 0)
+		expand_var(content, envp);
 	return 0;
 }
 
@@ -99,7 +99,7 @@ int	find_ev(t_input *first, t_data *data)
 	while(cur)
 	{
 		if (ft_strchr(cur->content, '$'))
-			expand_var(&cur, data);
+			expand_var(&(cur->content), data->envp);
 		if (ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 			expand_exit(&cur, data);
 		if (ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))

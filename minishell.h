@@ -91,10 +91,10 @@ int	assign_type(t_input **first);
 
 //env_var
 int	find_ev(t_input *first, t_data *data);
-int	expand_var(t_input **cur, t_data *data);
+int	expand_var(char **content, char **envp);
 //char	*extract_var(t_data *data, char *var);
 int	check_quotes(char *content, int len);
-int	join_all(t_input **cur, char *start, char *end, char *var);
+int	join_all(char **content, char *start, char *end, char *var);
 int	expand_exit(t_input **cur, t_data *data);
 
 //var utils
