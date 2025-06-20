@@ -40,8 +40,8 @@ void	free_list(t_input *first)
 		tmp = cur->next;
 		if (cur->content)
 			free(cur->content);
-		if (cur->is_builtin == 0 && cur->cmd_path)
-			free(cur->cmd_path);
+		/* if (cur->is_builtin == 0 && cur->cmd_path)
+			free(cur->cmd_path); */
 		if (cur)
 			free(cur);
 		if (tmp == first)

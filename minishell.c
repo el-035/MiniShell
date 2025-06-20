@@ -21,7 +21,6 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
 	
-	//extract_var(data->envp, "HOME");
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
@@ -279,3 +278,13 @@ Minishell: ==46451==
 ==46451==      possibly lost: 0 bytes in 0 blocks
 ==46451==    still reachable: 0 bytes in 0 blocks
 ==46451==         suppressed: 204,635 bytes in 216 blocks */
+
+/*  MiniShell git:(el) ✗ ./minishell 
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $"$USER"
+efittant
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo "$\"hello\""
+$hello\
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $\"hello\"
+$\hello
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $"hello"
+hello */

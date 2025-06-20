@@ -46,7 +46,7 @@ int	return_final_len(char *str)
 	return (j);
 }
 
-int	dollar_sign(t_input *cur)
+/* int	dollar_sign(t_input *cur)
 {
 	char	*temp;
 
@@ -58,7 +58,7 @@ int	dollar_sign(t_input *cur)
 	free(cur->content);
 	cur->content = temp;
 	return (0);
-}
+} */
 
 int	remove_useless_quotes(t_input *cur)
 {
@@ -67,9 +67,11 @@ int	remove_useless_quotes(t_input *cur)
 	char	*final;
 
 	i = 0;
-	dollar_sign(cur);
+	//dollar_sign(cur);
 	j = return_final_len(cur->content);
 	final = (char *)ft_calloc(j + 1, sizeof(char));
+	if(!final)
+		return (fail_mall(), 1);
 	j = 0;
 	while (cur->content[i])
 	{
@@ -84,6 +86,7 @@ int	remove_useless_quotes(t_input *cur)
 	}
 	free(cur->content);
 	cur->content = ft_strdup(final);
-	free(final);
-	return (0);
+	if (!cur->content)
+		return (free (final), fail_mall(), 1);
+	return (free(final), 0);
 }

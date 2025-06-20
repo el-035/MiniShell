@@ -101,19 +101,22 @@ int	find_ev(t_input *first, t_data *data)
 	cur = first;
 	while (cur)
 	{
-		if (ft_strchr(cur->content, '$'))
+		if ((!cur->prev || cur->prev->type != HERE_DOC)
+			&& stop(cur->content) != 0)
 		{
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
+			cur->exp = 1;
 		}
-		if (ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
+		if ((!cur->prev || cur->prev->type != HERE_DOC)
+			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)
 				return (1);
 		}
 		if (ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
 		{
-			if (remove_useless_quotes(cur) != 0)		//HERE
+			if (remove_useless_quotes(cur) != 0)
 				return (1);
 		}
 		cur = cur->next;
