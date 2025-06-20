@@ -47,7 +47,12 @@ int	join_all(char **content, char *start, char *end, char *var)
 {
 	char	*temp;
 	char	*joint;
+	int		index_flag;
 
+	index_flag = 0;
+	if (find_index(-1) != 0 && (ft_strlen(start) + 1) != find_index(-1)
+		&& find_index(-1) != -1)
+		index_flag = 1;
 	joint = ft_strjoin(start, var);
 	if (!joint)
 		return (free(start), free(var), free(end), 1);
@@ -57,6 +62,8 @@ int	join_all(char **content, char *start, char *end, char *var)
 	if (!temp)
 		return (free(end), free(joint), 1);
 	free(joint);
+	if (index_flag == 1)
+		find_index(exp_helper(temp));
 	joint = temp;
 	free(end);
 	free(*content);
@@ -94,6 +101,36 @@ int	expand_var(char **content, char **envp)
 	return (0);
 }
 
+int	find_index(int i /*  int j, */)
+{
+	static int	index = -1;
+
+	// i the og found			pass -1 to not change
+	// j when it gets updates	NO
+	// k to reset
+	if (i != -1)
+		index = i;
+	return (index);
+}
+
+int	exp_helper(char *content)
+{
+	int	i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '$' && check_quotes(content, i) == 0)
+		{
+			find_index(i);
+			return (i);
+		}
+		else
+			i++;
+	}
+	return (-1);
+}
+
 int	find_ev(t_input *first, t_data *data)
 {
 	t_input	*cur;
@@ -104,9 +141,12 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
+			cur->exp = exp_helper(cur->content);
+			//printf("%d\n", cur->exp);
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
-			cur->exp = 1;
+			cur->exp = find_index(-1);
+			//printf("%d\n", cur->exp);
 		}
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
@@ -114,7 +154,7 @@ int	find_ev(t_input *first, t_data *data)
 			if (expand_exit(&cur, data) != 0)
 				return (1);
 		}
-		if (ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
+		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')))
 		{
 			if (remove_useless_quotes(cur) != 0)
 				return (1);

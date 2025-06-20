@@ -8,7 +8,7 @@ void	init_input(t_input *first)
 	first->next = NULL;
 	first->prev = NULL;
 	first->is_builtin = -1;
-	first->exp = 0;
+	first->exp = -1;
 }
 
 int	save_input(char *line, t_input **first)
@@ -26,6 +26,11 @@ int	save_input(char *line, t_input **first)
 	if (!*first)
 		return (free_split(split), fail_mall(), 0);
 	cur = *first;
+	if (!split[1])
+	{
+		(*first)->next= (*first);
+		(*first)->prev= (*first);
+	}
 	while (split[++pos])
 	{
 		cur = add_new(split[pos], pos, cur);

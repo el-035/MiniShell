@@ -107,7 +107,7 @@ char	**mini_split(char const *s)
 	{
 		split[j] = ft_word((char *)s, i);
 		if (!split[j++])
-			return (/* free_split(split),  */NULL);
+			return (free_split(split), NULL);
 		while ((s[i] == 32 || s[i] == 9) && s[i])
 			i++;
 		i = i + ft_strlen(split[j - 1]);
