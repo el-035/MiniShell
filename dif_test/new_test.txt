@@ -127,7 +127,7 @@ exit
 [1m[35m  27:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:87[0m  
 [1m[35m  28:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:90[0m  
 [1m[35m  29:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:93[0m  
-[1m[35m  30:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:96[0m  
+[1m[35m  30:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:96[0m  
 [1m[35m  31:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:99[0m  
 [1m[35m  32:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:102[0m  
 [1m[35m  33:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:104[0m  
@@ -172,7 +172,7 @@ exit
 [1m[35m  72:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:207[0m  
 [1m[35m  73:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:210[0m  
 [1m[35m  74:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:213[0m  
-[1m[35m  75:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ❌[1m[31m [ minishell(127) bash(0) ][0m  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:216[0m  
+[1m[35m  75:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:216[0m  
 [1m[35m  76:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:219[0m  
 [1m[35m  77:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:222[0m  
 [1m[35m  78:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/10_parsing_hell.sh:225[0m  
@@ -230,7 +230,7 @@ exit
 [1m[35m  2:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ❌[1m[31m [ minishell(127) bash(0) ][0m  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/11_expansion.sh:7[0m  
 [1m[35m  3:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ❌[1m[31m [ minishell(127) bash(0) ][0m  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/11_expansion.sh:9[0m  
 [1m[35m  4:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/11_expansion.sh:11[0m  
-[1m[35m  5:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/11_expansion.sh:13[0m  
+[1m[35m  5:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/11_expansion.sh:13[0m  
 [1m[35m  6:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/11_expansion.sh:16[0m  
 [1m[33m  # **************************************************************************** #[0m
 [1m[33m  #                                      CD                                      #[0m
@@ -791,21 +791,21 @@ exit
 [1m[35m  33:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:93[0m  
 [1m[35m  34:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:102[0m  
 [1m[35m  35:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:108[0m  
-[1m[35m  36:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:112[0m  
-[1m[35m  37:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:115[0m  
-[1m[35m  38:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:118[0m  
-[1m[35m  39:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:121[0m  
-[1m[35m  40:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:124[0m  
-[1m[35m  41:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:127[0m  
-[1m[35m  42:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:130[0m  
-[1m[35m  43:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:133[0m  
-[1m[35m  44:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:136[0m  
+[1m[35m  36:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:112[0m  
+[1m[35m  37:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:115[0m  
+[1m[35m  38:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:118[0m  
+[1m[35m  39:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:121[0m  
+[1m[35m  40:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:124[0m  
+[1m[35m  41:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:127[0m  
+[1m[35m  42:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:130[0m  
+[1m[35m  43:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:133[0m  
+[1m[35m  44:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:136[0m  
 [1m[35m  45:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:139[0m  
 [1m[35m  46:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:142[0m  
-[1m[35m  47:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:145[0m  
-[1m[35m  48:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:148[0m  
-[1m[35m  49:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:151[0m  
-[1m[35m  50:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:154[0m  
+[1m[35m  47:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:145[0m  
+[1m[35m  48:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:148[0m  
+[1m[35m  49:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:151[0m  
+[1m[35m  50:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:154[0m  
 [1m[35m  51:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_variables.sh:157[0m  
 [1m[33m  # **************************************************************************** #[0m
 [1m[33m  #                                  CORRECTION                                  #[0m
@@ -1050,8 +1050,8 @@ exit
 🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁
 🏁                                    [1m[31mRESULT[0m                                    🏁
 🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁🏁
-                     [1m[35mTOTAL TEST COUNT: 976[0m  [1m[32mTESTS PASSED: 757[0m
-               [1m[34mSTD_OUT:[0m [1m[31m74[0m  [1m[33mSTD_ERR:[0m [1m[31m172[0m  [1m[36mEXIT_CODE:[0m [1m[31m38[0m  [1m[31mCRASHING: 1[0m
+                     [1m[35mTOTAL TEST COUNT: 976[0m  [1m[32mTESTS PASSED: 773[0m
+               [1m[34mSTD_OUT:[0m [1m[31m58[0m  [1m[33mSTD_ERR:[0m [1m[31m171[0m  [1m[36mEXIT_CODE:[0m [1m[31m37[0m  [1m[31mCRASHING: 1[0m
                           [1m[33mTOTAL FAILED AND PASSED CASES:[0m
-[1m[31m                                      ❌ 285 [0m
-[1m[32m                                      ✅ 2644 [0m
+[1m[31m                                      ❌ 267 [0m
+[1m[32m                                      ✅ 2662 [0m

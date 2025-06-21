@@ -89,3 +89,22 @@ int	remove_useless_quotes(t_input *cur)
 		return (free (final), fail_mall(), 1);
 	return (free(final), 0);
 }
+
+int	remove_quotes(t_input *first, t_data *data)
+{
+	t_input	*cur;
+
+	cur = first;
+	while (cur)
+	{
+		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')))
+		{
+			if (remove_useless_quotes(cur) != 0)
+				return (1);
+		}
+		cur = cur->next;
+		if (cur == first)
+			break ;
+	}
+	return (0);
+}
