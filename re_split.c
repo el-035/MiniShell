@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void init_new(t_input *new, t_input *cur, t_input *first)
+/* void init_new(t_input *new, t_input *cur, t_input *first)
 {
 	int i;
 	t_input *temp;
@@ -118,4 +118,4 @@ int	exp_split(t_input *first)
 			break ;
 	}
 	return 0;
-}
+} */

@@ -67,13 +67,11 @@ int	remove_useless_quotes(t_input *cur)
 	char	*final;
 
 	i = 0;
-	//dollar_sign(cur);
 	j = return_final_len(cur->content);
 	final = (char *)ft_calloc(j + 1, sizeof(char));
 	if(!final)
 		return (fail_mall(), 1);
 	j = 0;
-//	int temp = find_index(-1);
 	while (cur->content[i])
 	{
 		if (cur->content[i] == '"' && check_quotes(cur->content, i) != 1)
@@ -83,13 +81,8 @@ int	remove_useless_quotes(t_input *cur)
 		else if (cur->content[i] == '\'' && check_quotes(cur->content, i) != 2)
 			i++;
 		else
-		{
-			if (i == find_index(-1))
-				find_index(j);
 			final[j++] = cur->content[i++];
-		}
 	}
-//	printf("og: %s/%d\nnew %s/%d\n", cur->content, temp, final, find_index(-1));
 	free(cur->content);
 	cur->content = ft_strdup(final);
 	if (!cur->content)
