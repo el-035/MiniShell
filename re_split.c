@@ -2,14 +2,15 @@
 
 int	count_word(char *content)
 {
-	int wc;
-	int start;
+	int	wc;
+	int	start;
 
 	wc = 0;
 	start = 0;
-	while(content[start])
+	while (content[start])
 	{
-		if (content[start] != ' ' && content[start] != '\t' && content[start] != '\n')
+		if (content[start] != ' ' && content[start] != '\t'
+			&& content[start] != '\n')
 			start++;
 		else
 		{
@@ -19,7 +20,7 @@ int	count_word(char *content)
 	}
 	return (wc);
 }
-void init_node(t_input *cur, t_input *tmp, t_input *new, int i)
+void	init_node(t_input *cur, t_input *tmp, t_input *new, int i)
 {
 	ft_memset(new, 0, sizeof(t_input));
 	init_input(new);
@@ -40,17 +41,17 @@ void init_node(t_input *cur, t_input *tmp, t_input *new, int i)
 
 int	add_node(t_input *cur, t_input *next, int count)
 {
-	t_input *new;
-	t_input *tmp;
-	int i;
+	t_input	*new;
+	t_input	*tmp;
+	int		i;
 
 	i = 0;
-	tmp  = NULL;
+	tmp = NULL;
 	while (i < count)
 	{
 		new = (t_input *)malloc(sizeof(t_input));
 		if (!new)
-			return (fail_mall(), 1);
+			return (1);
 		init_node(cur, tmp, new, i);
 		tmp = new;
 		i++;
@@ -60,29 +61,34 @@ int	add_node(t_input *cur, t_input *next, int count)
 	return (0);
 }
 
-
 int	ft(t_input *cur)
 {
-	char **split;
-	int	i;
-	int count;
+	char	**split;
+	int		i;
+	int		count;
+	char	*tmp;
 
 	i = 0;
+	tmp = cur->content;
 	if (count_word(cur->content) < 2)
-		return 0;
+		return (0);
 	split = mini_split(cur->content);
 	if (!split)
-		return (fail_mall(), 1); //check
+		return (1);
 	count = arr_len(split);
 	if (count == 1)
-		return 0;
-	add_node(cur, cur->next, count - 1);
+		return (0);
+	if (add_node(cur, cur->next, count - 1) != 0)
+		return (free_split(split), 1);
+	free(cur->content);
 	while (i < count)
 	{
-		cur->content = ft_strdup(split[i++]);		//protect
+		cur->content = ft_strdup(split[i++]);
+		if (!cur->content)
+			return (free_split(split), 1);
 		cur = cur->next;
 	}
-	return 0;
+	return (free_split(split), 0);
 }
 
 int	exp_split(t_input *first)
@@ -92,14 +98,14 @@ int	exp_split(t_input *first)
 	cur = first;
 	while (cur)
 	{
-		if (cur->dq_var != NULL)
+		if (cur->exp != -1)
 		{
 			if (ft(cur) != 0)
-				return 1;
+				return (fail_mall(), 1);
 		}
 		cur = cur->next;
 		if (cur == first)
 			break ;
 	}
-	return 0;
-} 
+	return (0);
+}

@@ -29,7 +29,7 @@ typedef struct s_input
 	char			*content;
 	enum e_type		type;
 	int				is_builtin;
-	int				*dq_var;
+	int				exp;
 	int				position;	//do we need it?
 	struct s_input	*next;
 	struct s_input	*prev;
@@ -90,7 +90,7 @@ int					assign_type(t_input **first);
 
 // env_var
 int					find_ev(t_input *first, t_data *data);
-int					expand_var(char **content, char **envp, int **dq_var);
+int					expand_var(char **content, char **envp/* , int **dq_var */);
 // char	*extract_var(t_data *data, char *var);
 int					check_quotes(char *content, int len);
 int					join_all(char **content, char *start, char *end, char *var);

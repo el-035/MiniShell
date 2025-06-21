@@ -8,7 +8,7 @@ void	init_input(t_input *first)
 	first->next = NULL;
 	first->prev = NULL;
 	first->is_builtin = -1;
-	first->dq_var = NULL;
+	first->exp = -1;
 }
 
 int	save_input(char *line, t_input **first)

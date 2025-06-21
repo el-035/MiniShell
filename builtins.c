@@ -123,7 +123,6 @@ void	ft_cd(t_data *data, t_cmd *cmd)		//handle -
 			write(2, ": No such file or directory\n", 28);
 			return_exit_code(1);
 		}
-		//	handle_error(cmd->args[1], 1); 		//not sure what number
 	}
 	new_pwd = getcwd(NULL, 0);
 	update_envp(data->envp, "OLDPWD=", old_pwd);

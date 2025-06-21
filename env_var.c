@@ -72,16 +72,14 @@ void	save_var_index(int *dq_count, int index, char *var)
 	int	i;
 
 	i = 0;
-	// printf("%d\n", index);
 	if (!var || !*var)
 		index = -2;
 	while (dq_count[i] != -1)
 		i++;
 	dq_count[i] = index;
-	// printf("Expanded var at index: %d\n", (dq_count)[i]);
 }
 
-int	expand_var(char **content, char **envp, int **dq_count)
+int	expand_var(char **content, char **envp)
 {
 	char	*start;
 	char	*var;
@@ -101,13 +99,10 @@ int	expand_var(char **content, char **envp, int **dq_count)
 	var = extract_var(envp, var);
 	if (!var)
 		return (free(start), free(end), fail_mall(), 1);
-	// printf("%s\n", var);
-	if (*dq_count != NULL && check_quotes((*content), ft_strlen(start)) == 0)
-		save_var_index((*dq_count), ft_strlen(start), var);
 	if (join_all(content, start, end, var) == 1)
 		return (fail_mall(), 1);
 	if (ft_strchr(*content, '$') != 0)
-		expand_var(content, envp, dq_count);
+		expand_var(content, envp);
 	return (0);
 }
 
@@ -126,23 +121,7 @@ int	exp_helper(char *content)
 	}
 	if (count == 0)
 		return (-1);
-	// printf("count:%d\n", count);
 	return (count);
-}
-
-int	init_dq(t_input *cur)
-{
-	int	len;
-	int	i;
-
-	i = 0;
-	len = exp_helper(cur->content);
-	cur->dq_var = (int *)ft_calloc(len + 1, sizeof(int));
-	if (!cur->dq_var)
-		return (fail_mall(), 1);
-	while (i <= len)
-		cur->dq_var[i++] = -1;
-	return (0);
 }
 
 int	find_ev(t_input *first, t_data *data)
@@ -155,10 +134,8 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
-			if (exp_helper(cur->content) != -1)
-				if (init_dq(cur) != 0)
-					return (1);
-			if (expand_var(&(cur->content), data->envp, &(cur->dq_var)) != 0)
+			cur->exp = exp_helper(cur->content);
+			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
 		}
 		if ((!cur->prev || cur->prev->type != HERE_DOC)

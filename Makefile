@@ -8,8 +8,8 @@ CFLAGS = -g #-Wall -Wextra -Werror
 SRC = minishell.c list_utils.c check_input.c exec.c t.c mini_split.c \
 	free.c heredoc.c env_var.c check_commands.c free_all.c check_files.c \
 	testing.c parse_input.c var_utils.c quotes.c exp_exit.c builtins.c \
-  	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c re_split.c
-
+  	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c re_split.c \
+	ft_exit.c
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile
