@@ -94,18 +94,18 @@ char *prompt_join(t_data *data)
 
 	var = extract_var(data->envp, ft_strdup("USER"));
 	if (!var)
-		return (fail_mall(), NULL);
+		return (NULL);
 	tmp = ft_strjoin(var, ":~");
 	free(var);
 	if (!tmp)
 		return (fail_mall(), NULL);
 	var = extract_var(data->envp, ft_strdup("PWD"));
 	if (!var)
-		return (free(tmp), fail_mall(), NULL);
+		return (free(tmp),NULL);
 	prompt = ft_strjoin(tmp, var);
 	free(tmp); free(var);
 	if (!prompt)
-		return (fail_mall(), NULL);
+		return (NULL);
 	return (prompt);
 }
 
@@ -166,6 +166,7 @@ int main(int argc, char **argv, char **envp)
 	sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
 	sigaction(SIGQUIT, &sig, NULL);
+	return_exit_code(0);
 	while (1)
 	{
 		first = NULL;
@@ -292,3 +293,10 @@ efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $\"hell
 $\hello
 efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $"hello"
 hello */
+
+/* efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell cd ..
+H==2025538== Conditional jump or move depends on uninitialised value(s)
+==2025538==    at 0x402F03: exec_proc (exec.c:235)
+==2025538==    by 0x401495: parsing (minishell.c:41)
+==2025538==    by 0x4019BC: main (minishell.c:180)
+==2025538==  */
