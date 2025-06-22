@@ -3,9 +3,9 @@
 
 long	long_atoi(const char *str)
 {
-	int	i;
+	int		i;
 	long	result;
-	int	n;
+	int		n;
 
 	n = 1;
 	i = 0;
@@ -32,7 +32,7 @@ int	error_n(char *err)
 {
 	int	n;
 
-	n = ft_atoi(err);
+	n = long_atoi(err);
 	while (n < 0)
 		n += 256;
 	while (n > 255)
@@ -57,35 +57,49 @@ char	*clean_input(char *trim)
 		trim++;
 	if (sign == '-')
 		clean = ft_strjoin("-", trim);
-	else	
+	else
 		clean = ft_strdup(trim);
-	if (!clean)
-		return (free(tmp), NULL);
-	return (free(tmp), clean);
+	return (clean);
 }
-int		check_overflow(char *input, char *trimmed)
+int	check_overflow(char *trimmed)
 {
-	char *converted;
-	char *clean;
+	char	*converted;
+	char	*clean;
 
-	converted = ft_itoa(long_atoi(input));
-		//protect
+
 	clean = clean_input(trimmed);
-		//protect
-	if (ft_strncmp(converted, clean, ft_strlen(converted)) != 0)
+	if (!clean)
+		return (fail_mall(), free(trimmed), -2);
+
+
+	converted = ft_itoa(long_atoi(clean));
+	if (!converted)
+		return (fail_mall(), free(trimmed), free(clean), -2);
+
+
+	if (ft_strncmp(converted, clean, ft_strlen(converted)) != 0)		//vehck thias
 		return (free(converted), free(clean), -1);
 	return (free(converted), free(clean), 1);
 }
 
 void	ft_exit(t_data *data, t_cmd *cmd)
 {
-	char *trimmed;
+	char	*trimmed;
+	int		is_valid;
 
 	printf("exit\n");
 	if (cmd->args[1])
 	{
 		trimmed = ft_strtrim(cmd->args[1], " \t");
-		if (ft_str_digit(trimmed) != 0 || check_overflow(cmd->args[1], trimmed) == -1)
+		if (!trimmed)
+			return (fail_mall(), free_split(data->envp), free_all(data), exit(1));
+		
+		is_valid = check_overflow(trimmed);
+		if (is_valid == -2)
+			return (free_split(data->envp), free_all(data), exit(1));
+
+
+		if (ft_str_digit(trimmed) != 0 || is_valid == -1)
 		{
 			write(2, "bash: ", 6);
 			write(2, "exit: ", 6);
@@ -97,11 +111,10 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 		{
 			write(2, "exit: too many arguments\n", 25);
 			return_exit_code(1);
-		} 
+		}
 		else
 			error_n(cmd->args[1]);
+		free (trimmed);
 	}
-	free_split(data->envp);
-	free_all(data);
-	exit(return_exit_code(-2)); // or 1
+	return (free_split(data->envp), free_all(data), exit(return_exit_code(-2)));
 }

@@ -19,7 +19,7 @@ static int	ft_intlen(long n)
 
 	mem = 0;
 	if (n == LONG_MIN)
-		mem = 11;
+		return (20);
 	if (n <= 0)
 	{
 		mem++;
@@ -38,28 +38,29 @@ char	*ft_itoa(long n)
 	char	*arr;
 	int		mem;
 
-	mem = ft_intlen(n) + 1;
+	mem = ft_intlen(n);
 	if (n == LONG_MIN)
-		arr = ft_strdup("-9223372036854775808");
+		return (ft_strdup("-9223372036854775808"));
 	else
-		arr = (char *) malloc(mem * sizeof(char));
+		arr = (char *) ft_calloc((mem + 1), sizeof(char));
 	if (arr == NULL)
 		return (NULL);
-	arr[--mem] = '\0';
-	if (n < 0 && n > -2147483648)
+	if (n < 0 && n > LONG_MIN)
 	{
 		n *= -1;
 		arr[0] = '-';
 	}
 	if (n == 0)
 		arr[0] = '0';
-	while (arr[--mem] != '-' && mem >= 0 && n != 0 && n != LONG_MIN)
+	while (mem > 0 && arr[mem - 1] != '-' && n != 0 && n != LONG_MIN)
 	{
+		mem--;
 		arr[mem] = (n % 10) + 48;
 		n /= 10;
 	}
 	return (arr);
 }
+
 /* 
 #include <stdio.h>
 int main()
