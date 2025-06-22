@@ -62,10 +62,14 @@ int	create_heredoc(t_cmd *cmd)
 	while (1)
 	{
 		line = readline("> ");
-		//FOR THE EOF + ctrl D (EOF char)
-		/* if (*line == 26)
-			return (printf("hey\n"), 0); */
-		if (!line || ft_strcmp(line, cmd->limiter) == 0)
+		if (!line)
+		{
+			write (2, "bash: warning: here-document at line 1 delimited by end-of-file (wanted `", 74);
+			write (2, cmd->limiter, ft_strlen(cmd->limiter));
+			write (2, "')\n", 4);
+			break ;
+		}
+		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
 		new_lines = ft_calloc(sizeof(char *), count + 2);
 		if (!new_lines)

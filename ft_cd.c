@@ -59,11 +59,11 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
-		write(2, "getcwd failed\n", 16);
+		write(2, "getcwd failed\n", 15);
 	cd_helper(cmd, data);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
-		write(2, "getcwd failed\n", 16);
+		write(2, "getcwd failed\n", 15);
 	update_envp(data->envp, "OLDPWD=", old_pwd);
 	update_envp(data->envp, "PWD=", new_pwd);
 	free(old_pwd);
