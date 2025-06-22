@@ -28,46 +28,6 @@ void	ft_echo(t_cmd *cmd)
 		printf("\n");
 }
 
-int	error_n(char *err)
-{
-	int	n;
-
-	n = ft_atoi(err);
-	while (n < 0)
-		n += 256;
-	while (n > 255)
-		n -= 256;
-	return (return_exit_code(n));
-}
-
-void	ft_exit(t_data *data, t_cmd *cmd)
-{
-	printf("exit\n");		//i think it should be there but the tester doesnt like it
-	if (cmd->args[1])
-	{		
-		if (ft_str_digit(cmd->args[1]) != 0)
-		{
-			write(2, "bash: ", 6);
-			write(2, "exit: ", 6);
-			write(2, cmd->args[1], ft_strlen(cmd->args[1]));
-			write(2, ": numeric argument required\n", 28);
-			return_exit_code(2);
-		}
-		else if (cmd->args[2] && ft_str_digit(cmd->args[1]) == 0)
-		{
-			write(2, "exit: too many arguments\n", 25);
-			return_exit_code(1);
-		}
-		else
-			error_n(cmd->args[1]);
-
-	}
-	free_split(data->envp);
-	free_all(data);
-	exit(return_exit_code(-2));	//or 1
-}
-
-
 void	update_envp(char **envp, char *var, char *value)
 {
 	int i;
