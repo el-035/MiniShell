@@ -30,7 +30,7 @@ typedef struct s_input
 	enum e_type		type;
 	int				is_builtin;
 	int				exp;
-	int				position;	//do we need it?
+	int position; // do we need it?
 	struct s_input	*next;
 	struct s_input	*prev;
 }					t_input;
@@ -90,7 +90,8 @@ int					assign_type(t_input **first);
 
 // env_var
 int					find_ev(t_input *first, t_data *data);
-int					expand_var(char **content, char **envp/* , int **dq_var */);
+int					expand_var(char **content, char **envp /* ,
+						int **dq_var */);
 // char	*extract_var(t_data *data, char *var);
 int					check_quotes(char *content, int len);
 int					join_all(char **content, char *start, char *end, char *var);
@@ -103,15 +104,15 @@ int					stop(char *content);
 char				*extract_var(char **envp, char *var);
 char				*save_var(char *content);
 int					even_odd(char *content, int i);
-int	find_index(int i/*  int j, */);
-int	exp_helper(char *content);
+int					find_index(int i /*  int j, */);
+int					exp_helper(char *content);
 
-int	exp_split(t_input *first);
+int					exp_split(t_input *first);
 
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(t_input *cur);
-int	remove_quotes(t_input *first, t_data *data);
+int					remove_quotes(t_input *first);
 // commands
 
 int					compare_cmd(t_input *cur, char **commands);

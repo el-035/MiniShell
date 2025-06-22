@@ -9,7 +9,7 @@ int	return_sig_flag(int sig)
 	return (flag);
 }
 
-int	parsing(t_input *first, t_data *data, char *line)	//return value?
+int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
@@ -17,7 +17,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 		return (free_list(first), 1);
 	if (exp_split(first))
 		return (free_list(first), 1);
-	if (remove_quotes(first, data) != 0)
+	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
@@ -90,7 +90,6 @@ char *prompt_join(t_data *data)
 	char *prompt;
 	char *tmp;
 	char *var;
-	char *col;
 
 	var = extract_var(data->envp, ft_strdup("USER"));
 	if (!var)
@@ -123,6 +122,7 @@ char	*prompt(t_data *data, char **envp)
 	char *tmp;
 	char *prompt;
 
+	tmp = NULL;
 	return_exit_code(0);
 	return_sig_flag(0);
 	if (!*envp)
@@ -178,7 +178,7 @@ int main(int argc, char **argv, char **envp)
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 	//	test_print(first);
-		parsing(first, &data, line);	//here?
+		parsing(first, &data);	//here?
 		add_history(line);
 		free(line);
 		free_all(&data);

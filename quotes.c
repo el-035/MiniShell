@@ -76,7 +76,7 @@ int	remove_useless_quotes(t_input *cur)
 	return (free(final), 0);
 }
 
-int	remove_quotes(t_input *first, t_data *data)
+int	remove_quotes(t_input *first)
 {
 	t_input	*cur;
 

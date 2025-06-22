@@ -8,13 +8,13 @@ char	*get_var(char *str)
 	i = 0;
 	if (!ft_strchr(str, '='))
 		return (ft_strdup(str));
-	while (str[i] != '=' /*  && str[i] != '+' */)
+	while (str[i] != '=')
 		i++;
 	var = ft_calloc(i + 1, sizeof(char));
 	if (!var)
-		return (NULL); // erroere
+		return (NULL);
 	i = 0;
-	while (str[i] != '=' /*  && str[i] != '+' */)
+	while (str[i] != '=')
 	{
 		var[i] = str[i];
 		i++;
@@ -33,7 +33,7 @@ char	*get_content(char *str)
 	len = ft_strlen(ft_strchr(str, '=') + 1);
 	conetnt = ft_calloc(len + 1, sizeof(char));
 	if (!conetnt)
-		return (NULL); // erroere
+		return (fail_mall(), NULL);
 	str = ft_strchr(str, '=') + 1;
 	i = -1;
 	while (str[++i])
@@ -51,12 +51,14 @@ char	**copy(char **envp)
 	j = 0;
 	cpy = ft_calloc(arr_len(envp), sizeof(char *));
 	if (!cpy)
-		return (NULL); // euwei
+		return (NULL);
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "_=", 2) == 0)
 			i++;
 		cpy[j++] = ft_strdup(envp[i++]); // protect
+		if (!cpy[j - 1])
+			return (free_split(cpy), NULL);
 	}
 	return (cpy);
 }
@@ -97,17 +99,20 @@ int	print_export(char **envp)
 	i = 0;
 	cpy = copy(envp);
 	if (!cpy)
-		return (1); // ghhuijk
+		return (fail_mall(), 1);
 	sort(cpy);
 	while (cpy[i])
 	{
-		var = get_var(cpy[i]);         // protect
-		content = get_content(cpy[i]); // protect
+		var = get_var(cpy[i]);
+		if (!var)
+			return (fail_mall(), free_split(cpy), 1);
+		content = get_content(cpy[i]);
+		if (!content)
+			return ((free_split(cpy), free(var), 1));
 		printf("declare -x %s=\"%s\"\n", var, content);
 		free(var);
 		free(content);
 		i++;
 	}
-	free_split(cpy);
-	return (0);
+	return (free_split(cpy), 0);
 }
