@@ -20,6 +20,7 @@ int	count_word(char *content)
 	}
 	return (wc);
 }
+
 void	init_node(t_input *cur, t_input *tmp, t_input *new, int i)
 {
 	ft_memset(new, 0, sizeof(t_input));
@@ -93,7 +94,7 @@ int	ft(t_input *cur)
 
 int	exp_split(t_input *first)
 {
-	t_input *cur;
+	t_input	*cur;
 
 	cur = first;
 	while (cur)

@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-static int is_delimitor(char c)
+static int	is_delimitor(char c)
 {
 	if (c == 32 || c == 9)
-		return 1;
+		return (1);
 	else if (c == 124 || c == 60 || c == 62)
-		return 2;
-	return 0;
+		return (2);
+	return (0);
 }
 
 static int	ft_word_count(char *s)
@@ -24,9 +24,6 @@ static int	ft_word_count(char *s)
 			{
 				if (s[i] == s[i + 1])
 					i++;
-				/* c = s[i];
-				while (s[i] == c)
-					i++; */
 				wc++;
 			}
 			i++;
@@ -41,27 +38,26 @@ static int	ft_word_count(char *s)
 			i++;
 		}
 	}
-//	printf("wc: %d\n", wc);
 	return (wc);
 }
 
-static int word_len(char *s, int i)
+static int	word_len(char *s, int i)
 {
-	int		j;
+	int	j;
 
 	j = i;
 	while ((s[i] == 32 || s[i] == 9))
 		i++;
 	if (!s[i])
-		return 0;
+		return (0);
 	if (is_delimitor(s[i]) == 2 && check_quotes(s, i) == 0)
 	{
 		if (s[i] == s[i + 1])
-			return 2;
+			return (2);
 		else
-			return 1;
+			return (1);
 	}
-	while(s[i])
+	while (s[i])
 	{
 		if (is_delimitor(s[i]) != 0 && check_quotes(s, i) == 0)
 			break ;
@@ -79,7 +75,7 @@ static char	*ft_word(char *s, int i)
 	while ((s[i] == 32 || s[i] == 9) && s[i])
 		i++;
 	len = word_len(s, i);
-	word = (char *) ft_calloc((len + 1), sizeof(char));
+	word = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!word)
 		return (NULL);
 	j = 0;
@@ -95,12 +91,12 @@ char	**mini_split(char const *s)
 	int		j;
 	char	**split;
 
-	wc = ft_word_count((char *) s);
+	wc = ft_word_count((char *)s);
 	if (!wc)
 		return (NULL);
 	i = 0;
 	j = 0;
-	split = (char **) ft_calloc ((wc + 1), sizeof(char *));
+	split = (char **)ft_calloc((wc + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
 	while (s && split && j < wc)
@@ -112,10 +108,10 @@ char	**mini_split(char const *s)
 			i++;
 		i = i + ft_strlen(split[j - 1]);
 	}
-	//split[j] = 0;
+	// split[j] = 0;
 	return (split);
 }
-/* 
+/*
 int main (void)
 {
 	char *s = "cat 42 42";

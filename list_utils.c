@@ -1,5 +1,6 @@
-#include"minishell.h"
-#include<string.h>
+#include "minishell.h"
+#include <string.h>
+
 t_input	*make_new_node(char *content, int pos)
 {
 	t_input	*node;
@@ -24,7 +25,8 @@ t_input	*add_new(char *content, int pos, t_input *prev)
 
 	node = make_new_node(content, pos);
 	if (node == NULL)
-		return (write(2, "Error: node wasn't created\n", 27), NULL); //handle later
+		return (write(2, "Error: node wasn't created\n", 27), NULL);
+	// handle later
 	prev->next = node;
 	node->prev = prev;
 	return (node);
@@ -32,8 +34,8 @@ t_input	*add_new(char *content, int pos, t_input *prev)
 
 int	list_size(t_input *first)
 {
-	int	size;
-	t_input *cur;
+	int		size;
+	t_input	*cur;
 
 	size = 1;
 	if (!first)
@@ -43,7 +45,7 @@ int	list_size(t_input *first)
 	cur = first->next;
 	while (cur != first)
 	{
-		cur = cur -> next;
+		cur = cur->next;
 		size++;
 	}
 	return (size);

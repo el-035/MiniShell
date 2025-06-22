@@ -3,7 +3,7 @@
 void	ft_echo(t_cmd *cmd)
 {
 	int	i;
-	int nl;
+	int	nl;
 
 	nl = 1;
 	i = 1;
@@ -17,9 +17,9 @@ void	ft_echo(t_cmd *cmd)
 		nl = 0;
 		i++;
 	}
-	while(cmd->args[i])
+	while (cmd->args[i])
 	{
-		printf ("%s", cmd->args[i]);
+		printf("%s", cmd->args[i]);
 		if (cmd->args[i + 1])
 			printf(" ");
 		i++;

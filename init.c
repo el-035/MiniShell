@@ -16,7 +16,7 @@ int	save_input(char *line, t_input **first)
 	t_input	*cur;
 	char	**split;
 	int		pos;
-	char *exp;
+	char	*exp;
 
 	pos = 0;
 	split = mini_split(line);
@@ -28,8 +28,8 @@ int	save_input(char *line, t_input **first)
 	cur = *first;
 	if (!split[1])
 	{
-		(*first)->next= (*first);
-		(*first)->prev= (*first);
+		(*first)->next = (*first);
+		(*first)->prev = (*first);
 	}
 	while (split[++pos])
 	{
@@ -47,8 +47,8 @@ int	save_input(char *line, t_input **first)
 
 char	*double_join(char *s1, char *s2, char *s3) // those are not allocated
 {
-	char *tmp;
-	char *final;
+	char	*tmp;
+	char	*final;
 
 	tmp = ft_strjoin(s1, s2);
 	if (!tmp)

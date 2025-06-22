@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-//void	free_everything();
+// void	free_everything(void);
 
 void	fail_mall(void)
 {
@@ -8,7 +8,7 @@ void	fail_mall(void)
 	return_exit_code(1);
 }
 
-void free_split(char **split)
+void	free_split(char **split)
 {
 	int	word;
 
@@ -17,7 +17,7 @@ void free_split(char **split)
 		return ;
 	while (split[word])
 	{
-		if (split[word])	
+		if (split[word])
 			free(split[word]);
 		word++;
 	}
