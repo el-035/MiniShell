@@ -99,16 +99,16 @@ void	exec_builtin_child(t_cmd *cmd, t_data *data)
 		ft_env(data->envp);
 }
 
-int	create_hd_filename(char *name, size_t size)
+int	create_hd_filename(char *name, size_t size, int index)
 {
 	int	hd_id;
 	char	*id_str;
 	int	fd;
 
 	hd_id = 0;
-	while (1)
+	while (hd_id < 1000)
 	{
-		id_str = ft_itoa(getpid()); //CHABNGE IT!!!!!!!!!!!!!!!!!!!
+		id_str = ft_itoa(index + hd_id);
 		if (!id_str)
 			return (0);
 		if (ft_strlen("/tmp/heredoc_") + ft_strlen(id_str) + 1 > size)
@@ -117,19 +117,18 @@ int	create_hd_filename(char *name, size_t size)
 		fd = open(name, O_CREAT | O_EXCL | O_RDWR, 0600);
 		if (fd != -1)
 			return (fd);
-		if (hd_id > 10000) // RANDOM!!! RESEARCH??
-			break ;
+		hd_id++;
 	}
 	return (perror ("Open: "), -1);
 }
 
-int	set_heredoc_fds(t_cmd *cmd)
+int	set_heredoc_fds(t_cmd *cmd, int index)
 {
 	char	tmp_name[64];
 	int		fd;
 	int		i;
 
-	fd = create_hd_filename(tmp_name, sizeof(tmp_name));
+	fd = create_hd_filename(tmp_name, sizeof(tmp_name), index);
 	if (fd < 0)
 		return (perror("Open heredoc file: "), 0);
 	cmd->in = ft_strdup(tmp_name);
@@ -147,14 +146,17 @@ int	exec_child(t_data *data, int index, char **envp)
 {
 	t_cmd	*cmd;
 	int		fd;
+	/* struct sigaction	sig;
 
+	sigaction(SIG_IGN, &sig, NULL);
+	sigaction(SIG_DFL, &sig, NULL); */
 	cmd = &data->cmds[index];
 	set_child_fds(data, cmd, index);
 	if (cmd->is_hd == 1)
 	{
 		if (cmd->hd_content)
 		{
-			if (!set_heredoc_fds(cmd))
+			if (!set_heredoc_fds(cmd, index))
 				exit(EXIT_FAILURE);
 			fd = open(cmd->in, O_RDONLY);
 			if (fd < 0)
@@ -179,7 +181,6 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		ft_export(data, cmd);
-		//printf("hey\n");
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
@@ -191,10 +192,10 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 
 int	exec_proc(t_data *data, char **envp)
 {
-	int	i;
-	int	status;
-	int code;
-	t_cmd *cmd;
+	int				i;
+	int				status;
+	int				code;
+	t_cmd			*cmd;
 
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
@@ -231,7 +232,9 @@ int	exec_proc(t_data *data, char **envp)
 		code = WEXITSTATUS(status);
 		/* else if (WIFSIGNALED(status))
 			return_exit_code(128 + WTERMSIG(status)); */
-	}
+
+
+		}
 	if (WIFEXITED(status))
 		{
 			if (code != 0)
@@ -239,6 +242,33 @@ int	exec_proc(t_data *data, char **envp)
 		}
 	return (free_all(data), 1);
 }
+/* 
+
+	while (++i < data->cmd_count)
+	{
+		waitpid(data->pid[i], &status, 0);
+		//ADD CONDITION? 
+		//code = WEXITSTATUS(status);
+		// else if (WIFSIGNALED(status))
+		// 	return_exit_code(128 + WTERMSIG(status));
+		if (!WIFEXITED(status))
+		{
+			if(WIFSIGNALED(status))
+			{
+				return_sig_flag(2);
+			}
+			break ;
+		}
+	}
+	if (WIFEXITED(status))
+	{
+		code = WEXITSTATUS(status);
+		return_exit_code(code);
+	}
+	return (free_all(data), 1);
+} */
+
+
 
 int	create_pipes(t_data *data)
 {

@@ -21,7 +21,7 @@ int	parsing(t_input *first, t_data *data, char *line)	//return value?
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-	
+
 	//extract_var(data->envp, "HOME");
 	free_list(first);
     //freegrepo
