@@ -48,10 +48,6 @@ int	join_all(char **content, char *start, char *end, char *var)
 	char	*temp;
 	char	*joint;
 
-	index_flag = 0;
-	if (find_index(-1) != 0 && (ft_strlen(start) + 1) != find_index(-1)
-		&& find_index(-1) != -1)
-		index_flag = 1;
 	joint = ft_strjoin(start, var);
 	if (!joint)
 		return (free(start), free(var), free(end), 1);
@@ -61,8 +57,6 @@ int	join_all(char **content, char *start, char *end, char *var)
 	if (!temp)
 		return (free(end), free(joint), 1);
 	free(joint);
-	if (index_flag == 1)
-		find_index(exp_helper(temp));
 	joint = temp;
 	free(end);
 	free(*content);
@@ -72,7 +66,6 @@ int	join_all(char **content, char *start, char *end, char *var)
 		return (1);
 	return (0);
 }
-
 
 void	save_var_index(int *dq_count, int index, char *var)
 {
@@ -113,7 +106,6 @@ int	expand_var(char **content, char **envp)
 	return (0);
 }
 
-
 int	exp_helper(char *content)
 {
 	int	i;
@@ -143,10 +135,8 @@ int	find_ev(t_input *first, t_data *data)
 			&& stop(cur->content) != 0)
 		{
 			cur->exp = exp_helper(cur->content);
-
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
-
 		}
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))

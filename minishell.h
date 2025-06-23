@@ -178,7 +178,8 @@ void				print_cmd_list(t_cmd *cmds);
 void				print_cmds(t_data *data);
 
 
-int					handle_heredoc(t_cmd *cmd, t_input **cur);
+int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp);
+
 
 
 // Builtins
