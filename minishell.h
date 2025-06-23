@@ -30,7 +30,9 @@ typedef struct s_input
 	enum e_type		type;
 	int				is_builtin;
 	int				exp;
+
 	int position; // do we need it?
+
 	struct s_input	*next;
 	struct s_input	*prev;
 }					t_input;
@@ -90,8 +92,10 @@ int					assign_type(t_input **first);
 
 // env_var
 int					find_ev(t_input *first, t_data *data);
+
 int					expand_var(char **content, char **envp /* ,
 						int **dq_var */);
+
 // char	*extract_var(t_data *data, char *var);
 int					check_quotes(char *content, int len);
 int					join_all(char **content, char *start, char *end, char *var);
@@ -113,6 +117,7 @@ int					exp_split(t_input *first);
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(t_input *cur, int len);
 int					remove_quotes(t_input *first);
+
 // commands
 
 int					compare_cmd(t_input *cur, char **commands);
@@ -132,7 +137,9 @@ char				**mini_split(char const *s);
 void				ft_echo(t_cmd *cmd);
 void				ft_exit(t_data *data, t_cmd *cmd);
 void				ft_cd(t_data *data, t_cmd *cmd);
+
 int				ft_unset(t_data *data, t_cmd *cmd);
+
 int					arr_len(char **arr);
 
 // export
@@ -170,7 +177,9 @@ int					create_pipes(t_data *data);
 void				print_cmd_list(t_cmd *cmds);
 void				print_cmds(t_data *data);
 
+
 int					handle_heredoc(t_cmd *cmd, t_input **cur);
+
 
 // Builtins
 void				ft_pwd(void);

@@ -87,6 +87,7 @@ char	*extract_exit_code(void)
 	var = ft_strdup(num);
 	if (!var)
 		return (NULL);
+
 	free(num);
 	return (var);
 }

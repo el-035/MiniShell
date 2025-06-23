@@ -51,6 +51,7 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 	}
 }
 
+
 void	hd_handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
@@ -70,7 +71,8 @@ void	hd_handler(int sig)
 	// 	// exit(SIGQUIT + 128);
 	// }
 }
-int	create_heredoc(t_cmd *cmd)
+
+int	create_heredoc(t_cmd *cmd, char **envp)
 {
 	char *line;
 	int count;
@@ -103,6 +105,7 @@ int	create_heredoc(t_cmd *cmd)
 		}
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
+		expand_var(&line, envp);
 		new_lines = ft_calloc(sizeof(char *), count + 2);
 		if (!new_lines)
 			return (perror("Malloc: "), 0);
@@ -119,19 +122,19 @@ int	create_heredoc(t_cmd *cmd)
 	return (1);
 } 
 
-int	handle_heredoc(t_cmd *cmd, t_input **cur)
+int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp)
 {
 	if (!(*cur)->next)
 		return (0);
 	cmd->limiter = ft_strdup((*cur)->next->content);
-	if (!create_heredoc(cmd))
+	if (!create_heredoc(cmd, envp))
 		return (0);
 	cmd->is_hd = 1;
 	*cur = (*cur)->next;
 	return (1);
 }
 
-static void	handle_token(t_cmd *cmd, t_input **cur, int *j)
+static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 {
 	if (((*cur)->type == CMD || (*cur)->type == ARG) && (!(*cur)->prev
 			|| ((*cur)->prev->type != REDIR_IN
@@ -146,14 +149,9 @@ static void	handle_token(t_cmd *cmd, t_input **cur, int *j)
 			|| (*cur)->type == REDIR_APPEND) && (*cur)->next)
 		handle_redirs(cmd, cur);
 	else if ((*cur)->type == HERE_DOC)
-		if (!handle_heredoc(cmd, cur))
+		if (!handle_heredoc(cmd, cur, data->envp))
 			printf("Oopsy\n");
-	 //NEW LINE = "" - Enter:
-/* apchelni@c2r5p12:~$ cat << ""
-> ""
-> 
-""
- */
+	 
 // END of FILE handle as character - exits HD but not bash:
 /* apchelni@c2r5p12:~$ cat << EOF
 > 
@@ -162,14 +160,14 @@ apchelni@c2r5p12:~$ man ascii
  */
 }
 
-void	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens)
+void	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *data)
 {
 	int	j;
 
 	j = 0;
 	while (*cur && (*cur)->type != PIPE)
 	{
-		handle_token(cmd, cur, &j);
+		handle_token(cmd, cur, &j, data);
 		*cur = (*cur)->next;
 		if (*cur == tokens)
 			break ;
@@ -202,7 +200,7 @@ int	parse_tokens(t_input *tokens, t_data *data)
 		cmd->args = ft_calloc(count_args(cur) + 1, sizeof(char *));
 		if (!cmd->args)
 			return (perror("Malloc: "), 0);
-		fill_cmd_data(cmd, &cur, tokens);
+		fill_cmd_data(cmd, &cur, tokens, data);
 	}
 //	print_cmds(data);
 	return (1);
