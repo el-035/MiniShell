@@ -55,7 +55,7 @@ int	execute_cmd(t_data *data, char **args, char **envp)
 	}
 	if (execve(path, args, envp) == -1)
 	{
-		(perror("Execve"), free_all(data));
+		//(perror("Execve"), free_all(data));
 		if (path != args[0])
 			free(path);
 		exit(127);
