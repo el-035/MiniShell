@@ -10,14 +10,8 @@ static int	is_delimitor(char c)
 }
 /* static int wc_helper(char *s) */
 
-
-static int	ft_word_count(char *s)
+static int	ft_word_count(char *s, int i, int wc)
 {
-	int	i;
-	int	wc;
-
-	i = 0;
-	wc = 0;
 	while (s[i])
 	{
 		while (is_delimitor(s[i]) != 0)
@@ -93,10 +87,11 @@ char	**mini_split(char const *s)
 	int		j;
 	char	**split;
 
-	wc = ft_word_count((char *)s);
+	i = 0;
+	wc = 0;
+	wc = ft_word_count((char *)s, i, wc);
 	if (!wc)
 		return (NULL);
-	i = 0;
 	j = 0;
 	split = (char **)ft_calloc((wc + 1), sizeof(char *));
 	if (!split)
@@ -110,7 +105,6 @@ char	**mini_split(char const *s)
 			i++;
 		i = i + ft_strlen(split[j - 1]);
 	}
-	// split[j] = 0;
 	return (split);
 }
 /*
