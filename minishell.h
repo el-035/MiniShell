@@ -132,7 +132,7 @@ char				**mini_split(char const *s);
 void				ft_echo(t_cmd *cmd);
 void				ft_exit(t_data *data, t_cmd *cmd);
 void				ft_cd(t_data *data, t_cmd *cmd);
-void				ft_unset(t_data *data, t_cmd *cmd);
+int				ft_unset(t_data *data, t_cmd *cmd);
 int					arr_len(char **arr);
 
 // export

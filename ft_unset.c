@@ -20,8 +20,8 @@ int	var_count(char **envp, char **args)
 
 	i = 0;
 	count = 0;
-	/* 	if (!envp || !*envp)
-			return (-1); */
+	if (!envp || !*envp)
+		return (-1);
 	while (envp[i])
 	{
 		j = 1;
@@ -55,28 +55,31 @@ int	copy_var(char *envp, char **var)
 	return (1);
 }
 
-void	ft_unset(t_data *data, t_cmd *cmd)
+int	ft_unset(t_data *data, t_cmd *cmd)
 {
 	int		i;
 	int		j;
 	char	**tmp;
 
 	if (!cmd->args[1])
-		return ;
+		return (0);
 	i = var_count(data->envp, cmd->args);
 	if (i == 0)
-		return ; // var not found
+		return (0);
 	tmp = ft_calloc((arr_len(data->envp) - i) + 1, sizeof(char *));
 	if (!tmp)
-		return ; // errorr
+		return (fail_mall(), -1);
 	i = 0;
 	j = 0;
 	while (data->envp[i])
 	{
 		if (copy_var(data->envp[i], cmd->args) == 1)
-			tmp[j++] = ft_strdup(data->envp[i]); // protect
+		{
+			tmp[j++] = ft_strdup(data->envp[i]);
+			if (!tmp[j - 1])
+				return (free_split(tmp), fail_mall(), -1);
+		}
 		i++;
 	}
-	free_split(data->envp);
-	data->envp = tmp;
+	return (free_split(data->envp), data->envp = tmp, 0);
 }
