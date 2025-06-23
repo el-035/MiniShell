@@ -5,11 +5,11 @@ CC = cc
 CFLAGS = -g #-Wall -Wextra -Werror 
 
 #delete t.c and testing
-SRC = minishell.c list_utils.c check_input.c exec.c t.c mini_split.c \
-	free.c heredoc.c env_var.c check_commands.c free_all.c check_files.c \
-	testing.c parse_input.c var_utils.c quotes.c exp_exit.c builtins.c \
-  	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c
-
+SRC = minishell.c list_utils.c check_input.c  t.c mini_split.c \
+	free.c heredoc.c env_var.c check_commands.c free_all.c  \
+	testing.c parse_input.c var_utils.c quotes.c exp_exit.c ft_unset.c \
+  	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c re_split.c \
+	ft_exit.c ft_echo.c ft_cd.c exec.c check_files.c
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile

@@ -8,6 +8,7 @@ void	init_input(t_input *first)
 	first->next = NULL;
 	first->prev = NULL;
 	first->is_builtin = -1;
+	first->exp = -1;
 }
 
 int	save_input(char *line, t_input **first)
@@ -24,6 +25,11 @@ int	save_input(char *line, t_input **first)
 	if (!*first)
 		return (free_split(split), fail_mall(), 0);
 	cur = *first;
+	if (!split[1])
+	{
+		(*first)->next = (*first);
+		(*first)->prev = (*first);
+	}
 	while (split[++pos])
 	{
 		cur = add_new(split[pos], pos, cur);
@@ -40,8 +46,8 @@ int	save_input(char *line, t_input **first)
 
 char	*double_join(char *s1, char *s2, char *s3) // those are not allocated
 {
-	char *tmp;
-	char *final;
+	char	*tmp;
+	char	*final;
 
 	tmp = ft_strjoin(s1, s2);
 	if (!tmp)
@@ -101,7 +107,7 @@ int	copy_envp(t_data *data, char **envp)
 
 	i = 0;
 	if (!*envp) // IDK HOW TO VALGRIND THIS
-		return (no_env(data), -1);
+		return (no_env(data));
 	while (envp[i])
 		i++;
 	data->envp = (char **)ft_calloc(i + 1, sizeof(char *));

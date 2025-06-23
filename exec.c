@@ -111,7 +111,7 @@ int	create_hd_filename(char *name, size_t size, int index)
 		id_str = ft_itoa(index + hd_id);
 		if (!id_str)
 			return (0);
-		if (ft_strlen("/tmp/heredoc_") + ft_strlen(id_str) + 1 > size)
+		if (ft_strlen("/tmp/heredoc_") + ft_strlen(id_str) + 1 > size) 	//better hidden file
 			return (free(id_str), -1);
 		ft_strlcpy(name, "/tmp/heredoc_", size), ft_strlcat(name, id_str, size), free(id_str);
 		fd = open(name, O_CREAT | O_EXCL | O_RDWR, 0600);
@@ -141,15 +141,29 @@ int	set_heredoc_fds(t_cmd *cmd, int index)
 	close (fd);
 	return (1);
 }
+void	child_handler(int sig)
+{
+	if (sig == SIGINT)		//crtl C
+	{
+		printf("\n");
+		exit(SIGINT + 128);
+	}
+	if (sig == SIGQUIT)		//ctrl /
+		exit(SIGQUIT + 128);
+}
 
 int	exec_child(t_data *data, int index, char **envp)
 {
 	t_cmd	*cmd;
 	int		fd;
-	/* struct sigaction	sig;
+	struct sigaction	sig;
 
-	sigaction(SIG_IGN, &sig, NULL);
-	sigaction(SIG_DFL, &sig, NULL); */
+	sig.sa_handler = &child_handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL);
+
 	cmd = &data->cmds[index];
 	set_child_fds(data, cmd, index);
 	if (cmd->is_hd == 1)
@@ -220,6 +234,8 @@ int	exec_proc(t_data *data, char **envp)
 			return (free_all(data), perror("Fork: "), 0);
 		else if (data->pid[i] == 0)
 			exec_child(data, i, envp);
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	i = -1;
 	while (++i < data->cmd_count - 1)
@@ -227,15 +243,33 @@ int	exec_proc(t_data *data, char **envp)
 	i = -1;
 	while (++i < data->cmd_count)
 	{
+		/* if (data->pid[i] == -2 || data->pid[i] == -1)
+			continue; */
 		waitpid(data->pid[i], &status, 0);
 		//ADD CONDITION? 
 		code = WEXITSTATUS(status);
 		/* else if (WIFSIGNALED(status))
 			return_exit_code(128 + WTERMSIG(status)); */
 
-
+		if(WIFSIGNALED(status))
+		{
+			int sig = WTERMSIG(status);
+			if (sig == SIGINT)
+			{
+				write(1, "\n", 1);
+				return_exit_code(SIGINT + 128);
+			//	return_sig_flag(2);
+			}
+			if (sig == SIGQUIT)
+			{
+				write(2, "Quit (core dumped)\n", 20);
+				return_exit_code(SIGQUIT + 128);
+			//	return_sig_flag(3);
+			}	
 		}
-	if (WIFEXITED(status))
+	}
+	if (/* data->pid[i] == 0 && */ WIFEXITED(status))
+
 		{
 			if (code != 0)
 				return_exit_code(/* WEXITSTATUS(status) */code);

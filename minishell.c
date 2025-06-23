@@ -9,20 +9,22 @@ int	return_sig_flag(int sig)
 	return (flag);
 }
 
-int	parsing(t_input *first, t_data *data, char *line)	//return value?
+int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-	if (find_ev(first, data) != 0)		//continue checking from here
+	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
-	
+	if (exp_split(first))
+		return (free_list(first), 1);
+	if (remove_quotes(first) != 0)
+		return (free_list(first), 1);
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
 
-	//extract_var(data->envp, "HOME");
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
@@ -88,26 +90,23 @@ char *prompt_join(t_data *data)
 	char *prompt;
 	char *tmp;
 	char *var;
-	char *col;
 
 	var = extract_var(data->envp, ft_strdup("USER"));
 	if (!var)
-		return (fail_mall(), NULL);
+		return (NULL);
 	tmp = ft_strjoin(var, ":~");
 	free(var);
 	if (!tmp)
 		return (fail_mall(), NULL);
 	var = extract_var(data->envp, ft_strdup("PWD"));
 	if (!var)
-		return (free(tmp), fail_mall(), NULL);
+		return (free(tmp),NULL);
 	prompt = ft_strjoin(tmp, var);
 	free(tmp); free(var);
 	if (!prompt)
-		return (fail_mall(), NULL);
+		return (NULL);
 	return (prompt);
 }
-
-
 
 /* 	if (return_exit_code(-1) == 0 || return_sig_flag(-1) != 0)
 	{
@@ -117,13 +116,13 @@ char *prompt_join(t_data *data)
 	else if (return_exit_code(-1) != 0)
 		tmp = ft_strjoin("\001\033[1;31m\002", prompt); */
 
-
 char	*prompt(t_data *data, char **envp)
 {
 	char *line;
 	char *tmp;
 	char *prompt;
 
+	tmp = NULL;
 	return_exit_code(0);
 	return_sig_flag(0);
 	if (!*envp)
@@ -165,20 +164,20 @@ int main(int argc, char **argv, char **envp)
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
-	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL);
+
+	return_exit_code(0);
 	while (1)
 	{
 		first = NULL;
-		/* printf("%d\n", return_sig_flag(-1)); */
-/* 		if (return_sig_flag(-1) != 2) */
+		sigaction(SIGINT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL);
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 	//	test_print(first);
-		parsing(first, &data, line);
+		parsing(first, &data);	//here?
 		add_history(line);
 		free(line);
 		free_all(&data);
@@ -196,9 +195,6 @@ int main(int argc, char **argv, char **envp)
 
 //to run valgrind without readline leaks
 //valgrind --leak-check=full --show-leak-kinds=all --suppressions=minishell.supp ./minishell
-
-
-//free input after my part in parsing
 
 /* Minishell: unset HOME
 ---- Before unset ----
@@ -286,3 +282,20 @@ Minishell: ==46451==
 ==46451==      possibly lost: 0 bytes in 0 blocks
 ==46451==    still reachable: 0 bytes in 0 blocks
 ==46451==         suppressed: 204,635 bytes in 216 blocks */
+
+/*  MiniShell git:(el) ✗ ./minishell 
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $"$USER"
+efittant
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo "$\"hello\""
+$hello\
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $\"hello\"
+$\hello
+efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell echo $"hello"
+hello */
+
+/* efittant:~/home/efittant/Desktop/projects/CommonCore/mini/MiniShell cd ..
+H==2025538== Conditional jump or move depends on uninitialised value(s)
+==2025538==    at 0x402F03: exec_proc (exec.c:235)
+==2025538==    by 0x401495: parsing (minishell.c:41)
+==2025538==    by 0x4019BC: main (minishell.c:180)
+==2025538==  */

@@ -83,10 +83,11 @@ char	*extract_exit_code(void)
 	else
 		num = ft_itoa(return_exit_code(-1));
 	if (!num)
-			return (NULL);
+		return (NULL);
 	var = ft_strdup(num);
 	if (!var)
-			return (NULL);
+		return (NULL);
+
 	free(num);
 	return (var);
 }

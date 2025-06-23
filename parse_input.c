@@ -51,6 +51,27 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 	}
 }
 
+
+void	hd_handler(int sig)
+{
+	if (sig == SIGINT)		//crtl C
+	{
+		return_exit_code(SIGINT + 128);
+		return_sig_flag(2);
+/* 		rl_on_new_line();
+		rl_replace_line("", 0); */
+		//printf("\n");
+		// exit(SIGINT + 128);
+		return ;
+
+	}
+	// if (sig == SIGQUIT)		//ctrl /
+	// {
+	// 	return_sig_flag(3);
+	// 	// exit(SIGQUIT + 128);
+	// }
+}
+
 int	create_heredoc(t_cmd *cmd, char **envp)
 {
 	char *line;
@@ -58,14 +79,31 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	char **new_lines;
 	int	i;
 
+		struct sigaction	sig;
+
+	sig.sa_handler = &hd_handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
+	//sigaction(SIGQUIT, &sig, NULL);
+	signal(SIGQUIT, SIG_IGN);
 	count = 0;
 	while (1)
 	{
 		line = readline("> ");
-		//FOR THE EOF + ctrl D (EOF char)
-		/* if (*line == 26)
-			return (printf("hey\n"), 0); */
-		if (!line || ft_strcmp(line, cmd->limiter) == 0)
+		if (!line)
+		{
+			write (2, "bash: warning: here-document at line 1 delimited by end-of-file (wanted `", 74);
+			write (2, cmd->limiter, ft_strlen(cmd->limiter));
+			write (2, "')\n", 4);
+			break ;
+		}
+				if (return_sig_flag(-1) == 2)
+		{
+			return_sig_flag(0);
+			break ;
+		}
+		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
 		expand_var(&line, envp);
 		new_lines = ft_calloc(sizeof(char *), count + 2);
