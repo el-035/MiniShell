@@ -164,14 +164,13 @@ int main(int argc, char **argv, char **envp)
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
-	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL);
+
 	return_exit_code(0);
 	while (1)
 	{
 		first = NULL;
-		/* printf("%d\n", return_sig_flag(-1)); */
-/* 		if (return_sig_flag(-1) != 2) */
+		sigaction(SIGINT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL);
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;
