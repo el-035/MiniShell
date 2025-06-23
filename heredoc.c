@@ -1,41 +1,45 @@
 #include "minishell.h"
 
-/* int exec_heredoc(t_input *here_doc, t_data *data)
+int	create_hd_filename(char *name, size_t size, int index)
 {
-	char	*lim;
-	char *line;
-	int pipefd[2];
+	int		hd_id;
+	char	*id_str;
+	int		fd;
 
-	if (pipe(pipefd) == -1)
-		return (perror("pipe"), 0);
-	lim = here_doc->next->content;
-	while (1)
+	hd_id = 0;
+	while (hd_id < 1000)
 	{
-		line = readline("> ");
-		if (!line || ft_strcmp(line, lim) == 0)
-			break;
-		write(pipefd[1], line, ft_strlen(line));
-		write(pipefd[1], "\n", 1);
-		free(line);
+		id_str = ft_itoa(index + hd_id);
+		if (!id_str)
+			return (0);
+		if (ft_strlen("/tmp/heredoc_") + ft_strlen(id_str) + 1 > size)
+			return (free(id_str), -1);
+		(ft_strlcpy(name, "/tmp/heredoc_", size),
+			ft_strlcat(name, id_str, size), free(id_str));
+		fd = open(name, O_CREAT | O_EXCL | O_RDWR, 0600);
+		if (fd != -1)
+			return (fd);
+		hd_id++;
 	}
-	close(pipefd[1]);
-	return 1;
-} */
+	return (perror("Open: "), -1);
+}
 
-/* int handle_heredoc(t_input *input, t_data *data)
+int	set_heredoc_fds(t_cmd *cmd, int index)
 {
-	t_input *cur;
-	t_input *start;
+	char	tmp_name[64];
+	int		fd;
+	int		i;
 
-	cur = input;
-	start = input;
-	while (1)
+	fd = create_hd_filename(tmp_name, sizeof(tmp_name), index);
+	if (fd < 0)
+		return (perror("Open heredoc file: "), 0);
+	cmd->in = ft_strdup(tmp_name);
+	i = -1;
+	while (cmd->hd_content && cmd->hd_content[++i])
 	{
-		if (cur->type == HERE_DOC)
-			exec_heredoc(cur, data);
-		cur = cur->next;
-		if (cur == start)
-			break ;
+		write(fd, cmd->hd_content[i], ft_strlen(cmd->hd_content[i]));
+		write(fd, "\n", 1);
 	}
-	return (0);
-} */
+	close(fd);
+	return (1);
+}

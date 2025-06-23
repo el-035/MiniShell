@@ -52,14 +52,14 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 }
 
 
-void	hd_handler(int sig)
+/* void	hd_handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
 		return_exit_code(SIGINT + 128);
 		return_sig_flag(2);
-/* 		rl_on_new_line();
-		rl_replace_line("", 0); */
+ 		//rl_on_new_line();
+		//rl_replace_line("", 0);
 		//printf("\n");
 		// exit(SIGINT + 128);
 		return ;
@@ -70,7 +70,7 @@ void	hd_handler(int sig)
 	// 	return_sig_flag(3);
 	// 	// exit(SIGQUIT + 128);
 	// }
-}
+} */
 
 int	create_heredoc(t_cmd *cmd, char **envp)
 {
@@ -79,14 +79,14 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	char **new_lines;
 	int	i;
 
-		struct sigaction	sig;
+	/* 	struct sigaction	sig;
 
 	sig.sa_handler = &hd_handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
 	//sigaction(SIGQUIT, &sig, NULL);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN); */
 	count = 0;
 	while (1)
 	{
@@ -98,11 +98,11 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 			write (2, "')\n", 4);
 			break ;
 		}
-				if (return_sig_flag(-1) == 2)
+		/* 		//if (return_sig_flag(-1) == 2)
 		{
-			return_sig_flag(0);
+			//return_sig_flag(0);
 			break ;
-		}
+		} */
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
 		expand_var(&line, envp);
@@ -141,6 +141,7 @@ static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 				&& (*cur)->prev->type != REDIR_OUT
 				&& (*cur)->prev->type != REDIR_APPEND)))
 	{
+		//LEAK HERE
 		cmd->args[(*j)++] = ft_strdup((*cur)->content);
 		if ((*cur)->type == CMD)
 			cmd->is_builtin = (*cur)->is_builtin;
@@ -150,14 +151,8 @@ static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 		handle_redirs(cmd, cur);
 	else if ((*cur)->type == HERE_DOC)
 		if (!handle_heredoc(cmd, cur, data->envp))
+	//CHANGE THIS SHIIIT
 			printf("Oopsy\n");
-	 
-// END of FILE handle as character - exits HD but not bash:
-/* apchelni@c2r5p12:~$ cat << EOF
-> 
-bash: warning: here-document at line 1 delimited by end-of-file (wanted `EOF')
-apchelni@c2r5p12:~$ man ascii
- */
 }
 
 void	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *data)
@@ -202,6 +197,5 @@ int	parse_tokens(t_input *tokens, t_data *data)
 			return (perror("Malloc: "), 0);
 		fill_cmd_data(cmd, &cur, tokens, data);
 	}
-//	print_cmds(data);
 	return (1);
 }
