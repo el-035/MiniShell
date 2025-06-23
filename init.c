@@ -107,7 +107,7 @@ int	copy_envp(t_data *data, char **envp)
 
 	i = 0;
 	if (!*envp) // IDK HOW TO VALGRIND THIS
-		return (no_env(data), -1);
+		return (no_env(data));
 	while (envp[i])
 		i++;
 	data->envp = (char **)ft_calloc(i + 1, sizeof(char *));

@@ -46,18 +46,16 @@ int	return_final_len(char *str)
 	return (j);
 }
 
-int	remove_useless_quotes(t_input *cur)
+int	remove_useless_quotes(t_input *cur, int len)
 {
 	int		i;
-	int		j;
 	char	*final;
 
 	i = 0;
-	j = return_final_len(cur->content);
-	final = (char *)ft_calloc(j + 1, sizeof(char));
+	final = (char *)ft_calloc(len + 1, sizeof(char));
 	if (!final)
 		return (fail_mall(), 1);
-	j = 0;
+	len = 0;
 	while (cur->content[i])
 	{
 		if (cur->content[i] == '"' && check_quotes(cur->content, i) != 1)
@@ -67,7 +65,7 @@ int	remove_useless_quotes(t_input *cur)
 		else if (cur->content[i] == '\'' && check_quotes(cur->content, i) != 2)
 			i++;
 		else
-			final[j++] = cur->content[i++];
+			final[len++] = cur->content[i++];
 	}
 	free(cur->content);
 	cur->content = ft_strdup(final);
@@ -85,7 +83,7 @@ int	remove_quotes(t_input *first)
 	{
 		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')))
 		{
-			if (remove_useless_quotes(cur) != 0)
+			if (remove_useless_quotes(cur, return_final_len(cur->content)) != 0)
 				return (1);
 		}
 		cur = cur->next;

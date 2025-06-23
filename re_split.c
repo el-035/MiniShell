@@ -62,14 +62,12 @@ int	add_node(t_input *cur, t_input *next, int count)
 	return (0);
 }
 
-int	ft(t_input *cur)
+int	ft(t_input *cur, int i)
 {
 	char	**split;
-	int		i;
 	int		count;
 	char	*tmp;
 
-	i = 0;
 	tmp = cur->content;
 	if (count_word(cur->content) < 2)
 		return (0);
@@ -95,13 +93,15 @@ int	ft(t_input *cur)
 int	exp_split(t_input *first)
 {
 	t_input	*cur;
+	int		i;
 
+	i = 0;
 	cur = first;
 	while (cur)
 	{
 		if (cur->exp != -1)
 		{
-			if (ft(cur) != 0)
+			if (ft(cur, i) != 0)
 				return (fail_mall(), 1);
 		}
 		cur = cur->next;
