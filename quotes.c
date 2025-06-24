@@ -31,11 +31,11 @@ int	return_final_len(char *str, int exp)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '"' && check_quotes(str, i) != 1 && exp != 2)
+		if (str[i] == '"' && check_quotes(str, i) != 1 /* && exp != 2 */)
 			i++;
-		else if (str[i] == '\\' && check_quotes(str, i) == 2 && exp != 2)
+		else if (str[i] == '\\' && check_quotes(str, i) == 2 /* && exp != 2 */)
 			i++;
-		else if (str[i] == '\'' && check_quotes(str, i) != 2 && exp != 2)
+		else if (str[i] == '\'' && check_quotes(str, i) != 2 /* && exp != 2 */)
 			i++;
 		else
 		{
@@ -81,9 +81,10 @@ int	remove_quotes(t_input *first)
 	t_input	*cur;
 
 	cur = first;
+	//test_print(first);
 	while (cur)
 	{
-		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')))
+		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')) && cur->prev->type != HERE_DOC)
 		{
 			if (remove_useless_quotes(&(cur->content), return_final_len(cur->content, cur->exp), cur->exp) != 0)
 				return (1);	

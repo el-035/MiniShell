@@ -30,7 +30,7 @@ void	init_node(t_input *cur, t_input *tmp, t_input *new, int i)
 	{
 		cur->next = new;
 		new->prev = cur;
-		new->type = CMD;
+		new->type = ARG;
 	}
 	else
 	{
@@ -49,6 +49,7 @@ int	add_node(t_input *cur, t_input *next, int count)
 
 	i = 0;
 	tmp = NULL;
+	cur->type = CMD;
 	while (i < count)
 	{
 		new = (t_input *)malloc(sizeof(t_input));

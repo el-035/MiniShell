@@ -93,6 +93,8 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	count = 0;
 	while (1)
 	{
+		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
+			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter, -1), -1);
 		line = readline("> ");
 		if (!line)
 		{
@@ -108,9 +110,8 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 		}
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
-		//if ! quotes
+		
 		expand_var(&line, envp);
-		//remove quotes
 		new_lines = ft_calloc(sizeof(char *), count + 2);
 		if (!new_lines)
 			return (perror("Malloc: "), 0);
