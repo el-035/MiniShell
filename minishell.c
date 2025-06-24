@@ -170,7 +170,8 @@ int main(int argc, char **argv, char **envp)
 	{
 		first = NULL;
 		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL);
+		sigaction(SIGQUIT, &sig, NULL);	//ignore
+
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 			break ;

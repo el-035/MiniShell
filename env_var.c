@@ -138,7 +138,7 @@ int	find_ev(t_input *first, t_data *data)
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
 		}
-		if ((!cur->prev || cur->prev->type != HERE_DOC)
+		if ((!cur->prev || cur->prev->type != HERE_DOC)	//HD?
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)

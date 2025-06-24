@@ -115,7 +115,7 @@ int					exp_split(t_input *first);
 
 // quotes
 int					check_quotes(char *content, int len);
-int					remove_useless_quotes(t_input *cur, int len);
+int					remove_useless_quotes(char **content, int len, int exp);
 int					remove_quotes(t_input *first);
 
 // commands

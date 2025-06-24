@@ -25,6 +25,7 @@ void	init_node(t_input *cur, t_input *tmp, t_input *new, int i)
 {
 	ft_memset(new, 0, sizeof(t_input));
 	init_input(new);
+	new->exp = 2;
 	if (i == 0)
 	{
 		cur->next = new;
@@ -71,7 +72,7 @@ int	ft(t_input *cur, int i)
 	tmp = cur->content;
 	if (count_word(cur->content) < 2)
 		return (0);
-	split = mini_split(cur->content);
+	split = ft_split(cur->content, ' ');
 	if (!split)
 		return (1);
 	count = arr_len(split);
@@ -98,15 +99,16 @@ int	exp_split(t_input *first)
 	i = 0;
 	cur = first;
 	while (cur)
-	{
+	{	
 		if (cur->exp != -1)
 		{
+			//cur->exp = 2;
 			if (ft(cur, i) != 0)
-				return (fail_mall(), 1);
+			return (fail_mall(), 1);
 		}
 		cur = cur->next;
 		if (cur == first)
-			break ;
+		break ;
 	}
 	return (0);
 }

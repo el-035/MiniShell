@@ -30,7 +30,7 @@ void	test_print(t_input *first)
 	if (!cur->next)
 	{
 
-		printf("node %d, cur: %p, next: %p, content: %s: type: %s bi:%d\n", cur->position, cur, cur->next, cur->content, get_type_str(cur->type), cur->is_builtin/* , cur->cmd_path */);
+		printf("node %d, cur: %p, next: %p, content: %s: type: %s ex:%d\n", cur->position, cur, cur->next, cur->content, get_type_str(cur->type), cur->exp/* , cur->cmd_path */);
 
 		
 		//printf("node %d, content: %s: type:%s\n", cur->position, cur->content, get_type_str(cur->type));
@@ -42,7 +42,7 @@ void	test_print(t_input *first)
 		//printf("cur: %p prev: %p\n", cur, cur->prev);
 		//printf("node %d, content: %s: type:%s\n", cur->position, cur->content, get_type_str(cur->type));
 
-		printf("node %d, cur: %p, next: %p, content: %s: type: %s bi:%d\n", cur->position, cur, cur->next, cur->content, get_type_str(cur->type), cur->is_builtin/* , cur->cmd_path */);
+		printf("node %d, cur: %p, next: %p, content: %s: type: %s ex:%d\n", cur->position, cur, cur->next, cur->content, get_type_str(cur->type), cur->exp/* , cur->cmd_path */);
 		cur = cur->next;
 		if (cur == first)
 			break;
