@@ -115,9 +115,9 @@ int					exp_split(t_input *first);
 
 // quotes
 int					check_quotes(char *content, int len);
-int					remove_useless_quotes(t_input *cur, int len);
+int					remove_useless_quotes(char **content, int len);
 int					remove_quotes(t_input *first);
-
+int				return_final_len(char *str);
 // commands
 
 int					compare_cmd(t_input *cur, char **commands);
@@ -190,7 +190,6 @@ int					create_pipes(t_data *data);
 
 void				print_cmd_list(t_cmd *cmds);
 void				print_cmds(t_data *data);
-
 
 // Builtins
 void				ft_pwd(void);

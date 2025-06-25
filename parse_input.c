@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <sys/ioctl.h>
 
 static int	count_cmds(t_input *tokens, t_data *data)
 {
@@ -52,25 +53,27 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 }
 
 
-/* void	hd_handler(int sig)
+ void	hd_handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
 		return_exit_code(SIGINT + 128);
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
 		return_sig_flag(2);
- 		//rl_on_new_line();
-		//rl_replace_line("", 0);
+		//flag = 2;
+		rl_on_new_line();
+		rl_replace_line("", 0);
 		//printf("\n");
 		// exit(SIGINT + 128);
 		return ;
-
 	}
-	// if (sig == SIGQUIT)		//ctrl /
-	// {
-	// 	return_sig_flag(3);
-	// 	// exit(SIGQUIT + 128);
-	// }
-} */
+	if (sig == SIGQUIT)		//ctrl /
+	{
+		return_sig_flag(3);
+		// exit(SIGQUIT + 128);
+	}
+}
+
 
 int	create_heredoc(t_cmd *cmd, char **envp)
 {
@@ -78,34 +81,44 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	int count;
 	char **new_lines;
 	int	i;
-
-	/* 	struct sigaction	sig;
+	struct sigaction	sig;
+	int hd_flag = 0;
 
 	sig.sa_handler = &hd_handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
-	//sigaction(SIGQUIT, &sig, NULL);
-	signal(SIGQUIT, SIG_IGN); */
+	sigaction(SIGQUIT, &sig, NULL);
+	//signal(SIGQUIT, SIG_IGN);
 	count = 0;
 	while (1)
 	{
+		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
+		{
+			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
+			hd_flag = 1;
+		}
 		line = readline("> ");
 		if (!line)
 		{
-			write (2, "bash: warning: here-document at line 1 delimited by end-of-file (wanted `", 74);
+			write (2, "bash: warning: here-document delimited by end-of-file (wanted `", 64);
 			write (2, cmd->limiter, ft_strlen(cmd->limiter));
 			write (2, "')\n", 4);
 			break ;
-		}
-		/* 		//if (return_sig_flag(-1) == 2)
+ 		}
+		if (return_sig_flag(-1) == 2)
 		{
 			//return_sig_flag(0);
 			break ;
-		} */
+		}
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
-		expand_var(&line, envp);
+		if (ft_strchr(line, '$'))	
+		{
+			if (hd_flag == 0)
+				expand_var(&line, envp);
+			remove_useless_quotes(&line, return_final_len(line));
+		}
 		new_lines = ft_calloc(sizeof(char *), count + 2);
 		if (!new_lines)
 			return (perror("Malloc: "), 0);

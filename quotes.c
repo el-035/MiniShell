@@ -46,7 +46,7 @@ int	return_final_len(char *str)
 	return (j);
 }
 
-int	remove_useless_quotes(t_input *cur, int len)
+int	remove_useless_quotes(char **content, int len)
 {
 	int		i;
 	char	*final;
@@ -56,20 +56,20 @@ int	remove_useless_quotes(t_input *cur, int len)
 	if (!final)
 		return (fail_mall(), 1);
 	len = 0;
-	while (cur->content[i])
+	while ((*content)[i])
 	{
-		if (cur->content[i] == '"' && check_quotes(cur->content, i) != 1)
+		if ((*content)[i] == '"' && check_quotes((*content), i) != 1)
 			i++;
-		else if (cur->content[i] == '\\' && check_quotes(cur->content, i) == 2)
+		else if ((*content)[i] == '\\' && check_quotes((*content), i) == 2)
 			i++;
-		else if (cur->content[i] == '\'' && check_quotes(cur->content, i) != 2)
+		else if ((*content)[i] == '\'' && check_quotes((*content), i) != 2)
 			i++;
 		else
-			final[len++] = cur->content[i++];
+			final[len++] = (*content)[i++];
 	}
-	free(cur->content);
-	cur->content = ft_strdup(final);
-	if (!cur->content)
+	free((*content));
+	(*content) = ft_strdup(final);
+	if (!(*content))
 		return (free(final), fail_mall(), 1);
 	return (free(final), 0);
 }
@@ -79,12 +79,13 @@ int	remove_quotes(t_input *first)
 	t_input	*cur;
 
 	cur = first;
+	//test_print(first);
 	while (cur)
 	{
-		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')))
+		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')) && cur->prev->type != HERE_DOC)
 		{
-			if (remove_useless_quotes(cur, return_final_len(cur->content)) != 0)
-				return (1);
+			if (remove_useless_quotes(&(cur->content), return_final_len(cur->content)) != 0)
+				return (1);	
 		}
 		cur = cur->next;
 		if (cur == first)

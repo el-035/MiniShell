@@ -62,21 +62,10 @@ int	join_all(char **content, char *start, char *end, char *var)
 	free(*content);
 	*content = ft_strdup(joint);
 	free(joint);
+//	printf("content: %s\n", *content);
 	if (!*content)
 		return (1);
 	return (0);
-}
-
-void	save_var_index(int *dq_count, int index, char *var)
-{
-	int	i;
-
-	i = 0;
-	if (!var || !*var)
-		index = -2;
-	while (dq_count[i] != -1)
-		i++;
-	dq_count[i] = index;
 }
 
 int	expand_var(char **content, char **envp)
@@ -138,7 +127,7 @@ int	find_ev(t_input *first, t_data *data)
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
 		}
-		if ((!cur->prev || cur->prev->type != HERE_DOC)
+		if ((!cur->prev || cur->prev->type != HERE_DOC)	//HD?
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)
