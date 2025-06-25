@@ -68,18 +68,6 @@ int	join_all(char **content, char *start, char *end, char *var)
 	return (0);
 }
 
-/* void	save_var_index(int *dq_count, int index, char *var)
-{
-	int	i;
-
-	i = 0;
-	if (!var || !*var)
-		index = -2;
-	while (dq_count[i] != -1)
-		i++;
-	dq_count[i] = index;
-} */
-
 int	expand_var(char **content, char **envp)
 {
 	char	*start;

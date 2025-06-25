@@ -151,36 +151,45 @@ char				*get_var(char *str);
 char				*get_content(char *str);
 int					print_export(char **envp);
 
-// Exec
-int					check_permission(t_data *data, char *fd_name,
-						int file_order);
-int					get_env_path(t_data *data, char **envp);
+// check_files
 int					open_files(t_data *data);
+int					get_env_path(t_data *data, char **envp);
 
-void				free_cmds(t_cmd *cmd);
+//ft_utils
+int					ft_strcmp(const char *s1, const char *s2);
+
+//signal_handlers
+void				child_handler(int sig);
+
+//exec builtin
+void				exec_builtin_child(t_cmd *cmd, t_data *data);
+int					exec_builtin_parent(t_cmd *cmd, t_data *data);
+
+//exec child
+int					exec_child(t_data *data, int index, char **envp);
+
+//heredoc
+int					set_heredoc_fds(t_cmd *cmd, int index);
+
+//error_handler
+void				handle_error(char *str, int error_code);
+
+//free_all
 void				free_cmd(t_cmd *cmd);
 void				free_str_arr(char **str);
 void				free_pipes(int ***pipes, int count);
 void				close_fd(int *fd);
 void				free_all(t_data *data);
-void				handle_error(char *str, int error_code);
+
 
 int					parse_tokens(t_input *tokens, t_data *data);
 
-int					ft_strcmp(const char *s1, const char *s2);
-char				*check_path(t_data *data, char *cmd);
-int					execute_cmd(t_data *data, char **args, char **envp);
-int					exec_child(t_data *data, int index, char **envp);
+
 int					exec_proc(t_data *data, char **envp);
 int					create_pipes(t_data *data);
 
 void				print_cmd_list(t_cmd *cmds);
 void				print_cmds(t_data *data);
-
-
-int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp);
-
-
 
 // Builtins
 void				ft_pwd(void);

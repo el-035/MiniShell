@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	check_permission(t_data *data, char *fd_name, int file_order)
+static int	check_permission(t_data *data, char *fd_name, int file_order)
 {
 	if (file_order == 1)
 	{
@@ -39,12 +39,12 @@ int	get_env_path(t_data *data, char **envp)
 	return (1);
 }
 
-void	add_skip_flag(t_cmd *cmd)
+static void	add_skip_flag(t_cmd *cmd)
 {
 	cmd->error_skip = 1;
 }
 
-int	get_open_flags(int append)
+static int	get_open_flags(int append)
 {
 	int	flags;
 
