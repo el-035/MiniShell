@@ -62,12 +62,13 @@ int	join_all(char **content, char *start, char *end, char *var)
 	free(*content);
 	*content = ft_strdup(joint);
 	free(joint);
+//	printf("content: %s\n", *content);
 	if (!*content)
 		return (1);
 	return (0);
 }
 
-void	save_var_index(int *dq_count, int index, char *var)
+/* void	save_var_index(int *dq_count, int index, char *var)
 {
 	int	i;
 
@@ -77,7 +78,7 @@ void	save_var_index(int *dq_count, int index, char *var)
 	while (dq_count[i] != -1)
 		i++;
 	dq_count[i] = index;
-}
+} */
 
 int	expand_var(char **content, char **envp)
 {

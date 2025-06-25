@@ -94,7 +94,7 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	while (1)
 	{
 		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
-			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter, -1), -1);
+			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
 		line = readline("> ");
 		if (!line)
 		{

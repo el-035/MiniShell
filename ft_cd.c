@@ -30,6 +30,7 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 	if (!cmd->args[1])
 	{
 		home = extract_var(data->envp, ft_strdup("HOME"));
+		remove_useless_quotes(&home, return_final_len(home));
 		if (!home)
 			fail_mall();
 		if (chdir(home) == -1)
@@ -38,9 +39,7 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 	}
 	else if (cmd->args[2])
 	{
-		write(2, "bash: ", 6);
-		write(2, "cd: ", 4);
-		write(2, "too many arguments\n", 19);
+		write(2, "bash: cd: too many arguments\n", 29);
 		return_exit_code(1);
 	}
 	else if (chdir(cmd->args[1]) == -1)

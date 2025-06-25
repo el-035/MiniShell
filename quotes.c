@@ -22,7 +22,7 @@ int	check_quotes(char *content, int len)
 	return (quote);
 }
 
-int	return_final_len(char *str, int exp)
+int	return_final_len(char *str)
 {
 	int	i;
 	int	j;
@@ -31,11 +31,11 @@ int	return_final_len(char *str, int exp)
 	j = 0;
 	while (str[i])
 	{
-		if (str[i] == '"' && check_quotes(str, i) != 1 /* && exp != 2 */)
+		if (str[i] == '"' && check_quotes(str, i) != 1)
 			i++;
-		else if (str[i] == '\\' && check_quotes(str, i) == 2 /* && exp != 2 */)
+		else if (str[i] == '\\' && check_quotes(str, i) == 2)
 			i++;
-		else if (str[i] == '\'' && check_quotes(str, i) != 2 /* && exp != 2 */)
+		else if (str[i] == '\'' && check_quotes(str, i) != 2)
 			i++;
 		else
 		{
@@ -46,7 +46,7 @@ int	return_final_len(char *str, int exp)
 	return (j);
 }
 
-int	remove_useless_quotes(char **content, int len, int exp)
+int	remove_useless_quotes(char **content, int len)
 {
 	int		i;
 	char	*final;
@@ -58,13 +58,11 @@ int	remove_useless_quotes(char **content, int len, int exp)
 	len = 0;
 	while ((*content)[i])
 	{
-/* 		if (((*content)[i] == '"' || (*content)[i] == '\'') && exp == 1)
-			i++; */
-		/* else */ if ((*content)[i] == '"' && check_quotes((*content), i) != 1 /* && exp != 2 */)
+		if ((*content)[i] == '"' && check_quotes((*content), i) != 1)
 			i++;
-		else if ((*content)[i] == '\\' && check_quotes((*content), i) == 2 /* && exp != 2 */)
+		else if ((*content)[i] == '\\' && check_quotes((*content), i) == 2)
 			i++;
-		else if ((*content)[i] == '\'' && check_quotes((*content), i) != 2 /* && exp != 2 */)
+		else if ((*content)[i] == '\'' && check_quotes((*content), i) != 2)
 			i++;
 		else
 			final[len++] = (*content)[i++];
@@ -86,7 +84,7 @@ int	remove_quotes(t_input *first)
 	{
 		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')) && cur->prev->type != HERE_DOC)
 		{
-			if (remove_useless_quotes(&(cur->content), return_final_len(cur->content, cur->exp), cur->exp) != 0)
+			if (remove_useless_quotes(&(cur->content), return_final_len(cur->content)) != 0)
 				return (1);	
 		}
 		cur = cur->next;

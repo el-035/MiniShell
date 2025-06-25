@@ -101,11 +101,10 @@ char	*extract_var(char **envp, char *var)
 		if (ft_strncmp(envp[i], full, ft_strlen(full)) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
-			value = ft_strdup(temp);
+			value = double_join("\"", temp, "\"");
 			return (free(var), free(full), value);
 		}
-		else
-			i++;
+		i++;
 	}
 	return (free(var), free(full), ft_strdup(""));
 }

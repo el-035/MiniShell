@@ -115,9 +115,9 @@ int					exp_split(t_input *first);
 
 // quotes
 int					check_quotes(char *content, int len);
-int					remove_useless_quotes(char **content, int len, int exp);
+int					remove_useless_quotes(char **content, int len);
 int					remove_quotes(t_input *first);
-int	return_final_len(char *str, int exp);
+int				return_final_len(char *str);
 // commands
 
 int					compare_cmd(t_input *cur, char **commands);
