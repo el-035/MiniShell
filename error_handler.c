@@ -12,6 +12,7 @@ void	handle_error(char *str, int error_code)
 	{
 		write(2, str, ft_strlen(str));
 		write(2, ": Permission denied\n", 20);
+		return_exit_code(1);
 	}
 	else if (error_code == 2)
 	{
