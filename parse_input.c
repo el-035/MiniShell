@@ -53,7 +53,7 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 }
 
 
-/* void	hd_handler(int sig)
+void	hd_handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
@@ -73,7 +73,7 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 		return_sig_flag(3);
 		// exit(SIGQUIT + 128);
 	}
-} */
+}
 
 int	create_heredoc(t_cmd *cmd, char **envp)
 {
@@ -81,15 +81,14 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	int count;
 	char **new_lines;
 	int	i;
-
-/* 	struct sigaction	sig;
+	struct sigaction	sig;
 
 	sig.sa_handler = &hd_handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
 	sigaction(SIGQUIT, &sig, NULL);
-	//signal(SIGQUIT, SIG_IGN); */
+	//signal(SIGQUIT, SIG_IGN);
 	count = 0;
 	while (1)
 	{
@@ -110,8 +109,11 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 		}
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
-		
-		expand_var(&line, envp);
+		if (ft_strchr(line, '$') != NULL)
+		{
+			expand_var(&line, envp);
+			remove_useless_quotes(&line, return_final_len(line));
+		}
 		new_lines = ft_calloc(sizeof(char *), count + 2);
 		if (!new_lines)
 			return (perror("Malloc: "), 0);
