@@ -82,6 +82,7 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	char **new_lines;
 	int	i;
 	struct sigaction	sig;
+	int hd_flag = 0;
 
 	sig.sa_handler = &hd_handler;
 	sigemptyset(&sig.sa_mask);
@@ -93,7 +94,10 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	while (1)
 	{
 		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
+		{
 			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
+			hd_flag = 1;
+		}
 		line = readline("> ");
 		if (!line)
 		{
@@ -109,9 +113,10 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 		}
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
-		if (ft_strchr(line, '$') != NULL)
+		if (ft_strchr(line, '$'))	
 		{
-			expand_var(&line, envp);
+			if (hd_flag == 0)
+				expand_var(&line, envp);
 			remove_useless_quotes(&line, return_final_len(line));
 		}
 		new_lines = ft_calloc(sizeof(char *), count + 2);
