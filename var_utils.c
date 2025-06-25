@@ -1,30 +1,5 @@
 #include "minishell.h"
 
-int	start_len(char *content)
-{
-	int	i;
-
-	i = 0;
-	while (content[i])
-	{
-		if (content[i] == '$')
-		{
-			if (content[i + 1] && (content[i + 1] == '$'))
-				i += 2;
-			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content[i
-					+ 1] == '_'))
-				i++;
-			else if (check_quotes(content, i) == 1)
-				i++;
-			else
-				return (i);
-		}
-		else
-			i++;
-	}
-	return (i);
-}
-
 char	*search_var(char *content, char *var)
 {
 	char	*temp;
@@ -42,20 +17,6 @@ char	*search_var(char *content, char *var)
 	return (temp);
 }
 
-int	even_odd(char *content, int i)
-{
-	int	count;
-
-	count = 1;
-	while (i-- > 0)
-	{
-		if (content[i] != '\\')
-			break ;
-		count++;
-	}
-	return (count);
-}
-
 int	stop(char *content)
 {
 	int	i;
@@ -67,8 +28,8 @@ int	stop(char *content)
 		{
 			if (content[i + 1] && (content[i + 1] == '$'))
 				i += 2;
-			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content[i
-					+ 1] == '_'))
+			else if (content[i + 1] && !(ft_isalpha(content[i + 1]) || content
+					[i + 1] == '_'))
 				i++;
 			else if (check_quotes(content, i) == 1)
 				i++;
