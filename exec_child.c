@@ -7,7 +7,7 @@ static char	*check_path(t_data *data, char *cmd)
 	int		i;
 
 	i = -1;
-	//tmp = NULL;
+	tmp = NULL;
 	if (data->env_path && *data->env_path)
 		while (data->env_path[++i] != NULL)
 		{
@@ -23,10 +23,11 @@ static char	*check_path(t_data *data, char *cmd)
 			if (access(tmp, X_OK) == 0)
 				return (tmp);
 		}
-	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
 	else
-		return (handle_error(cmd, 0), NULL);
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+			else
+				return (handle_error(cmd, 0), NULL);
 	return (free(tmp), handle_error(cmd, 2), NULL);
 }
 
