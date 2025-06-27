@@ -27,12 +27,17 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 {
 	char	*home;
 
-	if (!cmd->args[1])
+	if (!cmd->args[1] || cmd->args[1][0] == '\0')
 	{
 		home = extract_var(data->envp, ft_strdup("HOME"));
-		remove_useless_quotes(&home, return_final_len(home));
 		if (!home)
 			fail_mall();
+		if (home[0] == '\0')
+		{
+			write (2, "bash: cd: HOME not set\n", 23);
+			return_exit_code(1);
+		}
+		remove_useless_quotes(&home, return_final_len(home));
 		if (chdir(home) == -1)
 			return_exit_code(1);
 		free(home);
