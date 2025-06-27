@@ -7,23 +7,29 @@ static char	*check_path(t_data *data, char *cmd)
 	int		i;
 
 	i = -1;
-	tmp = NULL;
-	while (data->env_path[++i] != NULL)
-	{
-		if (tmp != NULL)
-			free(tmp);
-		path = ft_strjoin(data->env_path[i], "/");
-		if (!path)
-			return (free(tmp), write(2, "Path alloc failed\n", 18), NULL);
-		tmp = ft_strjoin(path, cmd);
-		free(path);
-		if (!tmp)
-			return (write(2, "Path alloc failed\n", 18), NULL);
-		if (access(tmp, X_OK) == 0)
-			return (tmp);
-	}
-	return (free(tmp), NULL);
+	//tmp = NULL;
+	if (data->env_path && *data->env_path)
+		while (data->env_path[++i] != NULL)
+		{
+			if (tmp != NULL)
+				free(tmp);
+			path = ft_strjoin(data->env_path[i], "/");
+			if (!path)
+				return (fail_mall(), NULL);
+			tmp = ft_strjoin(path, cmd);
+			free(path);
+			if (!tmp)
+				return (fail_mall(), NULL);
+			if (access(tmp, X_OK) == 0)
+				return (tmp);
+		}
+	if (access(cmd, X_OK) == 0)
+		return (ft_strdup(cmd));
+	else
+		return (handle_error(cmd, 0), NULL);
+	return (free(tmp), handle_error(cmd, 2), NULL);
 }
+
 
 static int	execute_cmd(t_data *data, char **args, char **envp)
 {
@@ -41,7 +47,7 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	{
 		path = check_path(data, args[0]);
 		if (!path)
-			return (handle_error(args[0], 2), 0);
+			return (return_exit_code(1), 0);
 	}
 	if (execve(path, args, envp) == -1)
 	{
@@ -110,6 +116,6 @@ int	exec_child(t_data *data, int index, char **envp)
 	if (!cmd->args || !cmd->args[0])
 		exit(EXIT_FAILURE);
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_all(data), exit(127));
+		(free_all(data), exit(127)); //free_cmd USE INSTEAD!!!!!!!!!!!!!1
 	exit(EXIT_SUCCESS);
 }

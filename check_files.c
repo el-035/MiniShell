@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int	check_permission(t_data *data, char *fd_name, int file_order)
+static int	check_permission(char *fd_name, int file_order)
 {
 	if (file_order == 1)
 	{
@@ -66,7 +66,7 @@ int	open_files(t_data *data)
 	last = &data->cmds[data->cmd_count - 1];
 	if (first->in)
 	{
-		if (!check_permission(data, first->in, 1))
+		if (!check_permission(first->in, 1))
 			return (add_skip_flag(first), 0);
 		data->fd1 = open(first->in, O_RDONLY);
 		if (data->fd1 == -1)
@@ -74,7 +74,7 @@ int	open_files(t_data *data)
 	}
 	if (last->out)
 	{
-		if (!check_permission(data, last->out, 2))
+		if (!check_permission(last->out, 2))
 			return (add_skip_flag(last), 0);
 		flags = get_open_flags(last->append);
 		data->fd2 = open(last->out, flags, 0666);

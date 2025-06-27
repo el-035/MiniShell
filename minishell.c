@@ -29,7 +29,6 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-
 	free_list(first);
     //freegrepo
 	//print_cmds(data);

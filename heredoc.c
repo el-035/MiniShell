@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	create_hd_filename(char *name, size_t size, int index)
+int	create_hd_filename(char *name, int size, int index)
 {
 	int		hd_id;
 	char	*id_str;

@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include <sys/ioctl.h>
 
-static int	count_cmds(t_input *tokens, t_data *data)
+static void	count_cmds(t_input *tokens, t_data *data)
 {
 	t_input	*cur;
 
@@ -15,7 +15,6 @@ static int	count_cmds(t_input *tokens, t_data *data)
 		if (cur == tokens)
 			break ;
 	}
-	return (1);
 }
 
 static int	count_args(t_input *cur)
@@ -51,7 +50,6 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 		*cur = (*cur)->next;
 	}
 }
-
 
  void	hd_handler(int sig)
 {
@@ -199,7 +197,7 @@ int	parse_tokens(t_input *tokens, t_data *data)
 	count_cmds(tokens, data);
 	data->cmds = ft_calloc(data->cmd_count, sizeof(t_cmd));
 	if (!data->cmds)
-		return (perror("Malloc: "), free_all(data), 0);
+		return (0);
 	i = -1;
 	while (cur && ++i < data->cmd_count)
 	{
@@ -207,7 +205,7 @@ int	parse_tokens(t_input *tokens, t_data *data)
 		ft_memset(cmd, 0, sizeof(t_cmd));
 		cmd->args = ft_calloc(count_args(cur) + 1, sizeof(char *));
 		if (!cmd->args)
-			return (perror("Malloc: "), 0);
+			return (0);
 		fill_cmd_data(cmd, &cur, tokens, data);
 	}
 	return (1);
