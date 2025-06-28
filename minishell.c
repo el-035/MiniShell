@@ -30,7 +30,6 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
@@ -42,7 +41,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 		return (1);
 	
 	if (!open_files(data))
-		return (1);
+		return (return_exit_code(1), 1);
 	
 	if (!exec_proc(data, data->envp))
 		return (1);

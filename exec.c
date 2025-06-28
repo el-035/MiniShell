@@ -7,7 +7,9 @@ int	exec_proc(t_data *data, char **envp)
 	int				code;
 	t_cmd			*cmd;
 
+	status = 0;
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
+	//LEAK!!
 	if (!data->pid)
 		return (perror("PID malloc: "), free_all(data), 0);
 	i = -1;

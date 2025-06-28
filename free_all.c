@@ -25,9 +25,6 @@ void	free_str_arr(char **str)
 
 void	free_cmd(t_cmd *cmd)
 {
-	int	i;
-
-	i = -1;
 	if (!cmd)
 		return ;
 	if (cmd->args)

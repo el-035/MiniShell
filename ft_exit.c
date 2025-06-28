@@ -14,12 +14,10 @@ int	error_n(char *err)
 
 char	*clean_input(char *trim)
 {
-	char	*tmp;
 	char	*clean;
 	int		sign;
 
 	sign = 0;
-	tmp = trim;
 	if (*trim == '+' || *trim == '-')
 	{
 		sign = *trim;
