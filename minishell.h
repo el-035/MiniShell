@@ -30,9 +30,7 @@ typedef struct s_input
 	enum e_type		type;
 	int				is_builtin;
 	int				exp;
-
-	int position; // do we need it?
-
+	int position; // do we need it? NOPE
 	struct s_input	*next;
 	struct s_input	*prev;
 }					t_input;

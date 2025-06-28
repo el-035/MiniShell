@@ -35,8 +35,7 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 		if (home[0] == '\0')
 		{
 			write (2, "bash: cd: HOME not set\n", 23);
-			return_exit_code(1);
-			return (free(home));
+			return (return_exit_code(1), free(home));
 		}
 		if (cmd->args[1] && cmd->args[1][0] == '\0')
 			return ;

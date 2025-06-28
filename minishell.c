@@ -180,7 +180,10 @@ int main(int argc, char **argv, char **envp)
 
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
+		{
+			write (2, "exit\n", 5);
 			break ;
+		}
 		if (!*line || !save_input(line, &first))
 			continue ;		//error handling
 	//	test_print(first);
