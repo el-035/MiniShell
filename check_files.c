@@ -67,7 +67,7 @@ int	open_files(t_data *data)
 	if (first->in)
 	{
 		if (!check_permission(first->in, 1))
-			return (add_skip_flag(first), 0);
+			return (add_skip_flag(first),  0);
 		data->fd1 = open(first->in, O_RDONLY);
 		if (data->fd1 == -1)
 			return (add_skip_flag(first), handle_error(first->in, 0), 0);
@@ -75,7 +75,7 @@ int	open_files(t_data *data)
 	if (last->out)
 	{
 		if (!check_permission(last->out, 2))
-			return (add_skip_flag(last), 0);
+			return (add_skip_flag(last), return_exit_code(1), 0);
 		flags = get_open_flags(last->append);
 		data->fd2 = open(last->out, flags, 0666);
 		if (data->fd2 == -1)
