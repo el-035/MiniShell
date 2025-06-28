@@ -103,7 +103,6 @@ int	exp_split(t_input *first)
 	{
 		if (cur->exp != -1)
 		{
-			// cur->exp = 2;
 			if (ft(cur, i) != 0)
 				return (fail_mall(), 1);
 		}

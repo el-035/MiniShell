@@ -26,7 +26,7 @@ void	update_envp(char **envp, char *var, char *value)
 void	cd_helper(t_cmd *cmd, t_data *data)
 {
 	char	*home;
-
+	
 	if (!cmd->args[1] || cmd->args[1][0] == '\0')
 	{
 		home = extract_var(data->envp, ft_strdup("HOME"));
@@ -37,6 +37,8 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 			write (2, "bash: cd: HOME not set\n", 23);
 			return_exit_code(1);
 		}
+		if (cmd->args[1][0] == '\0')
+			return ;
 		remove_useless_quotes(&home, return_final_len(home));
 		if (chdir(home) == -1)
 			return_exit_code(1);
