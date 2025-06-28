@@ -79,13 +79,14 @@ int	remove_quotes(t_input *first)
 	t_input	*cur;
 
 	cur = first;
-	//test_print(first);
 	while (cur)
 	{
-		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"')) && cur->prev->type != HERE_DOC)
+		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
+			&& cur->prev->type != HERE_DOC)
 		{
-			if (remove_useless_quotes(&(cur->content), return_final_len(cur->content)) != 0)
-				return (1);	
+			if (remove_useless_quotes(&(cur->content),
+					return_final_len(cur->content)) != 0)
+				return (1);
 		}
 		cur = cur->next;
 		if (cur == first)

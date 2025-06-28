@@ -56,7 +56,8 @@ char	**copy(char **envp)
 	{
 		if (ft_strncmp(envp[i], "_=", 2) == 0)
 			i++;
-		cpy[j++] = ft_strdup(envp[i++]); // protect
+		if (envp[i])
+			cpy[j++] = ft_strdup(envp[i++]); // protect
 		if (!cpy[j - 1])
 			return (free_split(cpy), NULL);
 	}

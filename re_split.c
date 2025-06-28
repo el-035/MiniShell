@@ -98,16 +98,15 @@ int	exp_split(t_input *first)
 
 	cur = first;
 	while (cur)
-	{	
+	{
 		if (cur->exp != -1)
 		{
-			//cur->exp = 2;
 			if (ft(cur) != 0)
 			return (fail_mall(), 1);
 		}
 		cur = cur->next;
 		if (cur == first)
-		break ;
+			break ;
 	}
 	return (0);
 }

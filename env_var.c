@@ -62,7 +62,6 @@ int	join_all(char **content, char *start, char *end, char *var)
 	free(*content);
 	*content = ft_strdup(joint);
 	free(joint);
-//	printf("content: %s\n", *content);
 	if (!*content)
 		return (1);
 	return (0);
@@ -95,24 +94,6 @@ int	expand_var(char **content, char **envp)
 	return (0);
 }
 
-int	exp_helper(char *content)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (content[i])
-	{
-		if (content[i] == '$' && check_quotes(content, i) == 0)
-			count++;
-		i++;
-	}
-	if (count == 0)
-		return (-1);
-	return (count);
-}
-
 int	find_ev(t_input *first, t_data *data)
 {
 	t_input	*cur;
@@ -127,7 +108,7 @@ int	find_ev(t_input *first, t_data *data)
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
 		}
-		if ((!cur->prev || cur->prev->type != HERE_DOC)	//HD?
+		if ((!cur->prev || cur->prev->type != HERE_DOC) // HD?
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)

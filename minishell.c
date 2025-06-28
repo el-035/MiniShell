@@ -13,16 +13,17 @@ int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
+/* 	printf("before second split:\n");
+	test_print(first); */
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
 	
 	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
-	/* printf("before second split:\n");
-	test_print(first); */
+
 	if (exp_split(first))
 		return (free_list(first), 1);
-	/* printf("after second split:\n");
+/* 	printf("after second split:\n");
 	test_print(first); */
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);

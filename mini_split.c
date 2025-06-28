@@ -8,7 +8,6 @@ static int	is_delimitor(char c)
 		return (2);
 	return (0);
 }
-/* static int wc_helper(char *s) */
 
 static int	ft_word_count(char *s, int i, int wc)
 {

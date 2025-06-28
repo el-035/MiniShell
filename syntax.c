@@ -1,19 +1,5 @@
 #include "minishell.h"
 
-void	syntax_err(void)
-{
-	write(2, "bash: syntax error near unexpected token\n", 42);
-	return_exit_code(2);
-}
-
-int	is_red(t_input *cur)
-{
-	if (cur->type != REDIR_APPEND && cur->type != HERE_DOC
-		&& cur->type != REDIR_IN && cur->type != REDIR_OUT)
-		return (0);
-	return (1);
-}
-
 int	more_syntax(t_input *cur)
 {
 	if (is_red(cur) == 1 && cur->next->type == REDIR_OUT)
@@ -38,10 +24,13 @@ int	more_syntax(t_input *cur)
 
 int	check_nl(t_input *first)
 {
-	if (first->type == REDIR_IN || first->type == HERE_DOC)
+/* 	if (first->type == REDIR_IN || first->type == HERE_DOC
+		&& !first->next)
 		return (syntax_err(), 1);
 	if ((first->type == REDIR_APPEND || first->type == REDIR_OUT)
 		&& !first->next)
+		return (syntax_err(), 1); */
+	if (is_red(first) == 1 && !first->next)
 		return (syntax_err(), 1);
 	if (first->type == PIPE)
 		return (syntax_err(), 1);
@@ -72,22 +61,6 @@ int	syntax_check(t_input *first)
 	return (0);
 }
 
-int	is_red_or_pipe(t_input *first)
-{
-	if (ft_strncmp(first->content, ">>", 3) == 0)
-		return (first->type = REDIR_APPEND, 1);
-	else if (ft_strncmp(first->content, "<<", 3) == 0)
-		return (first->type = HERE_DOC, 1);
-	else if (ft_strncmp(first->content, "<", 1) == 0)
-		return (first->type = REDIR_IN, 1);
-	else if (ft_strncmp(first->content, ">", 2) == 0)
-		return (first->type = REDIR_OUT, 1);
-	else if (ft_strncmp(first->content, "|", 2) == 0)
-		return (first->type = PIPE, 1);
-	else
-		return (0);
-}
-
 int	assign_type(t_input **first)
 {
 	t_input	*cur;
@@ -111,6 +84,5 @@ int	assign_type(t_input **first)
 			cur->type = ARG;
 		cur = cur->next;
 	}
-	// test_print(*first);
 	return (syntax_check(*first));
 }

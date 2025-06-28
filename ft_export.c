@@ -80,7 +80,8 @@ void	export_helper(t_data *data, t_cmd *cmd, int i, char *var)
 		free(tmp);
 	}
 	else if (find_var(data->envp, var) == -1)
-		add_env(data, var, content);		//not printinf error message but otherwise too many lines
+		add_env(data, var, content);
+			// not printinf error message but otherwise too many lines
 	return (free(content));
 }
 

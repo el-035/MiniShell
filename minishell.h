@@ -63,10 +63,48 @@ typedef struct s_data
 }					t_data;
 
 void				fail_mall(void);
-// main
 
+// main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
+
+// syntax
+int					syntax_check(t_input *first);
+int					assign_type(t_input **first);
+
+// syntax utils
+int					is_red_or_pipe(t_input *first);
+int					is_red(t_input *cur);
+void				syntax_err(void);
+
+// env_var
+int					find_ev(t_input *first, t_data *data);
+int					expand_var(char **content, char **envp);
+int					join_all(char **content, char *start, char *end, char *var);
+char				*save_rest(char *content, char *var);
+char				*save_start(char *content);
+
+// var utils
+char				*search_var(char *content, char *var);
+int					stop(char *content);
+char				*extract_var(char **envp, char *var);
+char				*save_var(char *content);
+
+// var utils 2
+int					start_len(char *content);
+int					exp_helper(char *content);
+
+
+
+int					check_quotes(char *content, int len);
+int					expand_exit(t_input **cur, t_data *data);
+
+int					start_len(char *content);
+int					even_odd(char *content, int i);
+int					find_index(int i /*  int j, */);
+int					exp_helper(char *content);
+
+int					exp_split(t_input *first);
 
 // init
 void				init_input(t_input *first);
@@ -82,42 +120,11 @@ t_input				*add_new(char *content, int pos, t_input *prev);
 t_input				*make_new_node(char *content, int pos);
 int					list_size(t_input *lst);
 
-// check input
-int					pipe_syntax(t_input *cur, t_input *first);
-int					redir_syntax(t_input *cur, t_input *first);
-int					quotes_syntax(t_input *cur);
-int					is_red_or_pipe(t_input *first);
-int					syntax_check(t_input *first);
-int					assign_type(t_input **first);
-
-// env_var
-int					find_ev(t_input *first, t_data *data);
-
-int					expand_var(char **content, char **envp /* ,
-						int **dq_var */);
-
-// char	*extract_var(t_data *data, char *var);
-int					check_quotes(char *content, int len);
-int					join_all(char **content, char *start, char *end, char *var);
-int					expand_exit(t_input **cur, t_data *data);
-
-// var utils
-int					start_len(char *content);
-char				*search_var(char *content, char *var);
-int					stop(char *content);
-char				*extract_var(char **envp, char *var);
-char				*save_var(char *content);
-int					even_odd(char *content, int i);
-int					find_index(int i /*  int j, */);
-int					exp_helper(char *content);
-
-int					exp_split(t_input *first);
-
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
 int					remove_quotes(t_input *first);
-int				return_final_len(char *str);
+int					return_final_len(char *str);
 // commands
 
 int					compare_cmd(t_input *cur, char **commands);
@@ -138,7 +145,7 @@ void				ft_echo(t_cmd *cmd);
 void				ft_exit(t_data *data, t_cmd *cmd);
 void				ft_cd(t_data *data, t_cmd *cmd);
 
-int				ft_unset(t_data *data, t_cmd *cmd);
+int					ft_unset(t_data *data, t_cmd *cmd);
 
 int					arr_len(char **arr);
 
@@ -155,35 +162,33 @@ int					print_export(char **envp);
 int					open_files(t_data *data);
 int					get_env_path(t_data *data, char **envp);
 
-//ft_utils
+// ft_utils
 int					ft_strcmp(const char *s1, const char *s2);
 
-//signal_handlers
+// signal_handlers
 void				child_handler(int sig);
 
-//exec builtin
+// exec builtin
 void				exec_builtin_child(t_cmd *cmd, t_data *data);
 int					exec_builtin_parent(t_cmd *cmd, t_data *data);
 
-//exec child
+// exec child
 int					exec_child(t_data *data, int index, char **envp);
 
-//heredoc
+// heredoc
 int					set_heredoc_fds(t_cmd *cmd, int index);
 
-//error_handler
+// error_handler
 void				handle_error(char *str, int error_code);
 
-//free_all
+// free_all
 void				free_cmd(t_cmd *cmd);
 void				free_str_arr(char **str);
 void				free_pipes(int ***pipes, int count);
 void				close_fd(int *fd);
 void				free_all(t_data *data);
 
-
 int					parse_tokens(t_input *tokens, t_data *data);
-
 
 int					exec_proc(t_data *data, char **envp);
 int					create_pipes(t_data *data);

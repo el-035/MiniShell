@@ -1,49 +1,5 @@
 #include "minishell.h"
 
-void	init_input(t_input *first)
-{
-	first->content = NULL;
-	first->type = UNKNOWN;
-	first->position = -1;
-	first->next = NULL;
-	first->prev = NULL;
-	first->is_builtin = -1;
-	first->exp = -1;
-}
-
-int	save_input(char *line, t_input **first)
-{
-	t_input	*cur;
-	char	**split;
-	int		pos;
-
-	pos = 0;
-	split = mini_split(line);
-	if (!split)
-		return (0);
-	*first = make_new_node(split[pos], pos);
-	if (!*first)
-		return (free_split(split), fail_mall(), 0);
-	cur = *first;
-	if (!split[1])
-	{
-		(*first)->next = (*first);
-		(*first)->prev = (*first);
-	}
-	while (split[++pos])
-	{
-		cur = add_new(split[pos], pos, cur);
-		if (!cur)
-			return (free_split(split), free_list(*first), fail_mall(), 0);
-	}
-	if (pos > 1)
-	{
-		cur->next = *first;
-		(*first)->prev = cur;
-	}
-	return (free_split(split), 1);
-}
-
 char	*double_join(char *s1, char *s2, char *s3) // those are not allocated
 {
 	char	*tmp;
@@ -103,7 +59,7 @@ int	no_env(t_data *data)
 
 int	copy_envp(t_data *data, char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!*envp) // IDK HOW TO VALGRIND THIS
