@@ -103,25 +103,25 @@ int	exec_child(t_data *data, int index, char **envp)
 		if (cmd->hd_content)
 		{
 			if (!set_heredoc_fds(cmd, index))
-				exit(EXIT_FAILURE);
+				(free_split(data->envp), free_all(data),exit(EXIT_FAILURE));
 			fd = open(cmd->in, O_RDONLY);
 			if (fd < 0)
-				(perror("Opening heredoc tmp file: "), exit(EXIT_FAILURE));
+				(perror("Opening heredoc tmp file: "), free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
 			(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->in));
 		}
 		else
-			exit(EXIT_SUCCESS);
+			(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 	}
 	if (cmd->is_builtin)
-		(exec_builtin_child(cmd, data), exit(EXIT_SUCCESS));
+		(exec_builtin_child(cmd, data), free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 	if (!cmd->args || !cmd->args[0])
 	{
 		if (cmd->is_hd == 1)
-			exit (EXIT_SUCCESS);
+			(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 		else
-			exit(EXIT_FAILURE);
+			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
 	}
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_all(data), exit(127)); //free_cmd USE INSTEAD!!!!!!!!!!!!!1
-	exit(EXIT_SUCCESS);
+		(free_split(data->envp), free_all(data), exit(127)); //free_cmd USE INSTEAD!!!!!!!!!!!!!1
+	(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 }
