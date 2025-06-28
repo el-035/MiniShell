@@ -41,5 +41,5 @@ int	set_heredoc_fds(t_cmd *cmd, int index)
 		write(fd, "\n", 1);
 	}
 	close(fd);
-	return (1);
+	return ( return_exit_code(0), 1);
 }
