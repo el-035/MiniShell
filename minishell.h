@@ -103,11 +103,14 @@ int					find_index(int i /*  int j, */);
 int					exp_helper(char *content);
 
 int					exp_split(t_input *first);
+int	count_word(char *content);
 
 // init
 void				init_input(t_input *first);
 int					save_input(char *line, t_input **first);
 int					copy_envp(t_data *data, char **envp);
+//space split
+char	**space_split(char const *s);
 
 // free
 void				free_split(char **split);
@@ -162,6 +165,7 @@ int					get_env_path(t_data *data, char **envp);
 
 // ft_utils
 int					ft_strcmp(const char *s1, const char *s2);
+int					is_space(char c);
 
 // signal_handlers
 void				child_handler(int sig);

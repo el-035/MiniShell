@@ -11,7 +11,7 @@ SRC = minishell.c list_utils.c syntax.c syntax_utils.c  mini_split.c \
   	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c re_split.c \
 	ft_exit.c ft_echo.c ft_cd.c exec.c check_files.c exec_builtin.c \
 	ft_utils.c signal_handlers.c error_handler.c exec_child.c \
-	t.c
+	t.c space_split.c
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 LIBFT_MAKEFILE = $(LIBFT_DIR)/Makefile

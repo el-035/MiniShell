@@ -2,20 +2,22 @@
 
 int	count_word(char *content)
 {
-	int	wc;
-	int	start;
+	int	 i;
+	int	 wc;
 
+	i = 0;
 	wc = 0;
-	start = 0;
-	while (content[start])
+	if (!content)
+		return (0);
+	while (content[i])
 	{
-		if (content[start] != ' ' && content[start] != '\t'
-			&& content[start] != '\n')
-			start++;
-		else
+		while (content[i] && is_space(content[i]) == 1)
+			i++;
+		if (content[i] && is_space(content[i]) == 0)
 		{
 			wc++;
-			start++;
+			while (content[i] && is_space(content[i]) == 0)
+				i++;
 		}
 	}
 	return (wc);
@@ -71,23 +73,22 @@ int	ft(t_input *cur)
 	int		i;
 
 	i = 0;
-	if (count_word(cur->content) < 2)
+	count = count_word(cur->content);
+	if (count < 2)
 		return (0);
-	split = ft_split(cur->content, ' ');
+	split = space_split(cur->content);
 	if (!split)
-		return (1);
-	count = arr_len(split);
-	if (count == 1)
-		return (0);
+		return (1);	
 	if (add_node(cur, cur->next, count - 1) != 0)
 		return (free_split(split), 1);
 	free(cur->content);
-	while (i < count)
+	while (i < count && split[i])
 	{
-		cur->content = ft_strdup(split[i++]);
+		cur->content = ft_strdup(split[i]);
 		if (!cur->content)
 			return (free_split(split), 1);
 		cur = cur->next;
+		i++;
 	}
 	return (free_split(split), 0);
 }
@@ -102,7 +103,7 @@ int	exp_split(t_input *first)
 		if (cur->exp != -1)
 		{
 			if (ft(cur) != 0)
-			return (fail_mall(), 1);
+				return (fail_mall(), 1);
 		}
 		cur = cur->next;
 		if (cur == first)

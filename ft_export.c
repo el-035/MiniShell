@@ -106,9 +106,7 @@ void	ft_export(t_data *data, t_cmd *cmd)
 			return_exit_code(1);
 		}
 		else
-		{
 			export_helper(data, cmd, i, var);
-			free(var);
-		}
+		free(var);
 	}
 }
