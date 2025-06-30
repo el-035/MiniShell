@@ -43,7 +43,8 @@ int	exec_proc(t_data *data, char **envp)
 	{
 		/* if (data->pid[i] == -2 || data->pid[i] == -1)
 			continue; */
-		waitpid(data->pid[i], &status, 0);
+		if (data->pid[i] != -2)
+			waitpid(data->pid[i], &status, 0);
 		//ADD CONDITION? 
 		code = WEXITSTATUS(status);
 		/* else if (WIFSIGNALED(status))

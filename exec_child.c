@@ -71,13 +71,13 @@ static void	set_child_fds(t_data *data, t_cmd *cmd, int index)
 		dup2(data->pipes[index - 1][0], STDIN_FILENO);
 	if (cmd->out)
 		dup2(data->fd2, STDOUT_FILENO);
-	else if (index < data->cmd_count - 1)
+	if (index < data->cmd_count - 1)
 			dup2(data->pipes[index][1], STDOUT_FILENO);
 	i = -1;
 	while (++i < data->cmd_count - 1)
 	{
-		close(data->pipes[i][0]);
-		close(data->pipes[i][1]);
+		if (data->pipes)
+			(close(data->pipes[i][0]), close(data->pipes[i][1]));
 	}
 	if (cmd->in == NULL && data->fd1 != STDIN_FILENO && data->fd1 != -1)
 		close(data->fd1);
