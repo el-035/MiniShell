@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -g #-Wall -Wextra -Werror 
+CFLAGS = -g -Wall -Wextra -Werror 
 
 #delete t.c and testing
 SRC = minishell.c list_utils.c syntax.c syntax_utils.c  mini_split.c \

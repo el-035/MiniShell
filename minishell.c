@@ -13,27 +13,33 @@ int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-/* 	printf("before second split:\n");
+/* 	printf("before exp:\n");
 	test_print(first); */
 	if (find_ev(first, data) != 0)
+		return (free_list(first), 1);
+/* 	printf("before second split:\n");
+	test_print(first); */
+	if (exp_split(first))
 		return (free_list(first), 1);
 	
 	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
-
-	if (exp_split(first))
-		return (free_list(first), 1);
-/* 	printf("after second split:\n");
-	test_print(first); */
+	
+/* test_print(first); */
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
+	
+	
+/* 	printf("after quotes:\n");
+	test_print(first); */
+	
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
-	
+
 	if (!create_pipes(data))
         return (1);
 
@@ -112,7 +118,7 @@ char *prompt_join(t_data *data)
 	free(tmp); free(var);
 	if (!prompt)
 		return (NULL);
-	remove_useless_quotes(&prompt, return_final_len(prompt));
+	//remove_useless_quotes(&prompt, return_final_len(prompt));
 	return (prompt);
 }
 
