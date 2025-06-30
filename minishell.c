@@ -22,8 +22,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (exp_split(first))
 		return (free_list(first), 1);
 	
-	if (remove_quotes(first) != 0)
-		return (free_list(first), 1);
+/* 	test_print(first); */
 	
 /* test_print(first); */
 	if (find_cmd(first) != 0)
@@ -36,10 +35,14 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
+/* 	test_print(first); 
+	print_cmds(data); */
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
-
+	if (remove_quotes(data) != 0)
+		return (1);
+/* 	print_cmds(data); */
 	if (!create_pipes(data))
         return (1);
 

@@ -89,6 +89,7 @@ void	ft_export(t_data *data, t_cmd *cmd)
 {
 	int		i;
 	char	*var;
+	char *tmp;
 
 	i = 0;
 	if (!cmd->args[1])
@@ -101,8 +102,12 @@ void	ft_export(t_data *data, t_cmd *cmd)
 		if (ft_is_valid(var) != 0)
 		{
 			write(2, "bash: export: `", 15);
-			write(2, cmd->args[i], ft_strlen(cmd->args[i]));
+			tmp = ft_strdup(cmd->args[i]);
+				//protect;
+			remove_useless_quotes(&tmp, return_final_len(tmp));
+			write(2, tmp, ft_strlen(tmp));
 			write(2, "': not a valid identifier\n", 26);
+			free(tmp);
 			return_exit_code(1);
 		}
 		else

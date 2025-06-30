@@ -124,7 +124,7 @@ int					list_size(t_input *lst);
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
-int					remove_quotes(t_input *first);
+int					remove_quotes(t_data *data);
 int					return_final_len(char *str);
 // commands
 

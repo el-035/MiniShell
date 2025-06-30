@@ -74,32 +74,41 @@ int	remove_useless_quotes(char **content, int len)
 	return (free(final), 0);
 }
 
-int	remove_quotes(t_input *first/* t_data *data */)
+int	remove_quotes(t_data *data)
 {
-/* 	t_cmd *cmd;
 	int i;
+	int j;
 
 	i = 0;
-	cmd = data->cmds;
-	while (i < data->cmd_count)
-	{
-		if (ft_strnstr(&data->cmds[0], "export", ft_strlen(&data->cmds[0])) != NULL)
-	} */
-	t_input	*cur;
 
-	cur = first;
-	while (cur)
-	{
-		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
-			&& cur->prev->type != HERE_DOC)
+	while (i < data->cmd_count)
+	{	
+
+		if (data->cmds[i].args && data->cmds[i].args[0] && 
+			ft_strncmp(data->cmds[i].args[0], "export", ft_strlen(data->cmds[i].args[0])) != 0)
 		{
-			if (remove_useless_quotes(&(cur->content),
-					return_final_len(cur->content)) != 0)
-				return (1);
+			j = 1;
+			while(data->cmds[i].args[j])
+			{
+				if (ft_strchr(data->cmds[i].args[j], '\'') || ft_strchr(data->cmds[i].args[j], '"'))
+				{
+					if (remove_useless_quotes(&(data->cmds[i].args[j]), return_final_len(data->cmds[i].args[j])) != 0)
+						return 1;
+				}
+				j++;
+			}
 		}
-		cur = cur->next;
-		if (cur == first)
-			break ;
+		if (data->cmds[i].in)
+		{
+			if (remove_useless_quotes(&(data->cmds[i].in), return_final_len(data->cmds[i].in)) != 0)
+				return 1;
+		}
+		if (data->cmds[i].out)
+		{
+			if (remove_useless_quotes(&(data->cmds[i].out), return_final_len(data->cmds[i].out)) != 0)
+				return 1;
+		}
+		i++;
 	}
-	return (0);
+	return 0;
 }
