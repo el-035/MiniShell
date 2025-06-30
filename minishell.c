@@ -43,7 +43,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 		return (1);
 	
 	if (!open_files(data))
-		return (return_exit_code(1), 0);
+		return_exit_code(1);
 	
 	if (!exec_proc(data, data->envp))
 		return (1);

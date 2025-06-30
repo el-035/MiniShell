@@ -65,7 +65,7 @@ int	open_files(t_data *data)
 	i = -1;
 	while (++i < data->cmd_count)
 	{
-		cmd = &data->cmds[0];
+		cmd = &data->cmds[i];
 		if (cmd->in)
 		{
 			if (!check_permission(cmd->in, 1))

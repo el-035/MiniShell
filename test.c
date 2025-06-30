@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int	count_cmds(t_input *tokens, t_data *data)
+/* static int	count_cmds(t_input *tokens, t_data *data)
 {
 	t_input	*cur;
 
@@ -86,7 +86,7 @@ int	parse_tokens(t_input *tokens, t_data *data)
 			cur = cur->next;
 	}
 	return (1);
-}
+} */
 
 
 
