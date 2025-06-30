@@ -26,7 +26,7 @@ typedef enum e_type
 
 typedef struct s_input
 {
-	char			*content;
+	char			*content;	
 	enum e_type		type;
 	int				is_builtin;
 	int				exp;
