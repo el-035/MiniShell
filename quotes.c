@@ -74,8 +74,17 @@ int	remove_useless_quotes(char **content, int len)
 	return (free(final), 0);
 }
 
-int	remove_quotes(t_input *first)
+int	remove_quotes(t_input *first/* t_data *data */)
 {
+/* 	t_cmd *cmd;
+	int i;
+
+	i = 0;
+	cmd = data->cmds;
+	while (i < data->cmd_count)
+	{
+		if (ft_strnstr(&data->cmds[0], "export", ft_strlen(&data->cmds[0])) != NULL)
+	} */
 	t_input	*cur;
 
 	cur = first;

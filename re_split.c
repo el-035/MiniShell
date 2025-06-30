@@ -76,6 +76,7 @@ int	ft(t_input *cur)
 	count = count_word(cur->content);
 	if (count < 2)
 		return (0);
+	cur->exp = 2;
 	split = space_split(cur->content);
 	if (!split)
 		return (1);	
@@ -102,6 +103,7 @@ int	exp_split(t_input *first)
 	{
 		if (cur->exp != -1)
 		{
+			//cur->exp = 2;
 			if (ft(cur) != 0)
 				return (fail_mall(), 1);
 		}

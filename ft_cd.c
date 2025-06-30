@@ -39,7 +39,7 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 		}
 		if (cmd->args[1] && cmd->args[1][0] == '\0')
 			return ;
-		remove_useless_quotes(&home, return_final_len(home));
+	//	remove_useless_quotes(&home, return_final_len(home));
 		if (chdir(home) == -1)
 			return_exit_code(1);
 		free(home);
