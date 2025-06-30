@@ -58,28 +58,31 @@ static int	get_open_flags(int append)
 
 int	open_files(t_data *data)
 {
-	t_cmd	*first;
-	t_cmd	*last;
+	t_cmd	*cmd;
 	int		flags;
+	int		i;
 
-	first = &data->cmds[0];
-	last = &data->cmds[data->cmd_count - 1];
-	if (first->in)
+	i = -1;
+	while (++i < data->cmd_count)
 	{
-		if (!check_permission(first->in, 1))
-			return (add_skip_flag(first),  0);
-		data->fd1 = open(first->in, O_RDONLY);
-		if (data->fd1 == -1)
-			return (add_skip_flag(first), handle_error(first->in, 0), 0);
-	}
-	if (last->out)
-	{
-		if (!check_permission(last->out, 2))
-			return (add_skip_flag(last), return_exit_code(1), 0);
-		flags = get_open_flags(last->append);
-		data->fd2 = open(last->out, flags, 0666);
-		if (data->fd2 == -1)
-			return (add_skip_flag(last), handle_error(last->out, 0), 0);
+		cmd = &data->cmds[0];
+		if (cmd->in)
+		{
+			if (!check_permission(cmd->in, 1))
+				return (add_skip_flag(cmd),  0);
+			data->fd1 = open(cmd->in, O_RDONLY);
+			if (data->fd1 == -1)
+				return (add_skip_flag(cmd), handle_error(cmd->in, 0), 0);
+		}
+		if (cmd->out)
+		{
+			if (!check_permission(cmd->out, 2))
+				return (add_skip_flag(cmd), 0);
+			flags = get_open_flags(cmd->append);
+			data->fd2 = open(cmd->out, flags, 0666);
+			if (data->fd2 == -1)
+				return (add_skip_flag(cmd), handle_error(cmd->out, 0), 0);
+		}
 	}
 	return (1);
 }

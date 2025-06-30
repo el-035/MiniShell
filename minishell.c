@@ -36,12 +36,14 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	
 	if (!create_pipes(data))
         return (1);
+
+		
 	
 	if (!get_env_path(data, data->envp))
 		return (1);
 	
 	if (!open_files(data))
-		return (return_exit_code(1), 1);
+		return (return_exit_code(1), 0);
 	
 	if (!exec_proc(data, data->envp))
 		return (1);
