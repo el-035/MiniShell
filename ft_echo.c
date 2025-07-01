@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+int	valid_opt(char *opt)
+{
+	int	i;
+
+	i = 1;
+	if (opt[0] != '-')
+		return (0);
+	while (opt[i])
+	{
+		if (opt[i] != 'n')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	ft_echo(t_cmd *cmd)
 {
 	int	i;
@@ -12,7 +28,7 @@ void	ft_echo(t_cmd *cmd)
 		printf("\n");
 		return ;
 	}
-	else if (ft_strncmp(cmd->args[i], "-n", 3) == 0)
+	else if (valid_opt(cmd->args[i]) == 1)
 	{
 		nl = 0;
 		i++;

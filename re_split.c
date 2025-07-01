@@ -79,7 +79,7 @@ int	ft(t_input *cur)
 	cur->exp = 2;
 	split = space_split(cur->content);
 	if (!split)
-		return (1);	
+		return (1);
 	if (add_node(cur, cur->next, count - 1) != 0)
 		return (free_split(split), 1);
 	free(cur->content);
