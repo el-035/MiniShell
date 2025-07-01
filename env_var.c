@@ -72,8 +72,9 @@ int	expand_var(char **content, char **envp)
 	char	*start;
 	char	*var;
 	char	*end;
+	int i = 0;
 
-	if (stop(*content) == 0)
+	if (stop(*content) == 0 || i == 2)
 		return (0);
 	start = save_start(*content); // HERE malloc faisl ???+
 	if (!start)
@@ -81,7 +82,7 @@ int	expand_var(char **content, char **envp)
 	var = save_var(&(*content)[start_len(*content)]);
 	if (!var)
 		return (free(start), 1);
-	end = save_rest(search_var(*content, var), var);
+	end = save_rest(search_var(*content, var) + 1, var);
 	if (!end)
 		return (free(start), free(var), fail_mall(), 1);
 	var = extract_var(envp, var);
@@ -92,6 +93,8 @@ int	expand_var(char **content, char **envp)
 	if (ft_strchr(*content, '$') != 0)
 		expand_var(content, envp);
 	return (0);
+
+	i++;
 }
 
 int	find_ev(t_input *first, t_data *data)

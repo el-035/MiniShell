@@ -4,16 +4,21 @@ char	*search_var(char *content, char *var)
 {
 	char	*temp;
 	int		len;
+	char	*full_var;
 
 	len = ft_strlen(content);
 	temp = content;
+	full_var = ft_strjoin("$", var);
+	if (!full_var)
+		return (NULL);	//hehe
 	while (temp - content <= len)
 	{
-		temp = ft_strnstr(temp, var, ft_strlen(var));
+		temp = ft_strnstr(temp, full_var, ft_strlen(full_var));
 		if (check_quotes(content, temp - content) != 1)
 			break ;
 		temp++;
 	}
+	free(full_var);
 	return (temp);
 }
 
