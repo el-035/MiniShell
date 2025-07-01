@@ -130,7 +130,7 @@ char	*prompt(t_data *data, char **envp)
 	char *prompt;
 
 	tmp = NULL;
-	return_exit_code(0);
+	
 	return_sig_flag(0);
 	if (!*envp)
 		return (readline("\001\033[1;34m\002Minishell:\001\033[0m\002 "));
@@ -159,6 +159,7 @@ int main(int argc, char **argv, char **envp)
 	t_input 			*first;
 	t_data				data;
 	struct sigaction	sig;
+	int f = 0;
 	(void)argc;
 	(void)argv;
 
@@ -178,14 +179,22 @@ int main(int argc, char **argv, char **envp)
 		first = NULL;
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);	//ignore
-
+		if (f == 0)
+			return_exit_code(0);
+		f = 0;
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 		{
 			write (2, "exit\n", 5);
 			break ;
 		}
-		if (!*line || !save_input(line, &first))
+		if (!*line)
+		{
+			f = 1;
+			continue ;
+		}
+			
+		if (!save_input(line, &first))
 			continue ;		//error handling
 	//	test_print(first);
 		parsing(first, &data);	//here?

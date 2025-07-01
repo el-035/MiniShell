@@ -39,7 +39,6 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 		}
 		if (cmd->args[1] && cmd->args[1][0] == '\0')
 			return ;
-	//	remove_useless_quotes(&home, return_final_len(home));
 		if (chdir(home) == -1)
 			return_exit_code(1);
 		free(home);
@@ -65,11 +64,11 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
-		write(2, "getcwd failed\n", 15);
+		write(2, "getcwd failed: OLD_PWD could not be retrtived\n", 46);
 	cd_helper(cmd, data);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
-		write(2, "getcwd failed\n", 15);
+		write(2, "getcwd failed: PWD could not be retrtived\n", 42);
 	update_envp(data->envp, "OLDPWD=", old_pwd);
 	update_envp(data->envp, "PWD=", new_pwd);
 	free(old_pwd);
