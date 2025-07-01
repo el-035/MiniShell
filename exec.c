@@ -11,7 +11,7 @@ int	exec_proc(t_data *data, char **envp)
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	//LEAK!!
 	if (!data->pid)
-		return (perror("PID malloc: "), free_all(data), 0);
+		return (perror("PID malloc: "), 0);
 	i = -1;
 	while (++i < data->cmd_count)
 	{
@@ -29,7 +29,7 @@ int	exec_proc(t_data *data, char **envp)
 			}
 		data->pid[i] = fork();
 		if (data->pid[i] == -1)
-			return (free_all(data), perror("Fork: "), 0);
+			return (perror("Fork: "), 0);
 		else if (data->pid[i] == 0)
 			exec_child(data, i, envp);
 		signal(SIGINT, SIG_IGN);
@@ -73,7 +73,7 @@ int	exec_proc(t_data *data, char **envp)
 			if (code != 0)
 				return_exit_code(/* WEXITSTATUS(status) */code);
 		}
-	return (free_all(data), 1);
+	return (1);
 }
 
 int	create_pipes(t_data *data)
@@ -84,13 +84,13 @@ int	create_pipes(t_data *data)
 		return (1);
 	data->pipes = ft_calloc(sizeof(int *), (data->cmd_count));
 	if (!data->pipes)
-		return (perror("Pipes memory alloc: "), free_all(data), 0);
+		return (perror("Pipes memory alloc: "), 0);
 	i = -1;
 	while (++i < data->cmd_count - 1)
 	{
 		data->pipes[i] = ft_calloc(sizeof(int), 2);
 		if (!data->pipes[i] || pipe(data->pipes[i]) == -1)
-			return (free_all(data), perror("Pipe: "), 0);
+			return (perror("Pipe: "), 0);
 	}
 	data->pipes[i] = NULL;
 	return (1);

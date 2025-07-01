@@ -39,12 +39,14 @@ static void handle_redirs(t_cmd *cmd, t_input **cur)
 {
 	if ((*cur)->type == REDIR_IN && (*cur)->next)
 	{
+		free(cmd->in);
 		cmd->in = ft_strdup((*cur)->next->content);
 		*cur = (*cur)->next;
 	}
 	else if (((*cur)->type == REDIR_OUT || (*cur)->type == REDIR_APPEND)
 		&& (*cur)->next)
 	{
+		free(cmd->out);
 		cmd->out = ft_strdup((*cur)->next->content);
 		cmd->append = ((*cur)->type == REDIR_APPEND);
 		*cur = (*cur)->next;

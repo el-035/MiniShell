@@ -51,9 +51,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (!get_env_path(data, data->envp))
 		return (1);
 	
-	if (!open_files(data))
-		return_exit_code(1);
-	
+	open_files(data);
 	if (!exec_proc(data, data->envp))
 		return (1);
 	return (0);

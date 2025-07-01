@@ -39,9 +39,11 @@ int	get_env_path(t_data *data, char **envp)
 	return (1);
 }
 
-static void	add_skip_flag(t_cmd *cmd)
+static void	add_skip_flag(t_cmd *cmd, int i, int cmd_count)
 {
 	cmd->error_skip = 1;
+	if (i == cmd_count - 1)
+		return_exit_code(1);
 }
 
 static int	get_open_flags(int append)
@@ -69,19 +71,19 @@ int	open_files(t_data *data)
 		if (cmd->in)
 		{
 			if (!check_permission(cmd->in, 1))
-				return (add_skip_flag(cmd),  0);
+				return (add_skip_flag(cmd, i, data->cmd_count),  0);
 			data->fd1 = open(cmd->in, O_RDONLY);
 			if (data->fd1 == -1)
-				return (add_skip_flag(cmd), handle_error(cmd->in, 0), 0);
+				return (add_skip_flag(cmd, i, data->cmd_count), handle_error(cmd->in, 0), 0);
 		}
 		if (cmd->out)
 		{
 			if (!check_permission(cmd->out, 2))
-				return (add_skip_flag(cmd), 0);
+				return (add_skip_flag(cmd, i, data->cmd_count), 0);
 			flags = get_open_flags(cmd->append);
 			data->fd2 = open(cmd->out, flags, 0666);
 			if (data->fd2 == -1)
-				return (add_skip_flag(cmd), handle_error(cmd->out, 0), 0);
+				return (add_skip_flag(cmd, i, data->cmd_count), handle_error(cmd->out, 0), 0);
 		}
 	}
 	return (1);
