@@ -72,9 +72,8 @@ int	expand_var(char **content, char **envp)
 	char	*start;
 	char	*var;
 	char	*end;
-	int i = 0;
 
-	if (stop(*content) == 0 || i == 2)
+	if (stop(*content) == 0)
 		return (0);
 	start = save_start(*content); // HERE malloc faisl ???+
 	if (!start)
@@ -93,8 +92,23 @@ int	expand_var(char **content, char **envp)
 	if (ft_strchr(*content, '$') != 0)
 		expand_var(content, envp);
 	return (0);
+}
+//first check if there is unquoted var
+	//no -> just use wjaz o had and go on
+	//yes -> save everything untill unquoted var
+		// save first token of unquoted var
+		//this is the current token
+		//save everything and pass it as content to new token
+			//start again
+int	*exp_tokenise(t_input *cur, char *envp)
+{
+	char	*start;
+	char	*var;
+	char	*end;
 
-	i++;
+	start = save_start(cur->content); // HERE malloc faisl ???+
+	if (!start)
+		return (fail_mall(), 1);
 }
 
 int	find_ev(t_input *first, t_data *data)
@@ -107,7 +121,7 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
-			cur->exp = exp_helper(cur->content);
+			/* cur->exp = exp_helper(cur->content); */
 			if (expand_var(&(cur->content), data->envp) != 0)
 				return (1);
 		}

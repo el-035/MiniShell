@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	exp_helper(char *content)
+/* int	exp_helper(char *content)
 {
 	int	i;
 	int	count;
@@ -16,7 +16,7 @@ int	exp_helper(char *content)
 	if (count == 0)
 		return (-1);
 	return (count);
-}
+} */
 
 int	start_len(char *content)
 {
