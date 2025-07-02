@@ -1,0 +1,61 @@
+#include "minishell.h"
+
+int	create_heredoc(t_cmd *cmd, char **envp)
+{
+	char *line;
+	int count;
+	char **new_lines;
+	int	i;
+	struct sigaction	sig;
+	int hd_flag = 0;
+
+	sig.sa_handler = &hd_handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL);
+	//signal(SIGQUIT, SIG_IGN);
+	count = 0;
+	while (1)
+	{
+		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
+		{
+			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
+			hd_flag = 1;
+		}
+		line = readline("> ");
+		if (!line)
+		{
+			write (2, "bash: warning: here-document delimited by end-of-file (wanted `", 64);
+			write (2, cmd->limiter, ft_strlen(cmd->limiter));
+			write (2, "')\n", 4);
+			break ;
+ 		}
+		if (return_sig_flag(-1) == 2)
+		{
+			//return_sig_flag(0);
+			break ;
+		}
+		if (ft_strcmp(line, cmd->limiter) == 0)
+			break ;
+		if (ft_strchr(line, '$'))	
+		{
+			if (hd_flag == 0)
+				expand_var(&line, envp);
+			remove_useless_quotes(&line, return_final_len(line));
+		}
+		new_lines = ft_calloc(sizeof(char *), count + 2);
+		if (!new_lines)
+			return (perror("Malloc: "), 0);
+		i = -1;
+		while (++i < count)
+			new_lines[i] = cmd->hd_content[i];
+		new_lines[count] = line;
+		new_lines[count + 1] = NULL;
+		free(cmd->hd_content);
+		cmd->hd_content = new_lines;
+		count++;		
+	}
+	free(line);
+	return (1);
+}

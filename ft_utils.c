@@ -16,3 +16,37 @@ int	is_space(char c)
 		return 1;
 	return 0;	
 }
+
+int	get_env_path(t_data *data, char **envp)
+{
+	int	cmp;
+	int	i;
+
+	i = -1;
+	while (envp[++i])
+	{
+		cmp = ft_strncmp(envp[i], "PATH=", 5);
+		if (cmp == 0)
+		{
+			data->env_path = ft_split(envp[i] + 5, ':');
+			break ;
+		}
+	}
+	return (1);
+}
+
+void	count_cmds(t_input *tokens, t_data *data)
+{
+	t_input	*cur;
+
+	cur = tokens;
+	data->cmd_count = 1;
+	while (cur)
+	{
+		if (cur->type == PIPE)
+			data->cmd_count++;
+		cur = cur->next;
+		if (cur == tokens)
+			break ;
+	}
+}

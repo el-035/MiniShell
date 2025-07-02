@@ -8,7 +8,9 @@ static char	*check_path(t_data *data, char *cmd)
 
 	i = -1;
 	tmp = NULL;
-	if (data->env_path && *data->env_path)
+	if (!cmd || *cmd == '\0')
+		return (handle_error(cmd, 2), NULL);
+	if (data->env_path && *data->env_path && cmd && *cmd)
 		while (data->env_path[++i] != NULL)
 		{
 			if (tmp != NULL)

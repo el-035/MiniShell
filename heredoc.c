@@ -1,5 +1,38 @@
 #include "minishell.h"
 
+void	hd_handler(int sig)
+{
+	if (sig == SIGINT)		//crtl C
+	{
+		return_exit_code(SIGINT + 128);
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		return_sig_flag(2);
+		//flag = 2;
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		//printf("\n");
+		// exit(SIGINT + 128);
+		return ;
+	}
+	if (sig == SIGQUIT)		//ctrl /
+	{
+		return_sig_flag(3);
+		// exit(SIGQUIT + 128);
+	}
+}
+
+int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp)
+{
+	if (!(*cur)->next)
+		return (0);
+	cmd->limiter = ft_strdup((*cur)->next->content);
+	if (!create_heredoc(cmd, envp))
+		return (0);
+	cmd->is_hd = 1;
+	*cur = (*cur)->next;
+	return (1);
+}
+
 int	create_hd_filename(char *name, int size, int index)
 {
 	int		hd_id;

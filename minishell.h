@@ -11,6 +11,7 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/ioctl.h>
 
 typedef enum e_type
 {
@@ -58,6 +59,7 @@ typedef struct s_data
 	int				fd2;
 	t_cmd			*cmds;
 	int				cmd_count;
+	int				ec_update_flag;
 }					t_data;
 
 void				fail_mall(void);
@@ -161,11 +163,12 @@ int					print_export(char **envp);
 
 // check_files
 int					open_files(t_data *data);
-int					get_env_path(t_data *data, char **envp);
 
 // ft_utils
 int					ft_strcmp(const char *s1, const char *s2);
 int					is_space(char c);
+int					get_env_path(t_data *data, char **envp);
+void				count_cmds(t_input *tokens, t_data *data);
 
 // signal_handlers
 void				child_handler(int sig);
@@ -179,7 +182,8 @@ int					exec_child(t_data *data, int index, char **envp);
 
 // heredoc
 int					set_heredoc_fds(t_cmd *cmd, int index);
-
+int					handle_heredoc(t_cmd *cmd, t_input **cur, char **envp);
+void				hd_handler(int sig);
 // error_handler
 void				handle_error(char *str, int error_code);
 
@@ -189,6 +193,10 @@ void				free_str_arr(char **str);
 void				free_pipes(int ***pipes, int count);
 void				close_fd(int *fd);
 void				free_all(t_data *data);
+
+// heredoc_create
+int	create_heredoc(t_cmd *cmd, char **envp);
+
 
 int					parse_tokens(t_input *tokens, t_data *data);
 
