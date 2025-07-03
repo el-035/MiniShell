@@ -18,24 +18,6 @@ static int	count_args(t_input *cur)
 	return (argc);
 }
 
-static void handle_redirs(t_cmd *cmd, t_input **cur)
-{
-	if ((*cur)->type == REDIR_IN && (*cur)->next)
-	{
-		free(cmd->in);
-		cmd->in = ft_strdup((*cur)->next->content);
-		*cur = (*cur)->next;
-	}
-	else if (((*cur)->type == REDIR_OUT || (*cur)->type == REDIR_APPEND)
-		&& (*cur)->next)
-	{
-		free(cmd->out);
-		cmd->out = ft_strdup((*cur)->next->content);
-		cmd->append = ((*cur)->type == REDIR_APPEND);
-		*cur = (*cur)->next;
-	}
-}
-
 static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 {
 	if (((*cur)->type == CMD || (*cur)->type == ARG) && (!(*cur)->prev
@@ -96,6 +78,8 @@ int	parse_tokens(t_input *tokens, t_data *data)
 		ft_memset(cmd, 0, sizeof(t_cmd));
 		cmd->args = ft_calloc(count_args(cur) + 1, sizeof(char *));
 		if (!cmd->args)
+			return (0);
+		if (!alloc_redirs(cmd, cur, tokens))
 			return (0);
 		fill_cmd_data(cmd, &cur, tokens, data);
 	}

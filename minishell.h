@@ -39,11 +39,17 @@ typedef struct s_input
 typedef struct s_cmd
 {
 	char			**args;
-	char			*in;
-	char			*out;
+	char			**in;
+	char			**out;
+	int				in_redirs;
+	int				out_redirs;
+	int				*redir_order;
+	int				in_index;
+	int				out_index;
 	int				is_builtin;
 	int				append;
 	int				is_hd;
+	char			*hd_in;
 	char			**hd_content;
 	char			*limiter;
 	int				error_skip;
@@ -196,6 +202,12 @@ void				free_all(t_data *data);
 
 // heredoc_create
 int	create_heredoc(t_cmd *cmd, char **envp);
+
+// redirs handler 
+int					alloc_redirs(t_cmd *cmd, t_input *input, t_input *start);
+void				handle_redirs(t_cmd *cmd, t_input **cur);
+
+
 
 
 int					parse_tokens(t_input *tokens, t_data *data);

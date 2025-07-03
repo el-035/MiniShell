@@ -80,7 +80,6 @@ int	remove_quotes(t_data *data)
 	int j;
 
 	i = 0;
-
 	while (i < data->cmd_count)
 	{	
 
@@ -100,13 +99,17 @@ int	remove_quotes(t_data *data)
 		}
 		if (data->cmds[i].in)
 		{
-			if (remove_useless_quotes(&(data->cmds[i].in), return_final_len(data->cmds[i].in)) != 0)
-				return 1;
+			j = -1;
+			while (data->cmds[i].in[++j])
+				if (remove_useless_quotes(&(data->cmds[i].in[j]), return_final_len(data->cmds[i].in[j])) != 0)
+					return 1;
 		}
 		if (data->cmds[i].out)
 		{
-			if (remove_useless_quotes(&(data->cmds[i].out), return_final_len(data->cmds[i].out)) != 0)
-				return 1;
+			j = -1;
+			while (data->cmds[i].out[++j])
+				if (remove_useless_quotes(&(data->cmds[i].out[j]), return_final_len(data->cmds[i].out[j])) != 0)
+					return 1;
 		}
 		i++;
 	}

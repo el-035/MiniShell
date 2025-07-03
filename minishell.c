@@ -9,7 +9,7 @@ int	return_sig_flag(int sig)
 	return (flag);
 }
 
-int	parsing(t_input *first, t_data *data)	//return value?
+int	parsing(t_input *first, t_data *data)
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
@@ -32,15 +32,11 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	//print_cmds(data);
 	if (remove_quotes(data) != 0)
 		return (1);
-/* 	print_cmds(data); */
+	//print_cmds(data);
 	if (!create_pipes(data))
         return (1);
-
-		
-	
 	if (!get_env_path(data, data->envp))
 		return (1);
-	
 	open_files(data);
 	if (!exec_proc(data, data->envp))
 		return (1);

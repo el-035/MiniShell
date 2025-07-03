@@ -30,14 +30,13 @@ void	free_cmd(t_cmd *cmd)
 	if (cmd->args)
 		free_str_arr(cmd->args);
 	if (cmd->in)
-	{
-		free(cmd->in);
-		cmd->in = NULL;
-	}
+		free_str_arr(cmd->in);
 	if (cmd->out)
+		free_str_arr(cmd->out);
+	if (cmd->redir_order)
 	{
-		free(cmd->out);
-		cmd->out = NULL;
+		free(cmd->redir_order);
+		cmd->redir_order = NULL;
 	}
 	if (cmd->hd_content)
 		free_str_arr(cmd->hd_content);

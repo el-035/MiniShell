@@ -15,24 +15,24 @@ static void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
 	}
 }
 
-static int	check_permission(t_data *data, int i, int file_order)
+static int	check_permission(t_data *data, char *file, int i, int file_order)
 {
 	if (file_order == 1)
 	{
-		if (access(data->cmds[i].in, F_OK) != -1)
+		if (access(file, F_OK) != -1)
 		{
-			if (access(data->cmds[i].in, R_OK) == -1)
-				return (handle_error(data->cmds[i].in, 1), add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
+			if (access(file, R_OK) == -1)
+				return (handle_error(file, 1), add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
 		}
 		else
 		{
-			handle_error(data->cmds[i].in, 0);
+			handle_error(file, 0);
 			return (add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
 		}
 	}
-	else if (access(data->cmds[i].out, F_OK) != -1)
-		if (access(data->cmds[i].out, R_OK) == -1 || access(data->cmds[i].out, W_OK) == -1)
-			return (handle_error(data->cmds[i].out, 1), 0);
+	else if (access(file, F_OK) != -1)
+		if (access(file, R_OK) == -1 || access(file, W_OK) == -1)
+			return (handle_error(file, 1), 0);
 	return (1);
 }
 
@@ -48,26 +48,46 @@ static int	get_open_flags(int append)
 	return (flags);
 }
 
-static int	check_fd(t_data *data, int i, char *file, int mode)
+static int check_out(t_data *data, int i)
 {
-	int	flags;
+    int j;
+	t_cmd *cmd;
+	int flags;
 
-	if (mode == 1)
+	j = -1;
+	cmd = &data->cmds[i];
+	while (++j < cmd->out_redirs)
 	{
-		if (!check_permission(data, i, 1))
+		if (!check_permission(data, cmd->out[j], i, 2))
 			return (0);
-		data->fd1 = open(file, O_RDONLY);
-		if (data->fd1 == -1)
-			return (add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), handle_error(file, 0), 0);
-	}
-	else
-	{
-		if (!check_permission(data, i, 2))
-			return (0);
-		flags = get_open_flags(data->cmds[i].append);
-		data->fd2 = open(file, flags, 0666);
+
+		flags = get_open_flags(cmd->append);
+		data->fd2 = open(cmd->out[j], flags, 0666);
 		if (data->fd2 == -1)
-			return (add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), handle_error(file, 0), 0);
+			return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->out[j], 0), 0);
+		if (j != cmd->out_redirs - 1)
+			close(data->fd2);
+	}
+	return (1);
+}
+ 
+static int	check_in(t_data *data, int i)
+{
+	int	j;
+	t_cmd *cmd;
+
+	j = -1;
+	cmd = &data->cmds[i];
+	while (++j < cmd->in_redirs)
+	{
+		if (!check_permission(data, cmd->in[j], i, 1))
+			return (0);
+		if (j == cmd->in_redirs - 1)
+		{
+			data->fd1 = open(cmd->in[j], O_RDONLY);
+			if (data->fd1 == -1)
+				return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->in[j], 0), 0);
+		}
 	}
 	return (1);
 }
@@ -76,6 +96,8 @@ int	open_files(t_data *data)
 {
 	t_cmd	*cmd;
 	int		i;
+	int		j;
+	int		total;
 
 	i = -1;
 	while (++i < data->cmd_count)
@@ -83,15 +105,16 @@ int	open_files(t_data *data)
 		cmd = &data->cmds[i];
 		if (!cmd->args || !cmd->args[0])
 			add_skip_flag(cmd, i, data->cmd_count, 2);
-		if (cmd->in)
+		j = -1;
+		total = cmd->in_redirs + cmd->out_redirs;
+		while (cmd->redir_order && ++j < total)
 		{
-			if (!check_fd(data, i, cmd->in, 1))
-				continue ;
-		}
-		if (cmd->out)
-		{
-			if (!check_fd(data, i, cmd->out, 2))
-				continue ;
+			if (cmd->redir_order[j] == 1)
+				if (!check_in(data, i))
+					break ;
+			if (cmd->redir_order[j] == 2)
+				if (!check_out(data, i))
+					break ;
 		}
 	}
 	return (1);

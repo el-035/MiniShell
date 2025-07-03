@@ -106,10 +106,10 @@ int	exec_child(t_data *data, int index, char **envp)
 		{
 			if (!set_heredoc_fds(cmd, index))
 				(free_split(data->envp), free_all(data),exit(EXIT_FAILURE));
-			fd = open(cmd->in, O_RDONLY);
+			fd = open(cmd->hd_in, O_RDONLY);
 			if (fd < 0)
 				(perror("Opening heredoc tmp file: "), free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
-			(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->in));
+			(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in));
 		}
 		else
 			(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));

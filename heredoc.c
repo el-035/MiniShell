@@ -66,7 +66,7 @@ int	set_heredoc_fds(t_cmd *cmd, int index)
 	fd = create_hd_filename(tmp_name, sizeof(tmp_name), index);
 	if (fd < 0)
 		return (perror("Open heredoc file: "), 0);
-	cmd->in = ft_strdup(tmp_name);
+	cmd->hd_in = ft_strdup(tmp_name);
 	i = -1;
 	while (cmd->hd_content && cmd->hd_content[++i])
 	{
