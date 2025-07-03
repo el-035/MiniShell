@@ -7,7 +7,7 @@ int	check_quotes(char *content, int len)
 
 	i = 0;
 	quote = 0;
-	while (content[i] && i <= len)
+	while (content[i] && i < len)
 	{
 		if (content[i] == '\'' && quote == 0)
 			quote = 1;
@@ -21,7 +21,29 @@ int	check_quotes(char *content, int len)
 	}
 	return (quote);
 }
+/* int	check_quotes(char *content, int pos)
+{
+	int	i;
+	int	in_single_quote;
+	int	in_double_quote;
 
+	if (!content || pos < 0)
+		return (0);
+	
+	i = 0;
+	in_single_quote = 0;
+	in_double_quote = 0;
+	
+	while (i < pos && content[i])
+	{
+		if (content[i] == '\'' && !in_double_quote)
+			in_single_quote = !in_single_quote;
+		else if (content[i] == '"' && !in_single_quote)
+			in_double_quote = !in_double_quote;
+		i++;
+	}
+	return (in_single_quote || in_double_quote);
+} */
 int	return_final_len(char *str)
 {
 	int	i;
@@ -74,7 +96,7 @@ int	remove_useless_quotes(char **content, int len)
 	return (free(final), 0);
 }
 
-int	remove_quotes(t_data *data)
+/* int	remove_quotes(t_data *data)
 {
 	int i;
 	int j;
@@ -111,4 +133,33 @@ int	remove_quotes(t_data *data)
 		i++;
 	}
 	return 0;
+} */
+
+
+int	remove_quotes(t_input *first, t_data *data)
+{
+
+	t_input	*cur;
+
+	cur = first;
+	while (cur)
+	{
+		if ((!cur->prev || cur->prev->type != HERE_DOC) // HD?
+			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
+		{
+			if (expand_exit(&cur, data) != 0)
+				return (1);
+		}
+		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
+			&& cur->prev->type != HERE_DOC)
+		{
+			if (remove_useless_quotes(&(cur->content),
+					return_final_len(cur->content)) != 0)
+				return (1);
+		}
+		cur = cur->next;
+		if (cur == first)
+			break ;
+	}
+	return (0);
 }

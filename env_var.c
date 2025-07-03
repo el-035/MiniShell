@@ -73,6 +73,8 @@ int	expand_var(char **content, char **envp)
 	char	*var;
 	char	*end;
 
+/* 	printf("in exp var\n");
+	printf("content: %s\nstop %d\n", *content, stop(*content)); */
 	if (stop(*content) == 0)
 		return (0);
 	start = save_start(*content); // HERE malloc faisl ???+
@@ -93,23 +95,8 @@ int	expand_var(char **content, char **envp)
 		expand_var(content, envp);
 	return (0);
 }
-//first check if there is unquoted var
-	//no -> just use wjaz o had and go on
-	//yes -> save everything untill unquoted var
-		// save first token of unquoted var
-		//this is the current token
-		//save everything and pass it as content to new token
-			//start again
-int	*exp_tokenise(t_input *cur, char *envp)
-{
-	char	*start;
-	char	*var;
-	char	*end;
 
-	start = save_start(cur->content); // HERE malloc faisl ???+
-	if (!start)
-		return (fail_mall(), 1);
-}
+
 
 int	find_ev(t_input *first, t_data *data)
 {
@@ -121,15 +108,17 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
-			/* cur->exp = exp_helper(cur->content); */
-			if (expand_var(&(cur->content), data->envp) != 0)
-				return (1);
-		}
-		if ((!cur->prev || cur->prev->type != HERE_DOC) // HD?
-			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
-		{
-			if (expand_exit(&cur, data) != 0)
-				return (1);
+			//printf("before exp %s, %d\n", cur->content, check_quotes(cur->content, 3));
+/* 			if (unquoted_var(cur->content) == -1)
+			{
+				printf("do we get here?\n");
+				expand_var(&(cur->content), data->envp);
+			}
+
+			else */
+			exp_tokenise(cur, data->envp);
+			//printf("after exp var\n");
+			
 		}
 		cur = cur->next;
 		if (cur == first)

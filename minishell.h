@@ -82,6 +82,9 @@ int					join_all(char **content, char *start, char *end, char *var);
 char				*save_rest(char *content, char *var);
 char				*save_start(char *content);
 
+
+int	exp_tokenise(t_input *cur, char **envp);
+
 // var utils
 char				*search_var(char *content, char *var);
 int					stop(char *content);
@@ -104,7 +107,10 @@ int					exp_helper(char *content);
 
 int					exp_split(t_input *first);
 int	count_word(char *content);
-
+int	ft(t_input *cur, char *exp, char *next, char *start);
+char *save_unquoted_start(char *content, int i, char **env);
+int	unquoted_var(char *content);
+int	add_node(t_input *cur, t_input *next, int count);
 // init
 void				init_input(t_input *first);
 int					save_input(char *line, t_input **first);
@@ -124,7 +130,7 @@ int					list_size(t_input *lst);
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
-int					remove_quotes(t_data *data);
+int					remove_quotes(t_input *input, t_data *data);
 int					return_final_len(char *str);
 // commands
 

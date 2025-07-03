@@ -28,7 +28,7 @@ int	find_cmd(t_input *first)
 	{
 		if (cur->type == CMD)
 		{
-			remove_useless_quotes(&cur->content, return_final_len(cur->content));
+			/* remove_useless_quotes(&cur->content, return_final_len(cur->content)); */
 			compare_cmd(cur, commands);
 		}
 		if (cur->next)

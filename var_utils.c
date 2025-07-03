@@ -27,6 +27,8 @@ int	stop(char *content)
 	int	i;
 
 	i = 0;
+	if (!content)
+		return 0;
 	while (content[i])
 	{
 		if (content[i] == '$')

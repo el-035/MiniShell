@@ -13,25 +13,26 @@ int	parsing(t_input *first, t_data *data)	//return value?
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-
+	/* test_print(first); */
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
-
+/* 	test_print(first); */
 	/* if (exp_split(first))
 		return (free_list(first), 1); */
+	if (remove_quotes(first, data) != 0)
+		return (free_list(first), 1);
 	
-		
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
 
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-/* 	test_print(first); */
+
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
-	if (remove_quotes(data) != 0)
-		return (1);
+/* 	if (remove_quotes(data) != 0)
+		return (1); */
 	
 	if (!create_pipes(data))
         return (1);
