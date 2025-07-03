@@ -144,7 +144,7 @@ int	remove_quotes(t_input *first, t_data *data)
 	cur = first;
 	while (cur)
 	{
-		if ((!cur->prev || cur->prev->type != HERE_DOC) // HD?
+		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)

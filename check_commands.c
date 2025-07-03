@@ -25,14 +25,16 @@ int	find_cmd(t_input *first)
 
 	cur = first;
 	while (cur)
-	{
+	{	
+		if (cur->type == UNKNOWN)
+			cur->type = ARG;
 		if (cur->type == CMD)
 		{
 			/* remove_useless_quotes(&cur->content, return_final_len(cur->content)); */
 			compare_cmd(cur, commands);
 		}
-		if (cur->next)
-			cur = cur->next;
+		
+		cur = cur->next;
 		if (cur == first)
 			break;
 	}

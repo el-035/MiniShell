@@ -16,14 +16,15 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	/* test_print(first); */
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
-/* 	test_print(first); */
+	
 	/* if (exp_split(first))
 		return (free_list(first), 1); */
-	if (remove_quotes(first, data) != 0)
-		return (free_list(first), 1);
-	
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
+	if (remove_quotes(first, data) != 0)
+		return (free_list(first), 1);
+	/* test_print(first); */
+	
 
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);

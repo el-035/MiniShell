@@ -110,7 +110,7 @@ int	count_word(char *content);
 int	ft(t_input *cur, char *exp, char *next, char *start);
 char *save_unquoted_start(char *content, int i, char **env);
 int	unquoted_var(char *content);
-int	add_node(t_input *cur, t_input *next, int count);
+t_input	*add_node(t_input *cur, char *content);
 // init
 void				init_input(t_input *first);
 int					save_input(char *line, t_input **first);
