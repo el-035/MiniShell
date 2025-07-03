@@ -76,46 +76,44 @@ t_input *beginning(t_input *cur, char *start, char *exp, int f_b)
 {
 	if (start && start[0] != '\0')
 	{
-		/* printf("exp |%s| \n", exp); */
-
 		if (f_b == 1)
 		{
-			/* printf("step 1\n"); */
 			cur->content = ft_strdup(start);
 			cur = add_node(cur, exp);
-			//cur->type = ARG
+			cur->exp = 0;
 		}
 		else
+		{
 			cur->content = ft_strjoin(start, exp);
+			cur->exp = ft_strlen(start);
+		}
 	}
 	else
+	{
 		cur->content = ft_strdup(exp);
+		cur->exp = 0;
+	}
 	return (cur);
 }
 
-t_input *end(t_input *cur, char *next, char *exp, int flag, int f_e)
+t_input *end(t_input *cur, char *next, int f_e)
 {
 	char *tmp;
 
-	if (flag == 1)
-		cur = add_node(cur, ft_strdup(exp));
 	if (next && next[0] != '\0')
 	{
 		if (f_e == 1)
 		{
-			/* printf("step 2\n"); */
-			/* cur = add_node(cur, ft_strdup(exp)); */
 			cur = add_node(cur, ft_strdup(next));
 		}
 		else
 		{
-			/* cur = add_node(cur, ft_strdup(exp)); */
 			tmp = cur->content;
 			cur->content = ft_strjoin(tmp, next);
+			cur->exp = 0 - ft_strlen(tmp);
 			free(tmp);
 		}
 	}
-	/* else */
 	return (cur);
 }
 t_input *middle(t_input *cur, char **split)
@@ -127,6 +125,7 @@ t_input *middle(t_input *cur, char **split)
 		cur = add_node(cur, split[i++]);
 		if (!cur)
             return (NULL);
+		cur->exp = 0;
 	}
 	return (cur);
 }
@@ -142,8 +141,6 @@ t_input *new_token(t_input *cur, char *start, char *exp, char *next)
 	count = count_word(exp);
 	f_b = is_space(exp[0]);
 	f_e = is_space(exp[ft_strlen(exp) - 1]);
-	
-	//case when var is "  "
 	if (exp[0] == '\0')
 	{
 		cur->content = ft_strjoin(start, next);	//protect
@@ -160,7 +157,7 @@ t_input *new_token(t_input *cur, char *start, char *exp, char *next)
 	else if (count == 1)	//
 	{
 		cur = beginning(cur, start, split[0], f_b);
-		cur = end(cur, next, split[0], 0, f_e);
+		cur = end(cur, next, f_e);
 	}
 	else if (count > 1)
 	{
@@ -180,7 +177,9 @@ t_input *new_token(t_input *cur, char *start, char *exp, char *next)
                 return (NULL);
             }
         }
-		cur = end(cur, next, split[len - 1], 1, f_e);
+		cur = add_node(cur, ft_strdup(split[len - 1]));
+		cur->exp = 0;
+		cur = end(cur, next, f_e);
 	}
 	return (free_split(split), cur);
 }
@@ -194,32 +193,25 @@ int	exp_tokenise(t_input *cur, char **envp)
 	int	pos;
 
 	pos = unquoted_var(cur->content);
-	//printf("%d\n", pos);
-	//printf("content: %s\n", cur->content);
 	if (pos == -1)
 		return (expand_var(&(cur->content), envp));
 	start = save_unquoted_start(cur->content, pos, envp);
-	//printf("start: %s\n", start);
 	//protect
 	var = save_var(&(cur->content[pos]));
-	//printf("var: %s\n", var);
+
 	if (!var)
 		return -1; //proewr
 	next = save_rest(&(cur->content[pos + 1]), var);		//eehmm 
 	//prttetctw6azuhv;
-	//printf("next: %s\n", next);
+
 	exp = extract_var(envp, var);
-	//printf("exp: %s\n", exp);
+
 	if (!exp)
 		return -1; //proewr
 	free(cur->content);
 	cur->content = NULL;
-	/* cur =  */new_token(cur, start, exp, next);
-	/* printf("new content %s\n", cur->content); */
-	//proetct
-//	free(var);
-//	free(next);
-	/* free(start); free(var); free(exp); free(next); */
+	new_token(cur, start, exp, next);
+
 	if (unquoted_var(cur->content) != -1)
 		exp_tokenise(cur, envp);
 	

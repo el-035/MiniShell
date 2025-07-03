@@ -8,7 +8,7 @@ void	init_input(t_input *first)
 	first->next = first;
 	first->prev = first;
 	first->is_builtin = -1;
-	first->exp = -1;
+	first->exp = INT_MIN;
 }
 
 int	save_input(char *line, t_input **first)
