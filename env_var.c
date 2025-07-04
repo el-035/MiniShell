@@ -104,8 +104,14 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
-			exp_tokenise(cur, data->envp);	//protect
-			
+			if (exp_tokenise(cur, data->envp) == -1)	//protect
+				return (1);
+		}
+		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content
+			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
+		{
+			if (expand_exit(&cur, data) != 0)
+				return (1);
 		}
 		cur = cur->next;
 		if (cur == first)

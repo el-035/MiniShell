@@ -15,13 +15,13 @@
 
 typedef enum e_type
 {
-	CMD,          // Command (e.g., "ls", "cat")
-	ARG,          // Argument (e.g., "-a", "file.txt")
-	PIPE,         // Pipe ("|")
-	REDIR_IN,     //< Input redirection ("<")
-	REDIR_OUT,    //> Output redirection (">")
-	REDIR_APPEND, //>> Append redirection (">>")
-	HERE_DOC,     //<< Here document ("<<")
+	CMD,
+	ARG,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	HERE_DOC,
 	UNKNOWN
 }					t_type;
 
@@ -139,7 +139,7 @@ int					list_size(t_input *lst);
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
-int					remove_quotes(t_input *input, t_data *data);
+int					remove_quotes(t_input *input/* , t_data *data */);
 int					return_final_len(char *str);
 // commands
 

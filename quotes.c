@@ -142,23 +142,17 @@ int	var_quotes(t_input *cur)
 	return (0);
 }
 
-int	remove_quotes(t_input *first, t_data *data)
+int	remove_quotes(t_input *first/* , t_data *data */)
 {
 	t_input	*cur;
 
 	cur = first;
 	while (cur)
 	{
-		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content
-			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
-		{
-			if (expand_exit(&cur, data) != 0)
-				return (1);
-		}
 		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
 			&& cur->prev->type != HERE_DOC)
 		{
-			if (cur->exp == INT_MIN)
+			if (cur->exp == INT_MIN || cur->exp == INT_MAX)
 			{
 				if (remove_useless_quotes(&(cur->content),
 					return_final_len(cur->content)) != 0)

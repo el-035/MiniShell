@@ -43,8 +43,6 @@ char	*save_unquoted_start(char *content, int i, char **env)
 	return (start);
 }
 
-
-
 t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 {
 	char	**split;
@@ -68,7 +66,7 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 		if (!cur)
 			return (free_split(split), NULL);
 		if (count_word(exp) == 1)
-			cur->exp = INT_MIN;
+			cur->exp = INT_MAX;
 	}
 	return (free_split(split), cur);
 }
