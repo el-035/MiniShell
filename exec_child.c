@@ -33,7 +33,6 @@ static char	*check_path(t_data *data, char *cmd)
 	return (free(tmp), handle_error(cmd, 2), NULL);
 }
 
-
 static int	execute_cmd(t_data *data, char **args, char **envp)
 {
 	char	*path;

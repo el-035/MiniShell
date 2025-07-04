@@ -168,7 +168,9 @@ char				*get_content(char *str);
 int					print_export(char **envp);
 
 // check_files
-int					open_files(t_data *data);
+void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);
+int					check_out(t_data *data, int i);
+int					check_in(t_data *data, int i);
 
 // ft_utils
 int					ft_strcmp(const char *s1, const char *s2);
@@ -204,8 +206,9 @@ void				free_all(t_data *data);
 int	create_heredoc(t_cmd *cmd, char **envp);
 
 // redirs handler 
-int					alloc_redirs(t_cmd *cmd, t_input *input, t_input *start);
+int					count_redirs(t_cmd *cmd, t_input *input, t_input *start);
 void				handle_redirs(t_cmd *cmd, t_input **cur);
+int					open_files(t_data *data);
 
 
 

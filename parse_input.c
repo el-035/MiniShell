@@ -79,7 +79,7 @@ int	parse_tokens(t_input *tokens, t_data *data)
 		cmd->args = ft_calloc(count_args(cur) + 1, sizeof(char *));
 		if (!cmd->args)
 			return (0);
-		if (!alloc_redirs(cmd, cur, tokens))
+		if (!count_redirs(cmd, cur, tokens))
 			return (0);
 		fill_cmd_data(cmd, &cur, tokens, data);
 	}

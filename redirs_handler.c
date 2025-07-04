@@ -1,6 +1,54 @@
 #include "minishell.h"
 
-int  alloc_redirs(t_cmd *cmd, t_input *input, t_input *start)
+int	open_files(t_data *data)
+{
+	t_cmd	*cmd;
+	int		i;
+	int		j;
+	int		total;
+
+	i = -1;
+	while (++i < data->cmd_count)
+	{
+		cmd = &data->cmds[i];
+		if (!cmd->args || !cmd->args[0])
+			add_skip_flag(cmd, i, data->cmd_count, 2);
+		j = -1;
+		total = cmd->in_redirs + cmd->out_redirs;
+		while (cmd->redir_order && ++j < total)
+		{
+			if (cmd->redir_order[j] == 1)
+				if (!check_in(data, i))
+					break ;
+			if (cmd->redir_order[j] == 2)
+				if (!check_out(data, i))
+					break ;
+		}
+	}
+	return (1);
+}
+
+int	alloc_redirs(t_cmd *cmd)
+{
+	 if (cmd->in_redirs > 0)
+    {
+		cmd->in = ft_calloc(cmd->in_redirs + 1, sizeof(char *));
+        if (!cmd->in)
+            return (0);
+    }
+	if (cmd->out_redirs > 0)
+    {
+        cmd->out = ft_calloc(cmd->out_redirs + 1, sizeof(char *));
+        if (!cmd->out)
+            return (0);
+    }
+	cmd->redir_order = ft_calloc(cmd->in_redirs + cmd->out_redirs, sizeof(int));
+	if (!cmd->redir_order)
+		return (0);
+	return (1);
+}
+
+int  count_redirs(t_cmd *cmd, t_input *input, t_input *start)
 {
 	t_input	*cur;
 
@@ -15,22 +63,9 @@ int  alloc_redirs(t_cmd *cmd, t_input *input, t_input *start)
 		if (cur == start)
 			break ;
 	}
-    if (cmd->in_redirs > 0)
-    {
-		cmd->in = ft_calloc(cmd->in_redirs + 1, sizeof(char *));
-        if (!cmd->in)
-            return (fail_mall(), 0);
-    }
-	if (cmd->out_redirs > 0)
-    {
-        cmd->out = ft_calloc(cmd->out_redirs + 1, sizeof(char *));
-        if (!cmd->out)
-            return (fail_mall(), 0);
-    }
-	cmd->redir_order = ft_calloc(cmd->in_redirs + cmd->out_redirs, sizeof(int));
-	if (!cmd->redir_order)
+	if (!alloc_redirs(cmd))
 		return (fail_mall(), 0);
-    return (1);
+	return (1);
 }
 
 void handle_redirs(t_cmd *cmd, t_input **cur)

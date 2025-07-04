@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
+void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
 {
 	cmd->error_skip = 1;
 	if (mode == 1)
@@ -48,7 +48,7 @@ static int	get_open_flags(int append)
 	return (flags);
 }
 
-static int check_out(t_data *data, int i)
+int check_out(t_data *data, int i)
 {
     int j;
 	t_cmd *cmd;
@@ -71,7 +71,7 @@ static int check_out(t_data *data, int i)
 	return (1);
 }
  
-static int	check_in(t_data *data, int i)
+int	check_in(t_data *data, int i)
 {
 	int	j;
 	t_cmd *cmd;
@@ -87,34 +87,6 @@ static int	check_in(t_data *data, int i)
 			data->fd1 = open(cmd->in[j], O_RDONLY);
 			if (data->fd1 == -1)
 				return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->in[j], 0), 0);
-		}
-	}
-	return (1);
-}
-
-int	open_files(t_data *data)
-{
-	t_cmd	*cmd;
-	int		i;
-	int		j;
-	int		total;
-
-	i = -1;
-	while (++i < data->cmd_count)
-	{
-		cmd = &data->cmds[i];
-		if (!cmd->args || !cmd->args[0])
-			add_skip_flag(cmd, i, data->cmd_count, 2);
-		j = -1;
-		total = cmd->in_redirs + cmd->out_redirs;
-		while (cmd->redir_order && ++j < total)
-		{
-			if (cmd->redir_order[j] == 1)
-				if (!check_in(data, i))
-					break ;
-			if (cmd->redir_order[j] == 2)
-				if (!check_out(data, i))
-					break ;
 		}
 	}
 	return (1);
