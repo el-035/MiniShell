@@ -70,7 +70,8 @@ char	**space_split(char const *s)
 	wc = count_word((char *) s);
 	i = 0;
 	j = 0;
-	split = (char **) malloc ((wc + 1) * sizeof(char *));
+	
+	split = (char **) ft_calloc ((wc + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
 	else
@@ -85,6 +86,5 @@ char	**space_split(char const *s)
 			i = i + ft_strlen(split[j - 1]) + 1;
 		}
 	}
-	split[j] = 0;
 	return (split);
 }

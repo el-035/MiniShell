@@ -4,6 +4,7 @@
 # include "libft/get_next_line.h"
 # include "libft/libft.h"
 # include <fcntl.h>
+# include <limits.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -15,19 +16,19 @@
 
 typedef enum e_type
 {
-	CMD,          // Command (e.g., "ls", "cat")
-	ARG,          // Argument (e.g., "-a", "file.txt")
-	PIPE,         // Pipe ("|")
-	REDIR_IN,     //< Input redirection ("<")
-	REDIR_OUT,    //> Output redirection (">")
-	REDIR_APPEND, //>> Append redirection (">>")
-	HERE_DOC,     //<< Here document ("<<")
+	CMD,
+	ARG,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_APPEND,
+	HERE_DOC,
 	UNKNOWN
 }					t_type;
 
 typedef struct s_input
 {
-	char			*content;	
+	char			*content;
 	enum e_type		type;
 	int				is_builtin;
 	int				exp;
@@ -95,10 +96,21 @@ char				*search_var(char *content, char *var);
 int					stop(char *content);
 char				*extract_var(char **envp, char *var);
 char				*save_var(char *content);
+int					start_len(char *content);
+
+// exp token
+int					exp_tokenise(t_input *cur, char **envp);
+char				*save_unquoted_start(char *content, int i, char **env);
+int					unquoted_var(char *content);
+t_input				*new_token(t_input *cur, char *start, char *exp,
+						char *next);
 
 // var utils 2
-int					start_len(char *content);
-int					exp_helper(char *content);
+t_input				*add_node(t_input *cur, char *content);
+t_input				*empty(t_input *cur, char *start, char *next, char *exp);
+t_input				*middle(t_input *cur, char **split);
+t_input				*end(t_input *cur, char *next, int f_e);
+t_input				*beginning(t_input *cur, char *start, char *exp, int f_b);
 
 
 
@@ -111,14 +123,17 @@ int					find_index(int i /*  int j, */);
 int					exp_helper(char *content);
 
 int					exp_split(t_input *first);
-int	count_word(char *content);
-
+int					count_word(char *content);
+int					ft(t_input *cur, char *exp, char *next, char *start);
+char				*save_unquoted_start(char *content, int i, char **env);
+int					unquoted_var(char *content);
+t_input				*add_node(t_input *cur, char *content);
 // init
 void				init_input(t_input *first);
 int					save_input(char *line, t_input **first);
 int					copy_envp(t_data *data, char **envp);
-//space split
-char	**space_split(char const *s);
+// space split
+char				**space_split(char const *s);
 
 // free
 void				free_split(char **split);
@@ -132,7 +147,7 @@ int					list_size(t_input *lst);
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
-int					remove_quotes(t_data *data);
+int					remove_quotes(t_input *input/* , t_data *data */);
 int					return_final_len(char *str);
 // commands
 
@@ -175,8 +190,12 @@ int					check_in(t_data *data, int i);
 // ft_utils
 int					ft_strcmp(const char *s1, const char *s2);
 int					is_space(char c);
+
+int					count_word(char *content);
+
 int					get_env_path(t_data *data, char **envp);
 void				count_cmds(t_input *tokens, t_data *data);
+
 
 // signal_handlers
 void				child_handler(int sig);

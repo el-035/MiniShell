@@ -1,44 +1,111 @@
 #include "minishell.h"
 
-int	exp_helper(char *content)
+t_input	*beginning(t_input *cur, char *start, char *exp, int f_b)
 {
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	while (content[i])
+	if (start && start[0] != '\0')
 	{
-		if (content[i] == '$' && check_quotes(content, i) == 0)
-			count++;
-		i++;
-	}
-	if (count == 0)
-		return (-1);
-	return (count);
-}
-
-int	start_len(char *content)
-{
-	int	i;
-
-	i = 0;
-	while (content[i])
-	{
-		if (content[i] == '$')
+		if (f_b == 1)
 		{
-			if (content[i + 1] && (content[i + 1] == '$'))
-				i += 2;
-			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content
-					[i + 1] == '_'))
-				i++;
-			else if (check_quotes(content, i) == 1)
-				i++;
-			else
-				return (i);
+			cur->content = ft_strdup(start);
+			cur = add_node(cur, exp);
+			cur->exp = 0;
 		}
 		else
-			i++;
+		{
+			cur->content = ft_strjoin(start, exp);
+			cur->exp = ft_strlen(start);
+		}
 	}
-	return (i);
+	else
+	{
+		cur->content = ft_strdup(exp);
+		cur->exp = 0;
+	}
+	return (cur);
+}
+
+t_input	*end(t_input *cur, char *next, int f_e)
+{
+	char	*tmp;
+
+	if (next && next[0] != '\0')
+	{
+		if (f_e == 1)
+		{
+			cur = add_node(cur, next);
+		}
+		else
+		{
+			tmp = cur->content;
+			cur->content = ft_strjoin(tmp, next);
+			cur->exp = 0 - ft_strlen(tmp);
+			free(tmp);
+		}
+	}
+	return (cur);
+}
+
+t_input	*middle(t_input *cur, char **split)
+{
+	int	len;
+	int	i;
+	
+	len = arr_len(split);
+	i = 1;
+	while (i < len - 1)
+	{
+		cur = add_node(cur, split[i++]);
+		if (!cur)
+			return (NULL);
+		cur->exp = 0;
+	}
+	if (len > 1)
+	{
+		cur = add_node(cur, split[len - 1]);
+		if (!cur)
+			return (NULL);
+		cur->exp = 0;
+	}
+	return (cur);
+}
+
+t_input	*empty(t_input *cur, char *start, char *next, char *exp)
+{
+	if (exp[0] == '\0')
+	{
+		cur->content = ft_strjoin(start, next); // protect
+		return (cur);
+	}
+	else if (count_word(exp) == 0)
+	{
+		cur->content = ft_strdup(start);
+		cur = add_node(cur, next); // protect
+		return (cur);
+	}
+	return (cur);
+}
+
+t_input	*add_node(t_input *cur, char *content)
+{
+	t_input *new;
+
+	// protect content
+	if (!content || !*content)
+		return (NULL);
+	new = (t_input *)malloc(sizeof(t_input));
+	if (!new)
+		return (NULL);
+	ft_memset(new, 0, sizeof(t_input));
+	init_input(new);
+	new->content = ft_strdup(content);
+	if (!new->content)
+	{
+		free(new);
+		return (NULL);
+	}
+	cur->next->prev = new;
+	new->next = cur->next;
+	new->prev = cur;
+	cur->next = new;
+	return (new);
 }

@@ -13,16 +13,17 @@ int	parsing(t_input *first, t_data *data)
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
-
+	/* test_print(first); */
 	if (find_ev(first, data) != 0)
 		return (free_list(first), 1);
+	/* test_print(first); */
 
-	if (exp_split(first))
-		return (free_list(first), 1);
-	
-		
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
+	if (remove_quotes(first/* , data */) != 0)
+		return (free_list(first), 1);
+	
+	/* test_print(first); */
 
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
@@ -30,11 +31,14 @@ int	parsing(t_input *first, t_data *data)
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
-	if (remove_quotes(data) != 0)
-		return (1);
-	//print_cmds(data);
+
+/* 	if (remove_quotes(data) != 0)
+		return (1); */
+	
 	if (!create_pipes(data))
         return (1);
+
+	
 	if (!get_env_path(data, data->envp))
 		return (1);
 	open_files(data);
@@ -72,7 +76,6 @@ void	handler(int sig)
 {
 	if (sig == SIGINT)		//crtl C
 	{
-		//return_exit_code(130);		// this actually does not work :(
 		return_sig_flag(1);
 		printf("\n");
 		rl_on_new_line();
@@ -105,17 +108,8 @@ char *prompt_join(t_data *data)
 	free(tmp); free(var);
 	if (!prompt)
 		return (NULL);
-	//remove_useless_quotes(&prompt, return_final_len(prompt));
 	return (prompt);
 }
-
-/* 	if (return_exit_code(-1) == 0 || return_sig_flag(-1) != 0)
-	{
-		//return_sig_flag(0);
-		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
-	}
-	else if (return_exit_code(-1) != 0)
-		tmp = ft_strjoin("\001\033[1;31m\002", prompt); */
 
 char	*prompt(t_data *data, char **envp)
 {

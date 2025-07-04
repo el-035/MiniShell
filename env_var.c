@@ -72,9 +72,8 @@ int	expand_var(char **content, char **envp)
 	char	*start;
 	char	*var;
 	char	*end;
-	int i = 0;
 
-	if (stop(*content) == 0 || i == 2)
+	if (stop(*content) == 0)
 		return (0);
 	start = save_start(*content); // HERE malloc faisl ???+
 	if (!start)
@@ -93,8 +92,6 @@ int	expand_var(char **content, char **envp)
 	if (ft_strchr(*content, '$') != 0)
 		expand_var(content, envp);
 	return (0);
-
-	i++;
 }
 
 int	find_ev(t_input *first, t_data *data)
@@ -107,11 +104,10 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
-			cur->exp = exp_helper(cur->content);
-			if (expand_var(&(cur->content), data->envp) != 0)
+			if (exp_tokenise(cur, data->envp) == -1)	//protect
 				return (1);
 		}
-		if ((!cur->prev || cur->prev->type != HERE_DOC) // HD?
+		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)
