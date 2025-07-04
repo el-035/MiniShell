@@ -72,7 +72,6 @@ char	*extract_var(char **envp, char *var)
 			value = ft_strdup(temp);
 			if (!ft_strchr(value, '\''))
 				remove_useless_quotes(&value, return_final_len(value));
-			//value = double_join("\"", temp, "\"");
 			return (free(var), free(full), value);
 		}
 		i++;
@@ -105,4 +104,29 @@ char	*save_var(char *content)
 	while (++i < len)
 		var[i] = content[i];
 	return (var);
+}
+
+int	start_len(char *content)
+{
+	int	i;
+
+	i = 0;
+	while (content[i])
+	{
+		if (content[i] == '$')
+		{
+			if (content[i + 1] && (content[i + 1] == '$'))
+				i += 2;
+			else if (content[i + 1] && !(ft_isalnum(content[i + 1]) || content
+					[i + 1] == '_'))
+				i++;
+			else if (check_quotes(content, i) == 1)
+				i++;
+			else
+				return (i);
+		}
+		else
+			i++;
+	}
+	return (i);
 }

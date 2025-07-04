@@ -8,7 +8,7 @@ CFLAGS = -g -Wall -Wextra -Werror
 SRC = minishell.c list_utils.c syntax.c syntax_utils.c  mini_split.c \
 	free.c heredoc.c env_var.c check_commands.c free_all.c  \
 	testing.c parse_input.c var_utils.c var_utils_2.c quotes.c exp_exit.c ft_unset.c \
-  	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c re_split.c \
+  	ft_env.c ft_pwd.c init.c ft_export.c export_utils.c \
 	ft_exit.c ft_echo.c ft_cd.c exec.c check_files.c exec_builtin.c \
 	ft_utils.c signal_handlers.c error_handler.c exec_child.c \
 	t.c space_split.c exp_token.c
