@@ -32,7 +32,7 @@ t_input	*end(t_input *cur, char *next, int f_e)
 	{
 		if (f_e == 1)
 		{
-			cur = add_node(cur, ft_strdup(next));
+			cur = add_node(cur, next);
 		}
 		else
 		{
@@ -49,7 +49,7 @@ t_input	*middle(t_input *cur, char **split)
 {
 	int	len;
 	int	i;
-
+	
 	len = arr_len(split);
 	i = 1;
 	while (i < len - 1)
@@ -61,7 +61,7 @@ t_input	*middle(t_input *cur, char **split)
 	}
 	if (len > 1)
 	{
-		cur = add_node(cur, ft_strdup(split[len - 1]));
+		cur = add_node(cur, split[len - 1]);
 		if (!cur)
 			return (NULL);
 		cur->exp = 0;
@@ -78,7 +78,7 @@ t_input	*empty(t_input *cur, char *start, char *next, char *exp)
 	}
 	else if (count_word(exp) == 0)
 	{
-		cur->content = start;
+		cur->content = ft_strdup(start);
 		cur = add_node(cur, next); // protect
 		return (cur);
 	}
@@ -90,6 +90,8 @@ t_input	*add_node(t_input *cur, char *content)
 	t_input *new;
 
 	// protect content
+	if (!content || !*content)
+		return (NULL);
 	new = (t_input *)malloc(sizeof(t_input));
 	if (!new)
 		return (NULL);

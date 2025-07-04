@@ -70,8 +70,6 @@ char	*extract_var(char **envp, char *var)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
 			value = ft_strdup(temp);
-			if (!ft_strchr(value, '\''))
-				remove_useless_quotes(&value, return_final_len(value));
 			return (free(var), free(full), value);
 		}
 		i++;

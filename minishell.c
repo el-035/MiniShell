@@ -24,7 +24,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	if (remove_quotes(first, data) != 0)
 		return (free_list(first), 1);
 	
-	
+	/* test_print(first); */
 
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);

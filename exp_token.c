@@ -5,7 +5,7 @@ int	unquoted_var(char *content)
 	int	i;
 
 	i = 0;
-	if (!content || content[0] == '\0')
+	if (!*content || !content || content[0] == '\0')
 		return (-1);
 	while (content[i])
 	{
@@ -85,19 +85,14 @@ int	exp_tokenise(t_input *cur, char **envp)
 	var = save_var(&(cur->content[unquoted_var(cur->content)]));
 	if (!var)
 		return (free(start), -1);
-	next = save_rest(&(cur->content[unquoted_var(cur->content) + 1]), var);
-		// eehmm
+	next = save_rest(&(cur->content[unquoted_var(cur->content) + 1]), var);// eehmm
 	if (!next)
 		return (free(start), free(var), -1);
 	exp = extract_var(envp, var);
 	if (!exp)
 		return (free(start), free(var), free(next), -1);
 	new_token(cur, start, exp, next);
-	/* 	free(start);
-		//free(var);
-		free(next);
-		free(exp); */
 	if (unquoted_var(cur->content) != -1)
 		exp_tokenise(cur, envp);
-	return (0);
+	return (free(start), free(next), free(exp), 0);
 }

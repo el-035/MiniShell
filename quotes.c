@@ -21,29 +21,7 @@ int	check_quotes(char *content, int len)
 	}
 	return (quote);
 }
-/* int	check_quotes(char *content, int pos)
-{
-	int	i;
-	int	in_single_quote;
-	int	in_double_quote;
 
-	if (!content || pos < 0)
-		return (0);
-	
-	i = 0;
-	in_single_quote = 0;
-	in_double_quote = 0;
-	
-	while (i < pos && content[i])
-	{
-		if (content[i] == '\'' && !in_double_quote)
-			in_single_quote = !in_single_quote;
-		else if (content[i] == '"' && !in_single_quote)
-			in_double_quote = !in_double_quote;
-		i++;
-	}
-	return (in_single_quote || in_double_quote);
-} */
 int	return_final_len(char *str)
 {
 	int	i;
@@ -135,10 +113,37 @@ int	remove_useless_quotes(char **content, int len)
 	return 0;
 } */
 
+int	var_quotes(t_input *cur)
+{
+	char *start;
+	char *end;
+	char *unquoted;
+	int	len;
+
+	len = cur->exp;
+	if (cur->exp < 0)
+		len =  cur->exp * -1;
+		
+	start = ft_substr(cur->content, 0, len);
+	if (!start)
+		return (fail_mall(), -1);
+	end = ft_strdup(&(cur->content[len]));
+	if (!end)
+		return (free(start), fail_mall(), -1);
+	if (cur->exp < 0)
+		remove_useless_quotes(&end, return_final_len(cur->content));
+	else
+		remove_useless_quotes(&start, return_final_len(cur->content));
+	unquoted = ft_strjoin(start, end);
+	if (!unquoted)
+		return (free(start), free(end), fail_mall(), -1);
+	free(cur->content); free(start); free(end);
+	cur->content = unquoted;
+	return (0);
+}
 
 int	remove_quotes(t_input *first, t_data *data)
 {
-
 	t_input	*cur;
 
 	cur = first;
@@ -153,9 +158,15 @@ int	remove_quotes(t_input *first, t_data *data)
 		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
 			&& cur->prev->type != HERE_DOC)
 		{
-			if (remove_useless_quotes(&(cur->content),
+/* 			if (cur->exp == INT_MIN)
+			{ */
+				if (remove_useless_quotes(&(cur->content),
 					return_final_len(cur->content)) != 0)
-				return (1);
+					return (1);
+		/* 	} */
+/* 			else if (cur->exp != 0)
+				var_quotes(cur); */
+			
 		}
 		cur = cur->next;
 		if (cur == first)
