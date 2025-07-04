@@ -32,7 +32,8 @@ int	find_cmd(t_input *first)
 		if (cur->type == CMD && cur->content[0] == '\0' && cur->exp != INT_MIN)
 		{
 			cur->type = UNKNOWN;//remove useleess node??
-			cur->next->type = CMD;		
+			if (cur->next != cur)
+				cur->next->type = CMD;		
 		}
 		if (cur->type == CMD)
 			compare_cmd(cur, commands);
