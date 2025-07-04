@@ -1,21 +1,4 @@
 #include "minishell.h"
-#include <sys/ioctl.h>
-
-static void	count_cmds(t_input *tokens, t_data *data)
-{
-	t_input	*cur;
-
-	cur = tokens;
-	data->cmd_count = 1;
-	while (cur)
-	{
-		if (cur->type == PIPE)
-			data->cmd_count++;
-		cur = cur->next;
-		if (cur == tokens)
-			break ;
-	}
-}
 
 static int	count_args(t_input *cur)
 {
@@ -33,118 +16,6 @@ static int	count_args(t_input *cur)
 			break ;
 	}
 	return (argc);
-}
-
-static void handle_redirs(t_cmd *cmd, t_input **cur)
-{
-	if ((*cur)->type == REDIR_IN && (*cur)->next)
-	{
-		free(cmd->in);
-		cmd->in = ft_strdup((*cur)->next->content);
-		*cur = (*cur)->next;
-	}
-	else if (((*cur)->type == REDIR_OUT || (*cur)->type == REDIR_APPEND)
-		&& (*cur)->next)
-	{
-		free(cmd->out);
-		cmd->out = ft_strdup((*cur)->next->content);
-		cmd->append = ((*cur)->type == REDIR_APPEND);
-		*cur = (*cur)->next;
-	}
-}
-
- void	hd_handler(int sig)
-{
-	if (sig == SIGINT)		//crtl C
-	{
-		return_exit_code(SIGINT + 128);
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		return_sig_flag(2);
-		//flag = 2;
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		//printf("\n");
-		// exit(SIGINT + 128);
-		return ;
-	}
-	if (sig == SIGQUIT)		//ctrl /
-	{
-		return_sig_flag(3);
-		// exit(SIGQUIT + 128);
-	}
-}
-
-
-int	create_heredoc(t_cmd *cmd, char **envp)
-{
-	char *line;
-	int count;
-	char **new_lines;
-	int	i;
-	struct sigaction	sig;
-	int hd_flag = 0;
-
-	sig.sa_handler = &hd_handler;
-	sigemptyset(&sig.sa_mask);
-	sig.sa_flags = 0;
-	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL);
-	//signal(SIGQUIT, SIG_IGN);
-	count = 0;
-	while (1)
-	{
-		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
-		{
-			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
-			hd_flag = 1;
-		}
-		line = readline("> ");
-		if (!line)
-		{
-			write (2, "bash: warning: here-document delimited by end-of-file (wanted `", 64);
-			write (2, cmd->limiter, ft_strlen(cmd->limiter));
-			write (2, "')\n", 4);
-			break ;
- 		}
-		if (return_sig_flag(-1) == 2)
-		{
-			//return_sig_flag(0);
-			break ;
-		}
-		if (ft_strcmp(line, cmd->limiter) == 0)
-			break ;
-		if (ft_strchr(line, '$'))	
-		{
-			if (hd_flag == 0)
-				expand_var(&line, envp);
-			remove_useless_quotes(&line, return_final_len(line));
-		}
-		new_lines = ft_calloc(sizeof(char *), count + 2);
-		if (!new_lines)
-			return (perror("Malloc: "), 0);
-		i = -1;
-		while (++i < count)
-			new_lines[i] = cmd->hd_content[i];
-		new_lines[count] = line;
-		new_lines[count + 1] = NULL;
-		free(cmd->hd_content);
-		cmd->hd_content = new_lines;
-		count++;		
-	}
-	free(line);
-	return (1);
-} 
-
-int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp)
-{
-	if (!(*cur)->next)
-		return (0);
-	cmd->limiter = ft_strdup((*cur)->next->content);
-	if (!create_heredoc(cmd, envp))
-		return (0);
-	cmd->is_hd = 1;
-	*cur = (*cur)->next;
-	return (1);
 }
 
 static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
@@ -207,6 +78,8 @@ int	parse_tokens(t_input *tokens, t_data *data)
 		ft_memset(cmd, 0, sizeof(t_cmd));
 		cmd->args = ft_calloc(count_args(cur) + 1, sizeof(char *));
 		if (!cmd->args)
+			return (0);
+		if (!count_redirs(cmd, cur, tokens))
 			return (0);
 		fill_cmd_data(cmd, &cur, tokens, data);
 	}

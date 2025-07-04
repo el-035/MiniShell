@@ -9,7 +9,7 @@ int	return_sig_flag(int sig)
 	return (flag);
 }
 
-int	parsing(t_input *first, t_data *data)	//return value?
+int	parsing(t_input *first, t_data *data)
 {	
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
@@ -31,6 +31,7 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	free_list(first);
     //freegrepo
 	//print_cmds(data);
+
 /* 	if (remove_quotes(data) != 0)
 		return (1); */
 	
@@ -40,7 +41,6 @@ int	parsing(t_input *first, t_data *data)	//return value?
 	
 	if (!get_env_path(data, data->envp))
 		return (1);
-	
 	open_files(data);
 	if (!exec_proc(data, data->envp))
 		return (1);
@@ -147,11 +147,10 @@ int main(int argc, char **argv, char **envp)
 	t_input 			*first;
 	t_data				data;
 	struct sigaction	sig;
-	int f = 0;
 	(void)argc;
 	(void)argv;
 
-	ft_memset(&data, 0, sizeof(t_data));
+	ft_memset(&data, 0, sizeof(t_data)); 
 	data.fd1 = -1;
 	data.fd2 = -1;
 	if (copy_envp(&data, envp) == -1)
@@ -167,9 +166,9 @@ int main(int argc, char **argv, char **envp)
 		first = NULL;
 		sigaction(SIGINT, &sig, NULL);
 		sigaction(SIGQUIT, &sig, NULL);	//ignore
-		if (f == 0)
+		if (data.ec_update_flag == 0)
 			return_exit_code(0);
-		f = 0;
+		data.ec_update_flag = 0;
 		line = prompt(&data, envp);
 		if (!line)	//ctrl d
 		{
@@ -178,7 +177,7 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (!*line)
 		{
-			f = 1;
+			data.ec_update_flag = 1;
 			continue ;
 		}
 			

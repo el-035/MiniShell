@@ -41,15 +41,9 @@ int	exec_proc(t_data *data, char **envp)
 	i = -1;
 	while (++i < data->cmd_count)
 	{
-		/* if (data->pid[i] == -2 || data->pid[i] == -1)
-			continue; */
 		if (data->pid[i] != -2)
 			waitpid(data->pid[i], &status, 0);
-		//ADD CONDITION? 
 		code = WEXITSTATUS(status);
-		/* else if (WIFSIGNALED(status))
-			return_exit_code(128 + WTERMSIG(status)); */
-
 		//jump or move depends on uninitialised value(s) here
 		if(WIFSIGNALED(status))
 		{
@@ -68,10 +62,10 @@ int	exec_proc(t_data *data, char **envp)
 			}	
 		}
 	}
-	if (/* data->pid[i] == 0 && */ WIFEXITED(status))
+	if (WIFEXITED(status))
 		{
 			if (code != 0)
-				return_exit_code(/* WEXITSTATUS(status) */code);
+				return_exit_code(code);
 		}
 	return (1);
 }

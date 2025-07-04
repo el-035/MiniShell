@@ -1,48 +1,38 @@
 #include "minishell.h"
 
-static void	add_skip_flag(t_cmd *cmd, int i, int cmd_count)
+void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
 {
 	cmd->error_skip = 1;
-	if (i == cmd_count - 1)
-		return_exit_code(1);
+	if (mode == 1)
+	{
+		if (i == cmd_count - 1)
+			return_exit_code(1);		
+	}
+	else
+	{
+		if (i == cmd_count - 1)
+			return_exit_code(0);
+	}
 }
 
-static int	check_permission(t_data *data, int i, int file_order)
+static int	check_permission(t_data *data, char *file, int i, int file_order)
 {
 	if (file_order == 1)
 	{
-		if (access(data->cmds[i].in, F_OK) != -1)
+		if (access(file, F_OK) != -1)
 		{
-			if (access(data->cmds[i].in, R_OK) == -1)
-				return (handle_error(data->cmds[i].in, 1), add_skip_flag(&data->cmds[i], i, data->cmd_count), 0);
+			if (access(file, R_OK) == -1)
+				return (handle_error(file, 1), add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
 		}
 		else
 		{
-			handle_error(data->cmds[i].in, 0);
-			return (add_skip_flag(&data->cmds[i], i, data->cmd_count), 0);
+			handle_error(file, 0);
+			return (add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
 		}
 	}
-	else if (access(data->cmds[i].out, F_OK) != -1)
-		if (access(data->cmds[i].out, R_OK) == -1 || access(data->cmds[i].out, W_OK) == -1)
-			return (handle_error(data->cmds[i].out, 1), 0);
-	return (1);
-}
-
-int	get_env_path(t_data *data, char **envp)
-{
-	int	cmp;
-	int	i;
-
-	i = -1;
-	while (envp[++i])
-	{
-		cmp = ft_strncmp(envp[i], "PATH=", 5);
-		if (cmp == 0)
-		{
-			data->env_path = ft_split(envp[i] + 5, ':');
-			break ;
-		}
-	}
+	else if (access(file, F_OK) != -1)
+		if (access(file, R_OK) == -1 || access(file, W_OK) == -1)
+			return (handle_error(file, 1), 0);
 	return (1);
 }
 
@@ -58,38 +48,45 @@ static int	get_open_flags(int append)
 	return (flags);
 }
 
-int	open_files(t_data *data)
+int check_out(t_data *data, int i)
 {
-	t_cmd	*cmd;
-	int		flags;
-	int		i;
+    int j;
+	t_cmd *cmd;
+	int flags;
 
-	i = -1;
-	while (++i < data->cmd_count)
+	j = -1;
+	cmd = &data->cmds[i];
+	while (++j < cmd->out_redirs)
 	{
-		cmd = &data->cmds[i];
-		if (cmd->in)
+		if (!check_permission(data, cmd->out[j], i, 2))
+			return (0);
+
+		flags = get_open_flags(cmd->append);
+		data->fd2 = open(cmd->out[j], flags, 0666);
+		if (data->fd2 == -1)
+			return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->out[j], 0), 0);
+		if (j != cmd->out_redirs - 1)
+			close(data->fd2);
+	}
+	return (1);
+}
+ 
+int	check_in(t_data *data, int i)
+{
+	int	j;
+	t_cmd *cmd;
+
+	j = -1;
+	cmd = &data->cmds[i];
+	while (++j < cmd->in_redirs)
+	{
+		if (!check_permission(data, cmd->in[j], i, 1))
+			return (0);
+		if (j == cmd->in_redirs - 1)
 		{
-			if (!check_permission(data, i, 1))
-				continue ;
-			data->fd1 = open(cmd->in, O_RDONLY);
+			data->fd1 = open(cmd->in[j], O_RDONLY);
 			if (data->fd1 == -1)
-			{
-				(add_skip_flag(cmd, i, data->cmd_count), handle_error(cmd->in, 0));
-				continue ;
-			}
-		}
-		if (cmd->out)
-		{
-			if (!check_permission(data, i, 2))
-				continue ;
-			flags = get_open_flags(cmd->append);
-			data->fd2 = open(cmd->out, flags, 0666);
-			if (data->fd2 == -1)
-			{
-				add_skip_flag(cmd, i, data->cmd_count), handle_error(cmd->out, 0);
-				continue ;
-			}
+				return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->in[j], 0), 0);
 		}
 	}
 	return (1);

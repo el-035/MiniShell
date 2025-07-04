@@ -8,7 +8,9 @@ static char	*check_path(t_data *data, char *cmd)
 
 	i = -1;
 	tmp = NULL;
-	if (data->env_path && *data->env_path)
+	if (!cmd || *cmd == '\0')
+		return (handle_error(cmd, 2), NULL);
+	if (data->env_path && *data->env_path && cmd && *cmd)
 		while (data->env_path[++i] != NULL)
 		{
 			if (tmp != NULL)
@@ -30,7 +32,6 @@ static char	*check_path(t_data *data, char *cmd)
 				return (handle_error(cmd, 0), NULL);
 	return (free(tmp), handle_error(cmd, 2), NULL);
 }
-
 
 static int	execute_cmd(t_data *data, char **args, char **envp)
 {
@@ -104,10 +105,10 @@ int	exec_child(t_data *data, int index, char **envp)
 		{
 			if (!set_heredoc_fds(cmd, index))
 				(free_split(data->envp), free_all(data),exit(EXIT_FAILURE));
-			fd = open(cmd->in, O_RDONLY);
+			fd = open(cmd->hd_in, O_RDONLY);
 			if (fd < 0)
 				(perror("Opening heredoc tmp file: "), free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
-			(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->in));
+			(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in));
 		}
 		else
 			(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));

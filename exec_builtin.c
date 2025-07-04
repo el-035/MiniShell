@@ -12,7 +12,10 @@ void	exec_builtin_child(t_cmd *cmd, t_data *data)
 
 int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 {
-	// Maybe use exit_code to set EC immediately?
+	int	exit_count;
+	int	i;
+
+	exit_count = 0;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
@@ -20,7 +23,16 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		ft_exit(data, cmd);
+	{
+		i = -1;
+		while (++i < data->cmd_count)
+			if (ft_strcmp(cmd->args[0], data->cmds[i].args[0]) == 0)
+				exit_count++;
+		if (exit_count == 1)
+			ft_exit(data, cmd);
+		else
+			data->ec_update_flag = 1;
+	}
 	else
 		return (1);
 	return (0);

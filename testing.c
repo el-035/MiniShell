@@ -17,8 +17,13 @@ void print_cmds(t_data *data)
 		printf("CMD %d:\n", i);
 		for (int j = 0; data->cmds[i].args && data->cmds[i].args[j]; j++)
 			printf("  arg[%d]: %s\n", j, data->cmds[i].args[j]);
-		printf("  in: %s\n", data->cmds[i].in);
-		printf("  out: %s\n", data->cmds[i].out);
+		for (int j = 0; data->cmds[i].in && data->cmds[i].in[j]; j++)
+			printf("  in[%d]: %s\n", j, data->cmds[i].in[j]);
+		for (int j = 0; data->cmds[i].out && data->cmds[i].out[j]; j++)
+			printf("  out[%d]: %s\n", j, data->cmds[i].out[j]);
+		int total = data->cmds[i].in_redirs + data->cmds[i].out_redirs;
+		for (int j = 0; j < total; j++)
+			printf("  redir type[%d]: %d\n", j, data->cmds[i].redir_order[j]);
 	}
 }
 
