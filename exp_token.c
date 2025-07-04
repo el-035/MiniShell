@@ -65,7 +65,10 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 		if (!cur)
 			return (free_split(split), NULL);
 		cur = end(cur, next, is_space(exp[ft_strlen(exp) - 1]));
-		return (free_split(split), NULL);
+		if (!cur)
+			return (free_split(split), NULL);
+		if (count_word(exp) == 1)
+			cur->exp = INT_MIN;
 	}
 	return (free_split(split), cur);
 }

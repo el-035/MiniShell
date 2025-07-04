@@ -158,15 +158,14 @@ int	remove_quotes(t_input *first, t_data *data)
 		if ((ft_strchr(cur->content, '\'') || ft_strchr(cur->content, '"'))
 			&& cur->prev->type != HERE_DOC)
 		{
-/* 			if (cur->exp == INT_MIN)
-			{ */
+			if (cur->exp == INT_MIN)
+			{
 				if (remove_useless_quotes(&(cur->content),
 					return_final_len(cur->content)) != 0)
 					return (1);
-		/* 	} */
-/* 			else if (cur->exp != 0)
-				var_quotes(cur); */
-			
+			}
+			else if (cur->exp != 0)
+				var_quotes(cur);
 		}
 		cur = cur->next;
 		if (cur == first)
