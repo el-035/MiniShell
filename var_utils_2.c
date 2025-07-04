@@ -74,6 +74,8 @@ t_input	*empty(t_input *cur, char *start, char *next, char *exp)
 	if (exp[0] == '\0')
 	{
 		cur->content = ft_strjoin(start, next); // protect
+		if (cur->content[0] == '\0')
+			cur->exp = 0;
 		return (cur);
 	}
 	else if (count_word(exp) == 0)

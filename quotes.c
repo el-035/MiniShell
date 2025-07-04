@@ -33,8 +33,6 @@ int	return_final_len(char *str)
 	{
 		if (str[i] == '"' && check_quotes(str, i) != 1)
 			i++;
-		/* else if (str[i] == '\\' && check_quotes(str, i) == 2)
-			i++; */
 		else if (str[i] == '\'' && check_quotes(str, i) != 2)
 			i++;
 		else
@@ -60,8 +58,6 @@ int	remove_useless_quotes(char **content, int len)
 	{
 		if ((*content)[i] == '"' && check_quotes((*content), i) != 1)
 			i++;
-		/* else if ((*content)[i] == '\\' && check_quotes((*content), i) == 2)
-			i++; */
 		else if ((*content)[i] == '\'' && check_quotes((*content), i) != 2)
 			i++;
 		else
