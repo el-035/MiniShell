@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
+/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	count_args(t_input *cur)
@@ -18,14 +30,13 @@ static int	count_args(t_input *cur)
 	return (argc);
 }
 
-static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
+static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 {
 	if (((*cur)->type == CMD || (*cur)->type == ARG) && (!(*cur)->prev
 			|| ((*cur)->prev->type != REDIR_IN
 				&& (*cur)->prev->type != REDIR_OUT
 				&& (*cur)->prev->type != REDIR_APPEND)))
 	{
-		//LEAK HERE
 		cmd->args[(*j)++] = ft_strdup((*cur)->content);
 		if ((*cur)->type == CMD)
 			cmd->is_builtin = (*cur)->is_builtin;
@@ -35,18 +46,19 @@ static void	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 		handle_redirs(cmd, cur);
 	else if ((*cur)->type == HERE_DOC)
 		if (!handle_heredoc(cmd, cur, data->envp))
-	//CHANGE THIS SHIIIT
-			printf("Oopsy\n");
+			return (0);
+	return (1);
 }
 
-void	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *data)
+static int	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *data)
 {
 	int	j;
 
 	j = 0;
 	while (*cur && (*cur)->type != PIPE)
 	{
-		handle_token(cmd, cur, &j, data);
+		if (!handle_token(cmd, cur, &j, data))
+			return (0);
 		*cur = (*cur)->next;
 		if (*cur == tokens)
 			break ;
@@ -58,6 +70,7 @@ void	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *data)
 		if (*cur == tokens)
 			*cur = NULL;
 	}
+	return (1);
 }
 
 int	parse_tokens(t_input *tokens, t_data *data)
@@ -81,7 +94,8 @@ int	parse_tokens(t_input *tokens, t_data *data)
 			return (0);
 		if (!count_redirs(cmd, cur, tokens))
 			return (0);
-		fill_cmd_data(cmd, &cur, tokens, data);
+		if (!fill_cmd_data(cmd, &cur, tokens, data))
+			return (0);
 	}
 	return (1);
 }

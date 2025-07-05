@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
+/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	open_files(t_data *data)
@@ -30,25 +42,25 @@ int	open_files(t_data *data)
 
 int	alloc_redirs(t_cmd *cmd)
 {
-	 if (cmd->in_redirs > 0)
-    {
+	if (cmd->in_redirs > 0)
+	{
 		cmd->in = ft_calloc(cmd->in_redirs + 1, sizeof(char *));
-        if (!cmd->in)
-            return (0);
-    }
+		if (!cmd->in)
+			return (0);
+	}
 	if (cmd->out_redirs > 0)
-    {
-        cmd->out = ft_calloc(cmd->out_redirs + 1, sizeof(char *));
-        if (!cmd->out)
-            return (0);
-    }
+	{
+		cmd->out = ft_calloc(cmd->out_redirs + 1, sizeof(char *));
+		if (!cmd->out)
+			return (0);
+	}
 	cmd->redir_order = ft_calloc(cmd->in_redirs + cmd->out_redirs, sizeof(int));
 	if (!cmd->redir_order)
 		return (0);
 	return (1);
 }
 
-int  count_redirs(t_cmd *cmd, t_input *input, t_input *start)
+int	count_redirs(t_cmd *cmd, t_input *input, t_input *start)
 {
 	t_input	*cur;
 
@@ -68,7 +80,7 @@ int  count_redirs(t_cmd *cmd, t_input *input, t_input *start)
 	return (1);
 }
 
-void handle_redirs(t_cmd *cmd, t_input **cur)
+void	handle_redirs(t_cmd *cmd, t_input **cur)
 {
 	int	redir_ind;
 
@@ -84,7 +96,7 @@ void handle_redirs(t_cmd *cmd, t_input **cur)
 	else if (((*cur)->type == REDIR_OUT || (*cur)->type == REDIR_APPEND)
 		&& (*cur)->next)
 	{
-		if (cmd->out && cmd->out_index < cmd->out_redirs)	
+		if (cmd->out && cmd->out_index < cmd->out_redirs)
 		{
 			cmd->out[cmd->out_index++] = ft_strdup((*cur)->next->content);
 			if ((*cur)->type == REDIR_APPEND)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
+/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
@@ -6,7 +18,7 @@ void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
 	if (mode == 1)
 	{
 		if (i == cmd_count - 1)
-			return_exit_code(1);		
+			return_exit_code(1);
 	}
 	else
 	{
@@ -22,7 +34,8 @@ static int	check_permission(t_data *data, char *file, int i, int file_order)
 		if (access(file, F_OK) != -1)
 		{
 			if (access(file, R_OK) == -1)
-				return (handle_error(file, 1), add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
+				return (handle_error(file, 1), add_skip_flag(&data->cmds[i], i,
+						data->cmd_count, 1), 0);
 		}
 		else
 		{
@@ -48,11 +61,11 @@ static int	get_open_flags(int append)
 	return (flags);
 }
 
-int check_out(t_data *data, int i)
+int	check_out(t_data *data, int i)
 {
-    int j;
-	t_cmd *cmd;
-	int flags;
+	int		j;
+	t_cmd	*cmd;
+	int		flags;
 
 	j = -1;
 	cmd = &data->cmds[i];
@@ -60,21 +73,21 @@ int check_out(t_data *data, int i)
 	{
 		if (!check_permission(data, cmd->out[j], i, 2))
 			return (0);
-
 		flags = get_open_flags(cmd->append);
 		data->fd2 = open(cmd->out[j], flags, 0666);
 		if (data->fd2 == -1)
-			return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->out[j], 0), 0);
+			return (add_skip_flag(cmd, i, data->cmd_count, 1),
+				handle_error(cmd->out[j], 0), 0);
 		if (j != cmd->out_redirs - 1)
 			close(data->fd2);
 	}
 	return (1);
 }
- 
+
 int	check_in(t_data *data, int i)
 {
-	int	j;
-	t_cmd *cmd;
+	int		j;
+	t_cmd	*cmd;
 
 	j = -1;
 	cmd = &data->cmds[i];
@@ -86,7 +99,8 @@ int	check_in(t_data *data, int i)
 		{
 			data->fd1 = open(cmd->in[j], O_RDONLY);
 			if (data->fd1 == -1)
-				return (add_skip_flag(cmd, i, data->cmd_count, 1), handle_error(cmd->in[j], 0), 0);
+				return (add_skip_flag(cmd, i, data->cmd_count, 1),
+					handle_error(cmd->in[j], 0), 0);
 		}
 	}
 	return (1);

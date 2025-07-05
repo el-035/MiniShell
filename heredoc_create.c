@@ -16,13 +16,13 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	sigaction(SIGQUIT, &sig, NULL);
 	//signal(SIGQUIT, SIG_IGN);
 	count = 0;
-	while (1)
-	{
-		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
+	if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
 		{
 			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
 			hd_flag = 1;
 		}
+	while (1)
+	{
 		line = readline("> ");
 		if (!line)
 		{
@@ -59,6 +59,38 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	free(line);
 	return (1);
 }
+
+/* int	create_heredoc(t_cmd *cmd, char **envp)
+{
+	int count;
+	int	i;
+	struct sigaction	sig;
+	int hd_flag;
+
+	sig.sa_handler = &hd_handler;
+	sigemptyset(&sig.sa_mask);
+	sig.sa_flags = 0;
+	sigaction(SIGINT, &sig, NULL);
+	sigaction(SIGQUIT, &sig, NULL);
+	//signal(SIGQUIT, SIG_IGN);
+	count = 0;
+	hd_flag = 0;
+	if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
+	{
+		remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
+		hd_flag = 1;
+	}
+	while (1)
+	{
+		
+		i = read_heredoc(cmd, hd_flag, &count, envp);
+		if (i == 0)
+			return (fail_mall(), 0);
+		else if (i == 2)
+			break ;				
+	}
+	return (1);
+} */
 /*
 
 static int	realloc_heredoc(t_cmd *cmd, char *line, int *count)
@@ -112,34 +144,4 @@ static int read_heredoc(t_cmd *cmd, int hd_flag, int *count, char **envp)
 	return (1);
 }
 
-int	create_heredoc(t_cmd *cmd, char **envp)
-{
-	int count;
-	int	i;
-	struct sigaction	sig;
-	int hd_flag;
-
-	sig.sa_handler = &hd_handler;
-	sigemptyset(&sig.sa_mask);
-	sig.sa_flags = 0;
-	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL);
-	//signal(SIGQUIT, SIG_IGN);
-	count = 0;
-	hd_flag = 0;
-	while (1)
-	{
-		// handle limiter quotes once??
-		if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
-		{
-			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
-			hd_flag = 1;
-		}
-		i = read_heredoc(cmd, hd_flag, &count, envp);
-		if (i == 0)
-			return (fail_mall(), 0);
-		else if (i == 2)
-			break ;				
-	}
-	return (1);
-}*/
+*/

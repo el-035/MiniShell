@@ -1,26 +1,38 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_all.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
+/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-    while (*s1 && (*s1 == *s2))
+	while (*s1 && (*s1 == *s2))
 	{
-        s1++;
-        s2++;
-    }
-    return (unsigned char)*s1 - (unsigned char)*s2;
+		s1++;
+		s2++;
+	}
+	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
 int	is_space(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n')
-		return 1;
-	return 0;	
+		return (1);
+	return (0);
 }
 
 int	count_word(char *content)
 {
-	int	 i;
-	int	 wc;
+	int	i;
+	int	wc;
 
 	i = 0;
 	wc = 0;
@@ -73,4 +85,3 @@ void	count_cmds(t_input *tokens, t_data *data)
 			break ;
 	}
 }
-

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   free_all.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
 /*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */

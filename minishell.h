@@ -190,15 +190,14 @@ int					check_in(t_data *data, int i);
 // ft_utils
 int					ft_strcmp(const char *s1, const char *s2);
 int					is_space(char c);
-
 int					count_word(char *content);
-
 int					get_env_path(t_data *data, char **envp);
 void				count_cmds(t_input *tokens, t_data *data);
 
 
 // signal_handlers
 void				child_handler(int sig);
+void				hd_handler(int sig);
 
 // exec builtin
 void				exec_builtin_child(t_cmd *cmd, t_data *data);
@@ -210,7 +209,8 @@ int					exec_child(t_data *data, int index, char **envp);
 // heredoc
 int					set_heredoc_fds(t_cmd *cmd, int index);
 int					handle_heredoc(t_cmd *cmd, t_input **cur, char **envp);
-void				hd_handler(int sig);
+void				exec_hd(t_data *data, t_cmd *cmd, int index);
+
 // error_handler
 void				handle_error(char *str, int error_code);
 
