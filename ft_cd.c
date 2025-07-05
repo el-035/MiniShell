@@ -1,26 +1,23 @@
 #include "minishell.h"
 
-void	update_envp(char **envp, char *var, char *value)
+void	update_envp(t_data *data, char *var, char *value)
 {
 	int		i;
 	char	*tmp;
 
-	i = 0;
-	if (!envp[i])
+	if (!data->envp[0])
 		return ;
-	while (envp[i])
+	i = find_var(data->envp, var);
+	if (i == -1)
 	{
-		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
-		{
-			tmp = ft_strjoin(var, value);
-			if (!tmp)
-				return (fail_mall());
-			free(envp[i]);
-			envp[i] = tmp;
-			return ;
-		}
-		i++;
-	}
+		add_env(data, var, value);//protect
+		return ;
+	}	
+	tmp = double_join(var, "=", value);
+	if (!tmp)
+		return (fail_mall());	
+	free(data->envp[i]);
+	data->envp[i] = tmp;
 }
 
 void	cd_helper(t_cmd *cmd, t_data *data)
@@ -69,8 +66,8 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
 		write(2, "getcwd failed: PWD could not be retrtived\n", 42);
-	update_envp(data->envp, "OLDPWD=", old_pwd);
-	update_envp(data->envp, "PWD=", new_pwd);
+	update_envp(data, "OLDPWD", old_pwd);
+	update_envp(data, "PWD", new_pwd);
 	free(old_pwd);
 	free(new_pwd);
 }

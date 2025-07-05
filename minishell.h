@@ -181,6 +181,7 @@ int					return_exit_code(int exit);
 char				*get_var(char *str);
 char				*get_content(char *str);
 int					print_export(char **envp);
+int	find_var(char **envp, char *str);
 
 // check_files
 void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);

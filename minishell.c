@@ -87,58 +87,21 @@ void	handler(int sig)
 	} */
 }
 
-char *prompt_join(t_data *data)
-{
-	char *prompt;
-	char *tmp;
-	char *var;
-
-	var = extract_var(data->envp, ft_strdup("USER"));
-	if (!var)
-		return (NULL);
-	tmp = ft_strjoin(var, ":~");
-	free(var);
-	if (!tmp)
-		return (fail_mall(), NULL);
-	var = extract_var(data->envp, ft_strdup("PWD"));
-	if (!var)
-		return (free(tmp),NULL);
-	prompt = ft_strjoin(tmp, var);
-	free(tmp); free(var);
-	if (!prompt)
-		return (NULL);
-	return (prompt);
-}
-
-char	*prompt(t_data *data, char **envp)
+char	*prompt(char **envp)
 {
 	char *line;
-	char *tmp;
 	char *prompt;
 
-	tmp = NULL;
-	
 	return_sig_flag(0);
 	if (!*envp)
-		return (readline("\001\033[1;34m\002Minishell:\001\033[0m\002 "));
-	prompt = prompt_join(data);
-	if (!prompt)
-		return (fail_mall(), NULL);
-	if (return_exit_code(-1) == 0)						//color is fucked up for ctrl c
-		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
+		return (readline("\001\033[1;34m\002Minishell: \001\033[0m\002"));
+	if (return_exit_code(-1) == 0)
+		prompt = "\001\033[1;32m\002Minishell: \001\033[0m\002";
 	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
-		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
-//	tmp = ft_strjoin("\001\033[1;34m\002", prompt); 
-	free(prompt);
-	if (!tmp)
-		return (fail_mall(), NULL);
-	prompt = ft_strjoin(tmp, "\001\033[0m\002 ");
-	if (!prompt)
-		return (fail_mall(), free(tmp), NULL);
+		prompt = "\001\033[1;31m\002Minishell: \001\033[0m\002";
 	line = readline(prompt);
-	return (free(prompt), free(tmp), line);
+	return (line);
 }
-
 
 int main(int argc, char **argv, char **envp)
 {
@@ -168,7 +131,7 @@ int main(int argc, char **argv, char **envp)
 		if (data.ec_update_flag == 0)
 			return_exit_code(0);
 		data.ec_update_flag = 0;
-		line = prompt(&data, envp);
+		line = prompt(envp);
 		if (!line)	//ctrl d
 		{
 			write (2, "exit\n", 5);
