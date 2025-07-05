@@ -205,6 +205,7 @@ int					exec_builtin_parent(t_cmd *cmd, t_data *data);
 
 // exec child
 int					exec_child(t_data *data, int index, char **envp);
+void	close_unused_fds_in_child(t_data *data);
 
 // heredoc
 int					set_heredoc_fds(t_cmd *cmd, int index);
