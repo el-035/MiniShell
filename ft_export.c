@@ -14,6 +14,8 @@ int	ft_is_valid(char *cmd)
 			return (1);
 		i++;
 	}
+	if (!cmd[i])
+		return (0);
 	if (cmd[i] == '+')
 	{
 		if (!cmd[i + 1] || cmd[i + 1] != '=')
@@ -43,55 +45,6 @@ int	find_var(char **envp, char *str)
 	free(var);
 	return (-1);
 }
-/* 
-char	*append_replace(char *arg, char *content, char *prev)
-{
-	char	*tmp;
-	char	*app;
-
-	app = NULL;
-	tmp = ft_strchr(arg, '+');
-	if (!tmp)
-		return (free(prev), ft_strdup(content));
-	tmp++;
-	if (tmp[0] == '=')
-	{
-		app = ft_strjoin(prev, content);
-		if (!app)
-			return (fail_mall(), free(prev), NULL);
-		free(prev);
-	}
-	return (app);
-} */
-
-/*  void	export_helper(t_data *data, t_cmd *cmd, int i, char *var)
-{
-	char	*content;
-	char	*tmp;
-	int		j;
-	char	*alloc;
-
-	content = get_content(cmd->args[i]);
-	if (!content)
-		return ;
-	if (find_var(data->envp, var) != -1)
-	{
-		j = find_var(data->envp, var);
-		tmp = append_replace(cmd->args[i], content, get_content(data->envp[j]));
-		if (!tmp)
-			return (free(content));
-		alloc = double_join(var, "=", tmp);
-		if (!alloc)
-			return (free(content), free(tmp));
-		free(data->envp[j]);
-		data->envp[j] = alloc;
-		free(tmp);
-	}
-	else if (find_var(data->envp, var) == -1)
-		add_env(data, var, content);
-			// not printinf error message but otherwise too many lines
-	return (free(content));
-}  */
 
 int append(char *var, char *cmd, t_data *data)
 {
@@ -139,13 +92,15 @@ int replace(char *var, char *cmd, t_data *data)
 
 int export_helper(char *args, t_data *data, char *var)
 {
-	/* char *tmp; */
+	char *content;
 
-	/* tmp = ft_strchr(args, '='); */
+	content = get_content(args);
+	if (!content)
+		return (-1);
 	if (find_var(data->envp, var) == -1)
 	{
-		if (add_env(data, var, get_content(args)) == -1)
-			return (fail_mall(), -1); 
+		if (add_env(data, var, content) == -1)
+			return (-1);
 	}
 	else if (args[ft_strlen(var)] == '+' )
 	{
