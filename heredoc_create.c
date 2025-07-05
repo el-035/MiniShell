@@ -21,7 +21,7 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
 			hd_flag = 1;
 		}
-	while (1)
+	while (return_sig_flag(-1) != 2)
 	{
 		line = readline("> ");
 		if (!line)
