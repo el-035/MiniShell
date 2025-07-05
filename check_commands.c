@@ -1,45 +1,64 @@
-#include"minishell.h"
+#include "minishell.h"
 
-int compare_cmd(t_input *cur, char **commands)
+char	**is_builtins(void)
 {
-	int i;
+	char	**commands;
 
+	commands = ft_calloc(8, sizeof(char *));
+	if (!commands)
+		return (NULL);
+	commands[0] = "echo";
+	commands[1] = "cd";
+	commands[2] = "pwd";
+	commands[3] = "export";
+	commands[4] = "unset";
+	commands[5] = "env";
+	commands[6] = "exit";
+	commands[7] = NULL;
+	return (commands);
+}
+
+int	compare_cmd(t_input *cur)
+{
+	int		i;
+	char	**commands;
+
+	commands = is_builtins();
 	i = 0;
 	while (i <= 6)
 	{
-		if (ft_strncmp(commands[i], cur->content, (strlen(commands[i]) + 1)) == 0)
+		if (ft_strncmp(commands[i], cur->content, (strlen(commands[i])
+					+ 1)) == 0)
 		{
 			cur->is_builtin = 1;
-			return 0;
+			return (0);
 		}
 		i++;
 	}
 	cur->is_builtin = 0;
-	return 0;
+	return (0);
 }
 
 int	find_cmd(t_input *first)
 {
-	char	*commands[] = {"echo", "cd", "pwd", "export", "unset", "env", "exit"};
 	t_input	*cur;
 
 	cur = first;
 	while (cur)
-	{	
+	{
 		if (cur->type == UNKNOWN)
 			cur->type = ARG;
 		if (cur->type == CMD && cur->content[0] == '\0' && cur->exp != INT_MIN)
 		{
-			cur->type = UNKNOWN;//remove useleess node??
+			cur->type = UNKNOWN;
 			if (cur->next != cur)
-				cur->next->type = CMD;		
+				cur->next->type = CMD;
 		}
 		if (cur->type == CMD)
-			compare_cmd(cur, commands);
-		
+			compare_cmd(cur);
 		cur = cur->next;
 		if (cur == first)
-			break;
+			break ;
 	}
-	return 0;
+	return (0);
 }

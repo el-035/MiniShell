@@ -104,7 +104,7 @@ int	find_ev(t_input *first, t_data *data)
 		if ((!cur->prev || cur->prev->type != HERE_DOC)
 			&& stop(cur->content) != 0)
 		{
-			if (exp_tokenise(cur, data->envp) == -1)	//protect
+			if (exp_tokenise(cur, data->envp) == -1) // protect
 				return (1);
 		}
 		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content

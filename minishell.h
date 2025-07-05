@@ -151,7 +151,7 @@ int					remove_quotes(t_input *input/* , t_data *data */);
 int					return_final_len(char *str);
 // commands
 
-int					compare_cmd(t_input *cur, char **commands);
+int					compare_cmd(t_input *cur);
 int					find_cmd(t_input *first /* , t_data *data */);
 
 // exit exp

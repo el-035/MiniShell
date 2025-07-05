@@ -10,35 +10,40 @@ void	update_envp(t_data *data, char *var, char *value)
 	i = find_var(data->envp, var);
 	if (i == -1)
 	{
-		add_env(data, var, value);//protect
+		add_env(data, var, value); // protect
 		return ;
-	}	
+	}
 	tmp = double_join(var, "=", value);
 	if (!tmp)
-		return (fail_mall());	
+		return (fail_mall());
 	free(data->envp[i]);
 	data->envp[i] = tmp;
 }
 
-void	cd_helper(t_cmd *cmd, t_data *data)
+void	cd_more_help(t_cmd *cmd, t_data *data)
 {
 	char	*home;
-	
+
+	home = extract_var(data->envp, ft_strdup("HOME"));
+	if (!home)
+		fail_mall();
+	if (home[0] == '\0')
+	{
+		write(2, "bash: cd: HOME not set\n", 23);
+		return (return_exit_code(1), free(home));
+	}
+	if (cmd->args[1] && cmd->args[1][0] == '\0')
+		return ;
+	if (chdir(home) == -1)
+		return_exit_code(1);
+	free(home);
+}
+
+void	cd_helper(t_cmd *cmd, t_data *data)
+{
 	if (!cmd->args[1] || cmd->args[1][0] == '\0')
 	{
-		home = extract_var(data->envp, ft_strdup("HOME"));
-		if (!home)
-			fail_mall();
-		if (home[0] == '\0')
-		{
-			write (2, "bash: cd: HOME not set\n", 23);
-			return (return_exit_code(1), free(home));
-		}
-		if (cmd->args[1] && cmd->args[1][0] == '\0')
-			return ;
-		if (chdir(home) == -1)
-			return_exit_code(1);
-		free(home);
+		cd_more_help(cmd, data);
 	}
 	else if (cmd->args[2])
 	{
