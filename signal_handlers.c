@@ -34,8 +34,4 @@ void	hd_handler(int sig)
 		rl_replace_line("", 0);
 		return ;
 	}
-	if (sig == SIGQUIT)
-	{
-		return_sig_flag(3);
-	}
 }

@@ -27,16 +27,35 @@ int	compare_cmd(t_input *cur)
 	i = 0;
 	while (i <= 6)
 	{
-		if (ft_strncmp(commands[i], cur->content, (strlen(commands[i])
+		if (ft_strncmp(commands[i], cur->content, (ft_strlen(commands[i])
 					+ 1)) == 0)
 		{
 			cur->is_builtin = 1;
-			return (0);
+			return (free(commands), 0);
 		}
 		i++;
 	}
 	cur->is_builtin = 0;
-	return (0);
+	return (free(commands),0);
+}
+
+int ambiguous(t_input *first)
+{
+	t_input	*cur;
+
+	cur = first;
+	while (cur)
+	{
+		if (cur->type == REDIR_OUT && cur->next->exp != INT_MIN)
+		{
+			write(2, "ambiguous redirect\n", 19);
+			return (return_exit_code(1), 1);
+		}
+		cur = cur->next;
+		if (cur == first)
+			break ;
+	}
+	return 0;
 }
 
 int	find_cmd(t_input *first)
@@ -51,7 +70,7 @@ int	find_cmd(t_input *first)
 		if (cur->type == CMD && cur->content[0] == '\0' && cur->exp != INT_MIN)
 		{
 			cur->type = UNKNOWN;
-			if (cur->next != cur)
+			if (cur->next != cur && cur->next->type == ARG)
 				cur->next->type = CMD;
 		}
 		if (cur->type == CMD)
@@ -60,5 +79,5 @@ int	find_cmd(t_input *first)
 		if (cur == first)
 			break ;
 	}
-	return (0);
+	return (ambiguous(first));
 }

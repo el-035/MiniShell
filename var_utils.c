@@ -5,15 +5,17 @@ char	*search_var(char *content, char *var)
 	char	*temp;
 	int		len;
 	char	*full_var;
+	int		full_len;
 
 	len = ft_strlen(content);
 	temp = content;
 	full_var = ft_strjoin("$", var);
 	if (!full_var)
 		return (NULL);	//hehe
+	full_len = ft_strlen(full_var);
 	while (temp - content <= len)
 	{
-		temp = ft_strnstr(temp, full_var, ft_strlen(full_var));
+		temp = ft_strnstr(temp, full_var, full_len);
 		if (check_quotes(content, temp - content) != 1)
 			break ;
 		temp++;
@@ -57,6 +59,7 @@ char	*extract_var(char **envp, char *var)
 	char	*temp;
 	char	*full;
 	int		i;
+	int		len;
 
 	i = 0;
 	if (!var || !*var)
@@ -64,9 +67,10 @@ char	*extract_var(char **envp, char *var)
 	full = ft_strjoin(var, "=");
 	if (!full)
 		return (free(var), NULL);
+	len = ft_strlen(full);
 	while (envp && envp[i])
 	{
-		if (ft_strncmp(envp[i], full, ft_strlen(full)) == 0)
+		if (ft_strncmp(envp[i], full, len) == 0)
 		{
 			temp = ft_strchr(envp[i], '=') + 1;
 			value = ft_strdup(temp);

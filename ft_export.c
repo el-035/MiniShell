@@ -30,15 +30,17 @@ int	ft_is_valid(char *cmd)
 int	find_var(char **envp, char *str)
 {
 	char	*var;
+	int		len;
 	int		i;
 
 	i = 0;
 	var = ft_strjoin(str, "=");
+	len = ft_strlen(var);
 	if (!var)
 		return (fail_mall(), -2);
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var, ft_strlen(var)) == 0)
+		if (ft_strncmp(envp[i], var, len) == 0)
 			return (free(var), i);
 		i++;
 	}

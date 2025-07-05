@@ -13,9 +13,9 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
 	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL);
-	//signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	count = 0;
+	line = NULL;
 	if ((ft_strchr(cmd->limiter, '\'') || ft_strchr(cmd->limiter, '"')))
 		{
 			remove_useless_quotes(&(cmd->limiter), return_final_len(cmd->limiter));
@@ -32,10 +32,7 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 			break ;
  		}
 		if (return_sig_flag(-1) == 2)
-		{
-			//return_sig_flag(0);
 			break ;
-		}
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
 		if (ft_strchr(line, '$'))	
@@ -56,7 +53,8 @@ int	create_heredoc(t_cmd *cmd, char **envp)
 		cmd->hd_content = new_lines;
 		count++;		
 	}
-	free(line);
+	if (line)
+		free(line);
 	return (1);
 }
 
