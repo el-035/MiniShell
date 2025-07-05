@@ -20,6 +20,8 @@ void	exec_builtin_child(t_cmd *cmd, t_data *data)
 		ft_pwd();
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		ft_env(data->envp);
+	else
+		return ;
 }
 
 int	exec_builtin_parent(t_cmd *cmd, t_data *data)

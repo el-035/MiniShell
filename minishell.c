@@ -113,7 +113,7 @@ int main(int argc, char **argv, char **envp)
 	(void)argv;
 
 	ft_memset(&data, 0, sizeof(t_data));
-	signal(SIGPIPE, SIG_IGN);
+	//signal(SIGPIPE, SIG_IGN);
 	data.fd1 = -1;
 	data.fd2 = -1;
 	if (copy_envp(&data, envp) == -1)

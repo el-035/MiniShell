@@ -43,7 +43,6 @@ int	exec_proc(t_data *data, char **envp)
 		if (data->pid[i] != -2)
 			waitpid(data->pid[i], &status, 0);
 		code = WEXITSTATUS(status);
-		//jump or move depends on uninitialised value(s) here
 		if(WIFSIGNALED(status))
 		{
 			int sig = WTERMSIG(status);
