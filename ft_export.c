@@ -100,19 +100,19 @@ int export_helper(char *args, t_data *data, char *var)
 	if (find_var(data->envp, var) == -1)
 	{
 		if (add_env(data, var, content) == -1)
-			return (-1);
+			return (free(content), -1);
 	}
 	else if (args[ft_strlen(var)] == '+' )
 	{
 		if (append(var, args, data) == -1)
-			return (free(var), -1);
+			return (free(content), free(var), -1);
 	}
 	else
 	{
 		if (replace(var, args, data) == -1)
-			return (free(var), -1);
+			return (free(content), free(var), -1);
 	}
-	return (0);
+	return (free(content), 0);
 }
 
 void	ft_export(t_data *data, t_cmd *cmd)
