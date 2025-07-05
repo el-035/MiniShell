@@ -23,6 +23,7 @@ void	ft_echo(t_cmd *cmd)
 
 	nl = 1;
 	i = 1;
+	signal(SIGPIPE, SIG_IGN);
 	if (!cmd->args[i])
 	{
 		printf("\n");
