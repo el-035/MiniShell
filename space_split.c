@@ -1,26 +1,4 @@
-#include"minishell.h"
-
-/* static int	ft_word_count(char *s, char c)
-{
-	int	i;
-	int	wc;
-
-	i = 0;
-	wc = 0;
-	while (s[i])
-	{
-		while (s[i] == c && s[i])
-			i++;
-		if (s[i] != c && s[i])
-		{
-			wc++;
-			i++;
-		}
-		while (s[i] != c && s[i])
-			i++;
-	}
-	return (wc);
-} */
+#include "minishell.h"
 
 static char	*word(char *s, int i)
 {
@@ -35,7 +13,7 @@ static char	*word(char *s, int i)
 		i++;
 		j++;
 	}
-	word = (char *) malloc((j + 1) * sizeof(char));
+	word = (char *)malloc((j + 1) * sizeof(char));
 	if (!word)
 		return (NULL);
 	i = i - j;
@@ -46,20 +24,6 @@ static char	*word(char *s, int i)
 	return (word);
 }
 
-/* static char	**ft_free(char **split)
-{
-	int	word;
-
-	word = 0;
-	while (split[word])
-	{
-		free(split[word]);
-		word++;
-	}
-	free(split);
-	return (NULL);
-} */
-
 char	**space_split(char const *s)
 {
 	int		wc;
@@ -67,11 +31,10 @@ char	**space_split(char const *s)
 	int		j;
 	char	**split;
 
-	wc = count_word((char *) s);
+	wc = count_word((char *)s);
 	i = 0;
 	j = 0;
-	
-	split = (char **) ft_calloc ((wc + 1), sizeof(char *));
+	split = (char **)ft_calloc((wc + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
 	else

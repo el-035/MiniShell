@@ -65,8 +65,7 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 		return (0);
 	i = var_count(data->envp, cmd->args);
 	if (i == 0)
-		return (0);
-	//LEAK!!
+		return (0);	// LEAK!!
 	tmp = ft_calloc((arr_len(data->envp) - i) + 1, sizeof(char *));
 	if (!tmp)
 		return (fail_mall(), -1);

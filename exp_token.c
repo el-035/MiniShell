@@ -38,8 +38,7 @@ char	*save_unquoted_start(char *content, int i, char **env)
 		start[j] = content[j];
 		j++;
 	}
-	if (stop(start) != 0)
-		expand_var(&start, env);
+	expand_var(&start, env);
 	return (start);
 }
 
@@ -77,17 +76,18 @@ int	exp_tokenise(t_input *cur, char **envp)
 	char	*var;
 	char	*exp;
 	char	*next;
+	int		index;
 
-	if (unquoted_var(cur->content) == -1)
+	index = unquoted_var(cur->content);
+	if (index == -1)
 		return (expand_var(&(cur->content), envp));
-	start = save_unquoted_start(cur->content, unquoted_var(cur->content), envp);
+	start = save_unquoted_start(cur->content, index, envp);
 	if (!start)
 		return (-1);
-	var = save_var(&(cur->content[unquoted_var(cur->content)]));
+	var = save_var(&(cur->content[index]));
 	if (!var)
 		return (free(start), -1);
-	next = save_rest(&(cur->content[unquoted_var(cur->content) + 1]), var);
-	// eehmm
+	next = save_rest(&(cur->content[index + 1]), var);
 	if (!next)
 		return (free(start), free(var), -1);
 	exp = extract_var(envp, var);

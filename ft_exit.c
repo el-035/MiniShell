@@ -86,7 +86,8 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 		else
 			error_n(cmd->args[1]);
 		free(trimmed);
-		return (free_split(data->envp), free_all(data), exit(return_exit_code(-2)));
+		return (free_split(data->envp), free_all(data),
+			exit(return_exit_code(-2)));
 	}
 	return (free_split(data->envp), free_all(data), exit(return_exit_code(-1)));
 }

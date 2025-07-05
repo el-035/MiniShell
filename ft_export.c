@@ -48,70 +48,69 @@ int	find_var(char **envp, char *str)
 	return (-1);
 }
 
-int append(char *var, char *cmd, t_data *data)
+int	append(char *var, char *cmd, t_data *data, int index)
 {
-	char *new;
-	char *old;
-	char *app;
-	int	j;
+	char	*new;
+	char	*old;
+	char	*app;
 
-	j = find_var(data->envp, var);
 	new = get_content(cmd);
 	if (!new)
 		return (fail_mall(), -1);
-	old = get_content(data->envp[j]);
+	old = get_content(data->envp[index]);
 	if (!old)
 		return (free(new), fail_mall(), -1);
 	app = ft_strjoin(old, new);
-	free(new); free(old);
+	free(new);
+	free(old);
 	if (!app)
 		return (fail_mall(), -1);
 	new = double_join(var, "=", app);
 	if (!new)
 		return (free(app), fail_mall(), -1);
-	free(data->envp[j]);
-	data->envp[j] = new;
+	free(data->envp[index]);
+	data->envp[index] = new;
 	return (free(app), 0);
 }
 
-int replace(char *var, char *cmd, t_data *data)
+int	replace(char *var, char *cmd, t_data *data, int index)
 {
-	char *content;
-	int j;
-	char *new;
+	char	*content;
+	char	*new;
 
-	j = find_var(data->envp, var);
 	content = get_content(cmd);
 	if (!content)
 		return (fail_mall(), -1);
 	new = double_join(var, "=", content);
 	if (!new)
 		return (free(content), fail_mall(), -1);
-	free(data->envp[j]);
-	data->envp[j] = new;
+	free(data->envp[index]);
+	data->envp[index] = new;
 	return (free(content), 0);
 }
 
-int export_helper(char *args, t_data *data, char *var)
+int	export_helper(char *args, t_data *data, char *var)
 {
-	char *content;
+	char	*content;
+	int		index;
 
 	content = get_content(args);
 	if (!content)
 		return (-1);
-	if (find_var(data->envp, var) == -1)
+	index = find_var(data->envp, var);
+	if (index == -1)
 	{
 		if (add_env(data, var, content) == -1)
 			return (free(content), -1);
 	}
-	else if (args[ft_strlen(var)] == '+' )
+	else if (args[ft_strlen(var)] == '+')
 	{
-		if (append(var, args, data) == -1)
+		if (append(var, args, data, index) == -1)
 			return (free(content), free(var), -1);
 	}
 	else
 	{
-		if (replace(var, args, data) == -1)
+		if (replace(var, args, data, index) == -1)
 			return (free(content), free(var), -1);
 	}
 	return (free(content), 0);
@@ -139,7 +138,7 @@ void	ft_export(t_data *data, t_cmd *cmd)
 		}
 		else
 		{
-			if (export_helper(cmd->args[i], data, var) == -1)	//protect
+			if (export_helper(cmd->args[i], data, var) == -1) // protect
 				return (free(var));
 		}
 		free(var);

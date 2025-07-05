@@ -70,59 +70,16 @@ int	remove_useless_quotes(char **content, int len)
 	return (free(final), 0);
 }
 
-/* int	remove_quotes(t_data *data)
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < data->cmd_count)
-	{	
-
-		if (data->cmds[i].args && data->cmds[i].args[0] && 
-			ft_strncmp(data->cmds[i].args[0], "export", ft_strlen(data->cmds[i].args[0])) != 0)
-		{
-			j = 1;
-			while(data->cmds[i].args[j])
-			{
-				if (ft_strchr(data->cmds[i].args[j], '\'') || ft_strchr(data->cmds[i].args[j], '"'))
-				{
-					if (remove_useless_quotes(&(data->cmds[i].args[j]), return_final_len(data->cmds[i].args[j])) != 0)
-						return 1;
-				}
-				j++;
-			}
-		}
-		if (data->cmds[i].in)
-		{
-			j = -1;
-			while (data->cmds[i].in[++j])
-				if (remove_useless_quotes(&(data->cmds[i].in[j]), return_final_len(data->cmds[i].in[j])) != 0)
-					return 1;
-		}
-		if (data->cmds[i].out)
-		{
-			j = -1;
-			while (data->cmds[i].out[++j])
-				if (remove_useless_quotes(&(data->cmds[i].out[j]), return_final_len(data->cmds[i].out[j])) != 0)
-					return 1;
-		}
-		i++;
-	}
-	return 0;
-} */
-
 int	var_quotes(t_input *cur)
 {
-	char *start;
-	char *end;
-	char *unquoted;
-	int	len;
+	char	*start;
+	char	*end;
+	char	*unquoted;
+	int		len;
 
 	len = cur->exp;
 	if (cur->exp < 0)
-		len =  cur->exp * -1;
-		
+		len = cur->exp * -1;
 	start = ft_substr(cur->content, 0, len);
 	if (!start)
 		return (fail_mall(), -1);
@@ -136,12 +93,12 @@ int	var_quotes(t_input *cur)
 	unquoted = ft_strjoin(start, end);
 	if (!unquoted)
 		return (free(start), free(end), fail_mall(), -1);
-	free(cur->content); free(start); free(end);
+	(free(cur->content), free(start), free(end));
 	cur->content = unquoted;
 	return (0);
 }
 
-int	remove_quotes(t_input *first/* , t_data *data */)
+int	remove_quotes(t_input *first)
 {
 	t_input	*cur;
 
@@ -154,7 +111,7 @@ int	remove_quotes(t_input *first/* , t_data *data */)
 			if (cur->exp == INT_MIN || cur->exp == INT_MAX)
 			{
 				if (remove_useless_quotes(&(cur->content),
-					return_final_len(cur->content)) != 0)
+						return_final_len(cur->content)) != 0)
 					return (1);
 			}
 			else if (cur->exp != 0)

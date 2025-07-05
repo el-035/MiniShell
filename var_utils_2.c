@@ -49,7 +49,7 @@ t_input	*middle(t_input *cur, char **split)
 {
 	int	len;
 	int	i;
-	
+
 	len = arr_len(split);
 	i = 1;
 	while (i < len - 1)
@@ -89,7 +89,7 @@ t_input	*empty(t_input *cur, char *start, char *next, char *exp)
 
 t_input	*add_node(t_input *cur, char *content)
 {
-	t_input *new;
+	t_input	*new;
 
 	// protect content
 	if (!content || !*content)
