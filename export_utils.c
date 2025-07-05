@@ -8,13 +8,13 @@ char	*get_var(char *str)
 	i = 0;
 	if (!ft_strchr(str, '='))
 		return (ft_strdup(str));
-	while (str[i] != '=')
+	while (str[i] != '=' && str[i] != '+')
 		i++;
 	var = ft_calloc(i + 1, sizeof(char));
 	if (!var)
 		return (NULL);
 	i = 0;
-	while (str[i] != '=')
+	while (str[i] != '=' && str[i] != '+')
 	{
 		var[i] = str[i];
 		i++;

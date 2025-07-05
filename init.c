@@ -21,6 +21,8 @@ int	add_env(t_data *data, char *var, char *content)
 	char	**tmp;
 
 	i = 0;
+	if (!content)
+		return (-1);
 	len = arr_len(data->envp);
 	tmp = ft_calloc(len + 2, sizeof(char *));
 	if (!tmp)

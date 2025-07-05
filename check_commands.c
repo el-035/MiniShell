@@ -28,7 +28,6 @@ int	find_cmd(t_input *first)
 	{	
 		if (cur->type == UNKNOWN)
 			cur->type = ARG;
-		
 		if (cur->type == CMD && cur->content[0] == '\0' && cur->exp != INT_MIN)
 		{
 			cur->type = UNKNOWN;//remove useleess node??
