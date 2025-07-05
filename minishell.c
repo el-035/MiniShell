@@ -74,15 +74,17 @@ void	handler(int sig)
 	if (sig == SIGINT)		//crtl C
 	{
 		return_sig_flag(1);
+		/* return_exit_code(130); */
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 
 	}
-	if (sig == SIGQUIT)		//ctrl /
+/* 	if (sig == SIGQUIT)		//ctrl /
 	{
-	}
+		signal(SIGQUIT, SIG_IGN);
+	} */
 }
 
 char *prompt_join(t_data *data)
@@ -122,7 +124,7 @@ char	*prompt(t_data *data, char **envp)
 	prompt = prompt_join(data);
 	if (!prompt)
 		return (fail_mall(), NULL);
-	if (return_exit_code(-1) == 0 )						//color is fucked up for ctrl c
+	if (return_exit_code(-1) == 0)						//color is fucked up for ctrl c
 		tmp = ft_strjoin("\001\033[1;32m\002", prompt);
 	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
 		tmp = ft_strjoin("\001\033[1;31m\002", prompt);
@@ -162,7 +164,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		first = NULL;
 		sigaction(SIGINT, &sig, NULL);
-		sigaction(SIGQUIT, &sig, NULL);	//ignore
+		signal(SIGQUIT, SIG_IGN);
 		if (data.ec_update_flag == 0)
 			return_exit_code(0);
 		data.ec_update_flag = 0;
@@ -190,6 +192,8 @@ int main(int argc, char **argv, char **envp)
 		free_list(first);
 	free_all(&data);
 	rl_clear_history();
+	if (return_sig_flag(-1) != 0)
+		return (free_split(data.envp), return_exit_code(130));
 	return (free_split(data.envp), return_exit_code(-1));
 }
 //EXIT CODE FOR ALLOCATION FAILED?

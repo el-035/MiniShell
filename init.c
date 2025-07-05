@@ -52,10 +52,10 @@ int	no_env(t_data *data)
 	if (add_env(data, "PWD", pwd) != 0)
 		return (free(pwd), -1); // freeeee
 	free(pwd);
-	if (add_env(data, "SHLVL", "0") != 0)
+	/* if (add_env(data, "SHLVL", "0") != 0)
 		return (free_split(data->envp), -1); // freeeee
 	if (add_env(data, "_", "/usr/bin/env") != 0)
-		return (free_split(data->envp), -1); // freeeee
+		return (free_split(data->envp), -1); // freeeee */
 	return (0);
 }
 
