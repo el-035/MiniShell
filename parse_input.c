@@ -47,6 +47,8 @@ static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 	else if ((*cur)->type == HERE_DOC)
 		if (!handle_heredoc(cmd, cur, data->envp))
 			return (0);
+	else if ((*cur)->type == UNKNOWN)
+		return (1);
 	return (1);
 }
 
