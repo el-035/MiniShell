@@ -45,23 +45,11 @@ char	*save_rest(char *content, char *var)
 
 int	join_all(char **content, char *start, char *end, char *var)
 {
-	char	*temp;
-	char	*joint;
-
-	joint = ft_strjoin(start, var);
-	if (!joint)
-		return (free(start), free(var), free(end), 1);
+	free(*content);
+	*content = double_join(start, var, end);
 	free(start);
 	free(var);
-	temp = ft_strjoin(joint, end);
-	if (!temp)
-		return (free(end), free(joint), 1);
-	free(joint);
-	joint = temp;
 	free(end);
-	free(*content);
-	*content = ft_strdup(joint);
-	free(joint);
 	if (!*content)
 		return (1);
 	return (0);

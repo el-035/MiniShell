@@ -95,25 +95,21 @@ int replace(char *var, char *cmd, t_data *data)
 int export_helper(char *args, t_data *data, char *var)
 {
 	char *content;
+	int		index;
 
 	content = get_content(args);
 	if (!content)
 		return (-1);
-	if (find_var(data->envp, var) == -1)
-	{
+	index = find_var(data->envp, var);
+	if (index == -1)
 		if (add_env(data, var, content) == -1)
 			return (free(content), -1);
-	}
 	else if (args[ft_strlen(var)] == '+' )
-	{
 		if (append(var, args, data) == -1)
 			return (free(content), free(var), -1);
-	}
 	else
-	{
 		if (replace(var, args, data) == -1)
 			return (free(content), free(var), -1);
-	}
 	return (free(content), 0);
 }
 
