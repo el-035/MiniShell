@@ -24,12 +24,6 @@ int	more_syntax(t_input *cur)
 
 int	check_nl(t_input *first)
 {
-/* 	if (first->type == REDIR_IN || first->type == HERE_DOC
-		&& !first->next)
-		return (syntax_err(), 1);
-	if ((first->type == REDIR_APPEND || first->type == REDIR_OUT)
-		&& !first->next)
-		return (syntax_err(), 1); */
 	if (is_red(first) == 1 && !first->next)
 		return (syntax_err(), 1);
 	if (first->type == PIPE)

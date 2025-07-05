@@ -36,10 +36,10 @@ int	compare_cmd(t_input *cur)
 		i++;
 	}
 	cur->is_builtin = 0;
-	return (free(commands),0);
+	return (free(commands), 0);
 }
 
-int ambiguous(t_input *first)
+int	ambiguous(t_input *first)
 {
 	t_input	*cur;
 
@@ -55,7 +55,7 @@ int ambiguous(t_input *first)
 		if (cur == first)
 			break ;
 	}
-	return 0;
+	return (0);
 }
 
 int	find_cmd(t_input *first)

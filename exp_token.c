@@ -88,7 +88,6 @@ int	exp_tokenise(t_input *cur, char **envp)
 	if (!var)
 		return (free(start), -1);
 	next = save_rest(&(cur->content[index + 1]), var);
-	// eehmm
 	if (!next)
 		return (free(start), free(var), -1);
 	exp = extract_var(envp, var);

@@ -11,7 +11,7 @@ char	*search_var(char *content, char *var)
 	temp = content;
 	full_var = ft_strjoin("$", var);
 	if (!full_var)
-		return (NULL);	//hehe
+		return (NULL); // hehe
 	full_len = ft_strlen(full_var);
 	while (temp - content <= len)
 	{
@@ -30,7 +30,7 @@ int	stop(char *content)
 
 	i = 0;
 	if (!content)
-		return 0;
+		return (0);
 	while (content[i])
 	{
 		if (content[i] == '$')
