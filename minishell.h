@@ -76,6 +76,12 @@ void				fail_mall(void);
 // main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
+int					parsing_execution(t_input *first, t_data *data);
+
+
+// init
+int					init_stuff(t_data *data, char **envp);
+char				*prompt(char **envp, t_data *data, struct sigaction *sig);
 
 // syntax
 int					syntax_check(t_input *first);

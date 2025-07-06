@@ -11,7 +11,7 @@ void	init_input(t_input *first)
 	first->exp = INT_MIN;
 }
 
-int	save_input(char *line, t_input **first)
+int	save_input(char *line, t_input **first)	//
 {
 	t_input	*cur;
 	char	**split;
@@ -20,7 +20,7 @@ int	save_input(char *line, t_input **first)
 	pos = 0;
 	split = mini_split(line);
 	if (!split)
-		return (0);
+		return (fail_mall(), 0);
 	*first = make_new_node(split[pos], pos);
 	if (!*first)
 		return (free_split(split), fail_mall(), 0);
