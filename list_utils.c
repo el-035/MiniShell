@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	init_input(t_input *first)
+void	init_input(t_input *first) //
 {
 	first->content = NULL;
 	first->type = UNKNOWN;
@@ -11,7 +11,7 @@ void	init_input(t_input *first)
 	first->exp = INT_MIN;
 }
 
-int	save_input(char *line, t_input **first)
+int	save_input(char *line, t_input **first)	//
 {
 	t_input	*cur;
 	char	**split;
@@ -20,7 +20,7 @@ int	save_input(char *line, t_input **first)
 	pos = 0;
 	split = mini_split(line);
 	if (!split)
-		return (0);
+		return (fail_mall(), 0);
 	*first = make_new_node(split[pos], pos);
 	if (!*first)
 		return (free_split(split), fail_mall(), 0);
@@ -39,32 +39,28 @@ int	save_input(char *line, t_input **first)
 	return (free_split(split), 1);
 }
 
-t_input	*make_new_node(char *content, int pos)
+t_input	*make_new_node(char *content, int pos)	//
 {
 	t_input	*node;
-
+	(void)content;
 	node = (t_input *)malloc(sizeof(t_input));
 	if (!node)
 		return (NULL);
 	init_input(node);
 	node->content = ft_strdup(content);
-	if (!node->content) // fix
-	{
-		free(node);
-		return (NULL);
-	}
+	if (!node->content)
+		return (free(node), NULL);
 	node->position = pos;
 	return (node);
 }
 
-t_input	*add_new(char *content, int pos, t_input *prev)
+t_input	*add_new(char *content, int pos, t_input *prev) //
 {
 	t_input	*node;
 
-	node = make_new_node(content, pos);
+	node =make_new_node(content, pos);
 	if (node == NULL)
-		return (write(2, "Error: node wasn't created\n", 27), NULL);
-	// handle later
+		return (NULL);
 	prev->next = node;
 	node->prev = prev;
 	return (node);

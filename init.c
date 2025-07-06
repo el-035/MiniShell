@@ -1,108 +1,33 @@
 #include "minishell.h"
 
-char	*double_join(char *s1, char *s2, char *s3) // those are not allocated
+int init_stuff(t_data *data, char **envp)	//
 {
-	char	*tmp;
-	char	*final;
-
-	tmp = ft_strjoin(s1, s2);
-	if (!tmp)
-		return (write(2, "Allocation failed\n", 18), NULL);
-	final = ft_strjoin(tmp, s3);
-	if (!final)
-		return (write(2, "Allocation failed\n", 18), free(tmp), NULL);
-	return (free(tmp), final);
-}
-
-int	add_env(t_data *data, char *var, char *content)
-{
-	int		i;
-	char	**tmp;
-	char	*new;
-
-	i = 0;
-	if (!content)
-		return (-1);
-	tmp = ft_calloc(data->envp_size + 2, sizeof(char *));
-	if (!tmp)
-		return (-1);
-	new = double_join(var, "=", content);
-	if (!new)
-		return (free(tmp), -1);
-	while (data->envp && data->envp[i])
-	{
-		tmp[i] = data->envp[i];
-		i++;
-	}
-	tmp[i] = new;
-	free(data->envp);
-	data->envp = tmp;
-	data->envp_size++;
-	return (0);
-}
-/* 
-int	add_env(t_data *data, char *var, char *content)
-{
-	int		len;
-	int		i;
-	char	**tmp;
-
-	i = 0;
-	if (!content)
-		return (-1);
-	len = arr_len(data->envp);
-	tmp = ft_calloc(len + 2, sizeof(char *));
-	if (!tmp)
-		return (-1);
-	while (data->envp && data->envp[i])
-	{
-		tmp[i] = ft_strdup(data->envp[i]);
-		if (!tmp[i])
-			return (free_split(data->envp), free_split(tmp), -1);
-		i++;
-	}
-	tmp[i] = double_join(var, "=", content);
-	if (!tmp[i])
-		return (free_split(data->envp), free_split(tmp), -1);
-	free_split(data->envp);
-	data->envp = tmp;
-	return (0);
-} */
-
-int	no_env(t_data *data)
-{
-	char	*pwd;
-
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (-1);
-	if (add_env(data, "PWD", pwd) != 0)
-		return (free(pwd), -1); // freeeee
-	free(pwd);
-	data->envp_size = arr_len(data->envp);
+	ft_memset(data, 0, sizeof(t_data));
+	data->fd1 = -1;
+	data->fd2 = -1;
+	if (copy_envp(data, envp) == -1)
+		return (fail_mall(), -1);
+	return_exit_code(0);
 	return (0);
 }
 
-int	copy_envp(t_data *data, char **envp)
+char	*prompt(char **envp, t_data *data, struct sigaction *sig) //
 {
-	int	i;
+	char *line;
+	char *prompt;
 
-	i = 0;
-	if (!*envp) // IDK HOW TO VALGRIND THIS
-		return (no_env(data));
-	while (envp[i])
-		i++;
-	data->envp = (char **)ft_calloc(i + 1, sizeof(char *));
-	if (!data->envp)
-		return (-1);
-	i = 0;
-	while (envp[i])
-	{
-		data->envp[i] = ft_strdup(envp[i]);
-		if (!data->envp[i])
-			return (free_split(data->envp), -1);
-		i++;
-	}
-	data->envp_size = arr_len(data->envp);
-	return (0);
+	sigaction(SIGINT, sig, NULL);
+	signal(SIGQUIT, SIG_IGN);
+	if (data->ec_update_flag == 0)
+		return_exit_code(0);
+	data->ec_update_flag = 0;
+	return_sig_flag(0);
+	if (!*envp)
+		prompt = "\001\033[1;34m\002Minishell: \001\033[0m\002";
+	else if (return_exit_code(-1) == 0)
+		prompt = "\001\033[1;32m\002Minishell: \001\033[0m\002";
+	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
+		prompt = "\001\033[1;31m\002Minishell: \001\033[0m\002";
+	line = readline(prompt);
+	return (line);
 }

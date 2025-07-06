@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static int	is_delimitor(char c)
+static int	is_delimitor(char c) //
 {
 	if (c == 32 || c == 9)
 		return (1);
@@ -9,7 +9,7 @@ static int	is_delimitor(char c)
 	return (0);
 }
 
-static int	ft_word_count(char *s, int i, int wc)
+static int	ft_word_count(char *s, int i, int wc) //
 {
 	while (s[i])
 	{
@@ -36,7 +36,7 @@ static int	ft_word_count(char *s, int i, int wc)
 	return (wc);
 }
 
-static int	word_len(char *s, int i)
+static int	word_len(char *s, int i)	//
 {
 	int	j;
 
@@ -61,7 +61,7 @@ static int	word_len(char *s, int i)
 	return (i - j);
 }
 
-static char	*ft_word(char *s, int i)
+static char	*ft_word(char *s, int i)	//
 {
 	char	*word;
 	int		j;
@@ -79,7 +79,7 @@ static char	*ft_word(char *s, int i)
 	return (word);
 }
 
-char	**mini_split(char const *s)
+char	**mini_split(char const *s)	//
 {
 	int		wc;
 	int		i;
@@ -106,15 +106,3 @@ char	**mini_split(char const *s)
 	}
 	return (split);
 }
-/*
-int main (void)
-{
-	char *s = "cat 42 42";
-	char **split = mini_split(s);
-	int i = 0;
-	while (split[i])
-	{
-
-		printf("%s\n", split[i++]);
-	}
-} */
