@@ -66,20 +66,19 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 	i = var_count(data->envp, cmd->args);
 	if (i == 0)
 		return (0);	// LEAK!!
-	tmp = ft_calloc((arr_len(data->envp) - i) + 1, sizeof(char *));
+	tmp = ft_calloc((data->envp_size - i) + 1, sizeof(char *));
 	if (!tmp)
 		return (fail_mall(), -1);
+	data->envp_size -= i;
 	i = 0;
 	j = 0;
 	while (data->envp[i])
 	{
 		if (copy_var(data->envp[i], cmd->args) == 1)
-		{
-			tmp[j++] = ft_strdup(data->envp[i]);
-			if (!tmp[j - 1])
-				return (free_split(tmp), fail_mall(), -1);
-		}
+			tmp[j++] = data->envp[i];
+		else
+			free(data->envp[i]);
 		i++;
 	}
-	return (free_split(data->envp), data->envp = tmp, 0);
+	return (free(data->envp), data->envp = tmp, 0);
 }

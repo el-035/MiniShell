@@ -143,6 +143,7 @@ static void set_child_fds(t_data *data, t_cmd *cmd, int index)
         if (i != index - 1)
             close(data->pipes[i][0]);
     }
+	(void)cmd;
     if (cmd->in) 
         (dup2(data->fd1, STDIN_FILENO), close(data->fd1));
 	else if (index > 0)

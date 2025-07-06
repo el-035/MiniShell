@@ -1,14 +1,5 @@
 #include "minishell.h"
 
-int	return_sig_flag(int sig)
-{
-	static int flag = 0;
-
-	if (sig >= 0)
-		flag = sig;
-	return (flag);
-}
-
 int	parsing(t_input *first, t_data *data)
 {	
 	if (assign_type(&first) != 0)
@@ -42,49 +33,6 @@ int	parsing(t_input *first, t_data *data)
 	if (!exec_proc(data, data->envp))
 		return (1);
 	return (0);
-}
-
-int	return_exit_code(int exit)
-{
-	//0			updates previous and resets exit to 0
-	// > 0		update cur and return it
-	// -2		return cur without updating
-	// -1		return old
-
-	static int cur_exit = 0;
-	static int old_exit = 0;
-
-	if (exit > 0)
-		cur_exit = exit;
-	else if (exit == 0)
-	{
-		old_exit = cur_exit;
-		cur_exit = exit;
-	}
-	else if (exit == -1)
-		return (old_exit);
-	else if (exit == -2)	//do we even ever need this??
-		return (cur_exit);
-
-	return (cur_exit);
-}
-
-void	handler(int sig)
-{
-	if (sig == SIGINT)		//crtl C
-	{
-		return_sig_flag(1);
-		/* return_exit_code(130); */
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-
-	}
-/* 	if (sig == SIGQUIT)		//ctrl /
-	{
-		signal(SIGQUIT, SIG_IGN);
-	} */
 }
 
 char	*prompt(char **envp)
@@ -122,7 +70,6 @@ int main(int argc, char **argv, char **envp)
 	sig.sa_handler = &handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
-
 	return_exit_code(0);
 	while (1)
 	{
@@ -142,15 +89,10 @@ int main(int argc, char **argv, char **envp)
 		{
 			data.ec_update_flag = 1;
 			continue ;
-		}
-			
+		}	
 		if (!save_input(line, &first))
-			continue ;		//error handling
-	//	test_print(first);
-		parsing(first, &data);	//here?
-		add_history(line);
-		free(line);
-		free_all(&data);
+			continue ;
+		(parsing(first, &data), add_history(line), free(line), free_all(&data));
 	}
 	if (first)
 		free_list(first);

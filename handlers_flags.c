@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+void	handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		return_sig_flag(1);
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 void	child_handler(int sig)
 {
 	if (sig == SIGINT)
@@ -34,4 +46,37 @@ void	hd_handler(int sig)
 		rl_replace_line("", 0);
 		return ;
 	}
+}
+
+int	return_exit_code(int exit)
+{
+	//0			updates previous and resets exit to 0
+	// > 0		update cur and return it
+	// -2		return cur without updating
+	// -1		return old
+
+	static int cur_exit = 0;
+	static int old_exit = 0;
+
+	if (exit > 0)
+		cur_exit = exit;
+	else if (exit == 0)
+	{
+		old_exit = cur_exit;
+		cur_exit = exit;
+	}
+	else if (exit == -1)
+		return (old_exit);
+	else if (exit == -2)
+		return (cur_exit);
+	return (cur_exit);
+}
+
+int	return_sig_flag(int sig)
+{
+	static int flag = 0;
+
+	if (sig >= 0)
+		flag = sig;
+	return (flag);
 }

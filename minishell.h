@@ -10,9 +10,9 @@
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <sys/ioctl.h>
 
 typedef enum e_type
 {
@@ -61,6 +61,7 @@ typedef struct s_data
 {
 	char			**env_path;
 	char			**envp;
+	int				envp_size;
 	pid_t			*pid;
 	int				**pipes;
 	int				fd1;
@@ -114,8 +115,6 @@ t_input				*middle(t_input *cur, char **split);
 t_input				*end(t_input *cur, char *next, int f_e);
 t_input				*beginning(t_input *cur, char *start, char *exp, int f_b);
 
-
-
 int					check_quotes(char *content, int len);
 int					expand_exit(t_input **cur, t_data *data);
 
@@ -149,7 +148,7 @@ int					list_size(t_input *lst);
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
-int					remove_quotes(t_input *input/* , t_data *data */);
+int					remove_quotes(t_input *input /* , t_data *data */);
 int					return_final_len(char *str);
 // commands
 
@@ -183,7 +182,7 @@ int					return_exit_code(int exit);
 char				*get_var(char *str);
 char				*get_content(char *str);
 int					print_export(char **envp);
-int	find_var(char **envp, char *str);
+int					find_var(char **envp, char *str);
 
 // check_files
 void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);
@@ -197,10 +196,12 @@ int					count_word(char *content);
 int					get_env_path(t_data *data, char **envp);
 void				count_cmds(t_input *tokens, t_data *data);
 
-
-// signal_handlers
+// handlers_flags
 void				child_handler(int sig);
 void				hd_handler(int sig);
+void				handler(int sig);
+int					return_exit_code(int exit);
+int					return_sig_flag(int sig);
 
 // exec builtin
 void				exec_builtin_child(t_cmd *cmd, t_data *data);
@@ -208,7 +209,7 @@ int					exec_builtin_parent(t_cmd *cmd, t_data *data);
 
 // exec child
 int					exec_child(t_data *data, int index, char **envp);
-void	close_unused_fds_in_child(t_data *data);
+void				close_unused_fds_in_child(t_data *data);
 
 // heredoc
 int					set_heredoc_fds(t_cmd *cmd, int index);
@@ -226,15 +227,12 @@ void				close_fd(int *fd);
 void				free_all(t_data *data);
 
 // heredoc_create
-int	create_heredoc(t_cmd *cmd, char **envp);
+int					create_heredoc(t_cmd *cmd, char **envp);
 
-// redirs handler 
+// redirs handler
 int					count_redirs(t_cmd *cmd, t_input *input, t_input *start);
 void				handle_redirs(t_cmd *cmd, t_input **cur);
 int					open_files(t_data *data);
-
-
-
 
 int					parse_tokens(t_input *tokens, t_data *data);
 

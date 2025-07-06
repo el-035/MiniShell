@@ -16,6 +16,33 @@ char	*double_join(char *s1, char *s2, char *s3) // those are not allocated
 
 int	add_env(t_data *data, char *var, char *content)
 {
+	int		i;
+	char	**tmp;
+	char	*new;
+
+	i = 0;
+	if (!content)
+		return (-1);
+	tmp = ft_calloc(data->envp_size + 2, sizeof(char *));
+	if (!tmp)
+		return (-1);
+	new = double_join(var, "=", content);
+	if (!new)
+		return (free(tmp), -1);
+	while (data->envp && data->envp[i])
+	{
+		tmp[i] = data->envp[i];
+		i++;
+	}
+	tmp[i] = new;
+	free(data->envp);
+	data->envp = tmp;
+	data->envp_size++;
+	return (0);
+}
+/* 
+int	add_env(t_data *data, char *var, char *content)
+{
 	int		len;
 	int		i;
 	char	**tmp;
@@ -40,7 +67,7 @@ int	add_env(t_data *data, char *var, char *content)
 	free_split(data->envp);
 	data->envp = tmp;
 	return (0);
-}
+} */
 
 int	no_env(t_data *data)
 {
@@ -52,10 +79,7 @@ int	no_env(t_data *data)
 	if (add_env(data, "PWD", pwd) != 0)
 		return (free(pwd), -1); // freeeee
 	free(pwd);
-	/* if (add_env(data, "SHLVL", "0") != 0)
-		return (free_split(data->envp), -1); // freeeee
-	if (add_env(data, "_", "/usr/bin/env") != 0)
-		return (free_split(data->envp), -1); // freeeee */
+	data->envp_size = arr_len(data->envp);
 	return (0);
 }
 
@@ -79,5 +103,6 @@ int	copy_envp(t_data *data, char **envp)
 			return (free_split(data->envp), -1);
 		i++;
 	}
+	data->envp_size = arr_len(data->envp);
 	return (0);
 }
