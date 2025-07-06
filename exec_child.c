@@ -12,11 +12,11 @@
 
 #include "minishell.h"
 
-static char *create_path(char *cmd, char *env_path)
+static char	*create_path(char *cmd, char *env_path)
 {
 	char	*path;
 	char	*tmp;
-	
+
 	path = ft_strjoin(env_path, "/");
 	if (!path)
 		return (NULL);
@@ -83,31 +83,33 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	return (1);
 }
 
-static void set_child_fds(t_data *data, t_cmd *cmd, int index, int i)
+static void	set_child_fds(t_data *data, t_cmd *cmd, int index, int i)
 {
-    while (++i < data->cmd_count - 1)
+	while (++i < data->cmd_count - 1)
 	{
-        if (i != index)
-            close(data->pipes[i][1]);
-        if (i != index - 1)
-            close(data->pipes[i][0]);
-    }
-    if (cmd->in) 
-        (dup2(data->fd1, STDIN_FILENO), close(data->fd1));
+		if (i != index)
+			close(data->pipes[i][1]);
+		if (i != index - 1)
+			close(data->pipes[i][0]);
+	}
+	if (cmd->in)
+		(dup2(data->fd1, STDIN_FILENO), close(data->fd1));
 	else if (index > 0)
-        (dup2(data->pipes[index-1][0], STDIN_FILENO), close(data->pipes[index-1][0]));
-    if (cmd->out)
-        (dup2(data->fd2, STDOUT_FILENO), close(data->fd2));
-    else if (index < data->cmd_count - 1)
-        (dup2(data->pipes[index][1], STDOUT_FILENO), close(data->pipes[index][1]));
-    if (!cmd->in && data->fd1 != STDIN_FILENO && data->fd1 != -1)
-        close(data->fd1);
-    if (!cmd->out && data->fd2 != STDOUT_FILENO && data->fd2 != -1)
+		(dup2(data->pipes[index - 1][0], STDIN_FILENO), close(data->pipes[index
+				- 1][0]));
+	if (cmd->out)
+		(dup2(data->fd2, STDOUT_FILENO), close(data->fd2));
+	else if (index < data->cmd_count - 1)
+		(dup2(data->pipes[index][1], STDOUT_FILENO),
+			close(data->pipes[index][1]));
+	if (!cmd->in && data->fd1 != STDIN_FILENO && data->fd1 != -1)
+		close(data->fd1);
+	if (!cmd->out && data->fd2 != STDOUT_FILENO && data->fd2 != -1)
 		close(data->fd2);
 	i = 2;
 	while (++i < 256)
-        if (i != STDIN_FILENO && i != STDOUT_FILENO && i != STDERR_FILENO)
-            close(i);
+		if (i != STDIN_FILENO && i != STDOUT_FILENO && i != STDERR_FILENO)
+			close(i);
 }
 
 int	exec_child(t_data *data, int index, char **envp)
@@ -124,8 +126,8 @@ int	exec_child(t_data *data, int index, char **envp)
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
-		(exec_builtin_child(cmd, data), /* close(STDOUT_FILENO), close(STDIN_FILENO),  */
-		free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
+		(exec_builtin_child(cmd, data), close(STDOUT_FILENO), free_all(data),
+			free_split(data->envp), close(STDIN_FILENO), exit(EXIT_SUCCESS));
 	if (!cmd->args || !cmd->args[0])
 	{
 		if (cmd->is_hd == 1)
@@ -134,7 +136,7 @@ int	exec_child(t_data *data, int index, char **envp)
 			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
 	}
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_split(data->envp), free_all(data),/* close(STDOUT_FILENO),
-		close(STDIN_FILENO),*/ exit(127));
+		(free_split(data->envp), free_all(data), close(STDOUT_FILENO),
+			close(STDIN_FILENO), exit(127));
 	(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 }

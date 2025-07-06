@@ -50,7 +50,7 @@ static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 	return (1);
 }
 
-static int	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *data)
+static int	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *t, t_data *data)
 {
 	int	j;
 
@@ -60,14 +60,14 @@ static int	fill_cmd_data(t_cmd *cmd, t_input **cur, t_input *tokens, t_data *dat
 		if (!handle_token(cmd, cur, &j, data))
 			return (0);
 		*cur = (*cur)->next;
-		if (*cur == tokens)
+		if (*cur == t)
 			break ;
 	}
 	cmd->args[j] = NULL;
 	if (*cur && (*cur)->type == PIPE)
 	{
 		*cur = (*cur)->next;
-		if (*cur == tokens)
+		if (*cur == t)
 			*cur = NULL;
 	}
 	return (1);

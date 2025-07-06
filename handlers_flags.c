@@ -50,13 +50,8 @@ void	hd_handler(int sig)
 
 int	return_exit_code(int exit)
 {
-	//0			updates previous and resets exit to 0
-	// > 0		update cur and return it
-	// -2		return cur without updating
-	// -1		return old
-
-	static int cur_exit = 0;
-	static int old_exit = 0;
+	static int	cur_exit = 0;
+	static int	old_exit = 0;
 
 	if (exit > 0)
 		cur_exit = exit;
@@ -74,7 +69,7 @@ int	return_exit_code(int exit)
 
 int	return_sig_flag(int sig)
 {
-	static int flag = 0;
+	static int	flag = 0;
 
 	if (sig >= 0)
 		flag = sig;

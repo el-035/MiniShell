@@ -31,7 +31,7 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 
 	exit_count = 0;
 	if ((ft_strcmp(cmd->args[0], "cd") == 0) && data->pipes == NULL)
-			ft_cd(data, cmd);
+		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		ft_export(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)

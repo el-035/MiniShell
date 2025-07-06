@@ -20,12 +20,12 @@ int	ft_isdigit(int c)
 
 int	ft_str_digit(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
-	while(str[i])
+	while (str[i])
 	{
 		if (!ft_isdigit(str[i++]))
 			return (2048);
