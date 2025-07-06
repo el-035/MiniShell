@@ -74,6 +74,11 @@ int	check_out(t_data *data, int i)
 		if (!check_permission(data, cmd->out[j], i, 2))
 			return (0);
 		flags = get_open_flags(cmd->append);
+		if (data->fd2 >= 0)
+		{
+			close(data->fd2);
+			data->fd2 = -1;
+		}
 		data->fd2 = open(cmd->out[j], flags, 0666);
 		if (data->fd2 == -1)
 			return (add_skip_flag(cmd, i, data->cmd_count, 1),
