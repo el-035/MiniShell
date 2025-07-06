@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static char	*word(char *s, int i)
+static char	*word(char *s, int i) //
 {
 	char	*word;
 	int		j;
@@ -24,7 +24,7 @@ static char	*word(char *s, int i)
 	return (word);
 }
 
-char	**space_split(char const *s)
+char	**space_split(char const *s)	//
 {
 	int		wc;
 	int		i;

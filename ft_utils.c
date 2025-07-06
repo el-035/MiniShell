@@ -29,7 +29,7 @@ int	is_space(char c)
 	return (0);
 }
 
-int	count_word(char *content)
+int	count_word(char *content)	//
 {
 	int	i;
 	int	wc;
