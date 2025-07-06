@@ -12,39 +12,6 @@
 
 #include "minishell.h"
 
-/*static char	*check_path(t_data *data, char *cmd)
-{
-	char	*path;
-	char	*tmp;
-	int		i;
-
-	i = -1;
-	tmp = NULL;
-	if (!cmd || *cmd == '\0')
-		return (handle_error(cmd, 2), NULL);
-	if (data->env_path && *data->env_path && cmd && *cmd)
-		while (data->env_path[++i] != NULL)
-		{
-			if (tmp != NULL)
-				free(tmp);
-			path = ft_strjoin(data->env_path[i], "/");
-			if (!path)
-				return (fail_mall(), NULL);
-			tmp = ft_strjoin(path, cmd);
-			free(path);
-			if (!tmp)
-				return (fail_mall(), NULL);
-			if (access(tmp, X_OK) == 0)
-				return (tmp);
-		}
-	else
-		if (access(cmd, X_OK) == 0)
-			return (ft_strdup(cmd));
-			else
-				return (handle_error(cmd, 0), NULL);
-	return (free(tmp), handle_error(cmd, 2), NULL);
-}*/
-
 static char *create_path(char *cmd, char *env_path)
 {
 	char	*path;
@@ -116,26 +83,8 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	return (1);
 }
 
-/* void	close_unused_fds_in_child(t_data *data)
+static void set_child_fds(t_data *data, t_cmd *cmd, int index, int i)
 {
-	int	i;
-
-	for (i = 0; i < data->cmd_count - 1; i++)
-	{
-		close(data->pipes[i][0]);
-		close(data->pipes[i][1]);
-	}
-	if (data->fd1 != -1)
-		close(data->fd1);
-	if (data->fd2 != -1)
-		close(data->fd2);
-} */
-
-static void set_child_fds(t_data *data, t_cmd *cmd, int index)
-{
-    int i;
-
-	i = -1;
     while (++i < data->cmd_count - 1)
 	{
         if (i != index)
@@ -143,7 +92,6 @@ static void set_child_fds(t_data *data, t_cmd *cmd, int index)
         if (i != index - 1)
             close(data->pipes[i][0]);
     }
-	(void)cmd;
     if (cmd->in) 
         (dup2(data->fd1, STDIN_FILENO), close(data->fd1));
 	else if (index > 0)
@@ -155,15 +103,11 @@ static void set_child_fds(t_data *data, t_cmd *cmd, int index)
     if (!cmd->in && data->fd1 != STDIN_FILENO && data->fd1 != -1)
         close(data->fd1);
     if (!cmd->out && data->fd2 != STDOUT_FILENO && data->fd2 != -1)
-	{
 		close(data->fd2);
-
-	}
-
-	for (i = 3; i < 256; i++) {
+	i = 2;
+	while (++i < 256)
         if (i != STDIN_FILENO && i != STDOUT_FILENO && i != STDERR_FILENO)
             close(i);
-	}
 }
 
 int	exec_child(t_data *data, int index, char **envp)
@@ -174,14 +118,13 @@ int	exec_child(t_data *data, int index, char **envp)
 	sig.sa_handler = &child_handler;
 	sigemptyset(&sig.sa_mask);
 	sig.sa_flags = 0;
-	sigaction(SIGINT, &sig, NULL);
-	sigaction(SIGQUIT, &sig, NULL);
+	(sigaction(SIGINT, &sig, NULL), sigaction(SIGQUIT, &sig, NULL));
 	cmd = &data->cmds[index];
-	set_child_fds(data, cmd, index);
+	set_child_fds(data, cmd, index, -1);
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
-		(exec_builtin_child(cmd, data), close(STDOUT_FILENO), close(STDIN_FILENO), 
+		(exec_builtin_child(cmd, data), /*close(STDOUT_FILENO), close(STDIN_FILENO), */
 		free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 	if (!cmd->args || !cmd->args[0])
 	{
@@ -191,7 +134,7 @@ int	exec_child(t_data *data, int index, char **envp)
 			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
 	}
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_split(data->envp), free_all(data), close(STDOUT_FILENO),
-		close(STDIN_FILENO), exit(127));
+		(free_split(data->envp), free_all(data),/* close(STDOUT_FILENO),
+		close(STDIN_FILENO),*/ exit(127));
 	(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 }
