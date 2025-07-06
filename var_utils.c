@@ -53,7 +53,7 @@ int	stop(char *content)
 	return (0);
 }
 
-char	*extract_var(char **envp, char *var)
+char	*extract_var(char **envp, char *var) //
 {
 	char	*value;
 	char	*temp;
@@ -102,7 +102,7 @@ char	*save_var(char *content)
 	}
 	var = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!var)
-		return (fail_mall(), NULL); //
+		return (NULL);
 	while (++i < len)
 		var[i] = content[i];
 	return (var);

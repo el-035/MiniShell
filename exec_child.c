@@ -181,7 +181,7 @@ int	exec_child(t_data *data, int index, char **envp)
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
-		(exec_builtin_child(cmd, data), close(STDOUT_FILENO), close(STDIN_FILENO), 
+		(exec_builtin_child(cmd, data), /* close(STDOUT_FILENO), close(STDIN_FILENO),  */
 		free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 	if (!cmd->args || !cmd->args[0])
 	{
@@ -191,7 +191,7 @@ int	exec_child(t_data *data, int index, char **envp)
 			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
 	}
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_split(data->envp), free_all(data), close(STDOUT_FILENO),
-		close(STDIN_FILENO), exit(127));
+		(free_split(data->envp), free_all(data), /* close(STDOUT_FILENO),
+		close(STDIN_FILENO),  */exit(127));
 	(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 }

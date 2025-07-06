@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-int	unquoted_var(char *content)
+int	unquoted_var(char *content)	//
 {
 	int	i;
 
 	i = 0;
-	if (!*content || !content || content[0] == '\0')
+	if (content[0] == '\0')
 		return (-1);
 	while (content[i])
 	{
@@ -22,7 +22,7 @@ int	unquoted_var(char *content)
 	return (-1);
 }
 
-char	*save_unquoted_start(char *content, int i, char **env)
+char	*save_unquoted_start(char *content, int i)	//
 {
 	char	*start;
 	int		j;
@@ -32,13 +32,12 @@ char	*save_unquoted_start(char *content, int i, char **env)
 		return (ft_strdup(""));
 	start = ft_calloc(i + 1, sizeof(char));
 	if (!start)
-		return (fail_mall(), NULL); // protect
+		return (NULL);
 	while (j < i)
 	{
 		start[j] = content[j];
 		j++;
 	}
-	expand_var(&start, env);
 	return (start);
 }
 
@@ -70,18 +69,16 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 	return (free_split(split), cur);
 }
 
-int	exp_tokenise(t_input *cur, char **envp)
+int	exp_tokenise(t_input *cur, char **envp, int index)
 {
 	char	*start;
 	char	*var;
 	char	*exp;
 	char	*next;
-	int		index;
 
-	index = unquoted_var(cur->content);
 	if (index == -1)
-		return (expand_var(&(cur->content), envp));
-	start = save_unquoted_start(cur->content, index, envp);
+		return (0);
+	start = save_unquoted_start(cur->content, index);
 	if (!start)
 		return (-1);
 	var = save_var(&(cur->content[index]));
@@ -92,9 +89,10 @@ int	exp_tokenise(t_input *cur, char **envp)
 		return (free(start), free(var), -1);
 	exp = extract_var(envp, var);
 	if (!exp)
-		return (free(start), free(var), free(next), -1);
-	new_token(cur, start, exp, next);
+		return (free(start), free(next), -1);
+	if (!new_token(cur, start, exp, next))
+		return (free(start), free(next), free(exp), -1);
 	if (unquoted_var(cur->content) != -1)
-		exp_tokenise(cur, envp);
+		exp_tokenise(cur, envp, unquoted_var(cur->content));
 	return (free(start), free(next), free(exp), 0);
 }

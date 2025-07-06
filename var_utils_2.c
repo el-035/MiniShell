@@ -69,16 +69,18 @@ t_input	*middle(t_input *cur, char **split)
 	return (cur);
 }
 
-t_input	*empty(t_input *cur, char *start, char *next, char *exp)
+t_input	*empty(t_input *cur, char *start, char *next, char *exp) //
 {
 	if (exp[0] == '\0')
 	{
-		cur->content = ft_strjoin(start, next); // protect
+		cur->content = ft_strjoin(start, next);
+		if (!cur->content)
+			return (NULL);
 		if (cur->content[0] == '\0')
 			cur->exp = 0;
 		return (cur);
 	}
-	else if (count_word(exp) == 0)
+	else if (count_word(exp) == 0)		//I AM HERE
 	{
 		cur->content = ft_strdup(start);
 		cur = add_node(cur, next); // protect

@@ -36,7 +36,7 @@ char	*save_rest(char *content, char *var)
 	len = len - i;
 	rest = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!rest)
-		return (NULL); //
+		return (NULL);
 	len = 0;
 	while (content[i])
 		rest[len++] = content[i++];
@@ -65,18 +65,18 @@ int	expand_var(char **content, char **envp)
 		return (0);
 	start = save_start(*content); // HERE malloc faisl ???+
 	if (!start)
-		return (fail_mall(), 1);
+		return (-1);
 	var = save_var(&(*content)[start_len(*content)]);
 	if (!var)
-		return (free(start), 1);
+		return (free(start), -1);
 	end = save_rest(search_var(*content, var) + 1, var);
 	if (!end)
-		return (free(start), free(var), fail_mall(), 1);
+		return (free(start), free(var), -1);
 	var = extract_var(envp, var);
 	if (!var)
-		return (free(start), free(end), fail_mall(), 1);
+		return (free(start), free(end), -1);
 	if (join_all(content, start, end, var) == 1)
-		return (fail_mall(), 1);
+		return (-1);
 	if (ft_strchr(*content, '$') != 0)
 		expand_var(content, envp);
 	return (0);
@@ -89,17 +89,19 @@ int	find_ev(t_input *first, t_data *data)
 	cur = first;
 	while (cur)
 	{
-		if ((!cur->prev || cur->prev->type != HERE_DOC)
-			&& stop(cur->content) != 0)
+		if ((!cur->prev || cur->prev->type != HERE_DOC) &&
+			cur->content)
 		{
-			if (exp_tokenise(cur, data->envp) == -1) // protect
-				return (1);
+			if (exp_tokenise(cur, data->envp, unquoted_var(cur->content)) == -1) // protect
+				return (fail_mall(), 1);
+			if (expand_var(&(cur->content), data->envp) == -1)
+				return (fail_mall(), 1);
 		}
 		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content
 			&& ft_strnstr(cur->content, "$?", ft_strlen(cur->content)))
 		{
 			if (expand_exit(&cur, data) != 0)
-				return (1);
+				return (fail_mall(), 1);
 		}
 		cur = cur->next;
 		if (cur == first)

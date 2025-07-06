@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	more_syntax(t_input *cur)
+static int	more_syntax(t_input *cur)
 {
 	if (is_red(cur) == 1 && cur->next->type == REDIR_OUT)
 		return (syntax_err(), 1);
@@ -22,7 +22,7 @@ int	more_syntax(t_input *cur)
 	return (0);
 }
 
-int	check_nl(t_input *first)
+static int	more_syntax_two(t_input *first)
 {
 	if (is_red(first) == 1 && !first->next)
 		return (syntax_err(), 1);
@@ -35,14 +35,14 @@ int	check_nl(t_input *first)
 	return (0);
 }
 
-int	syntax_check(t_input *first)
+static int	syntax_check(t_input *first)
 {
 	t_input	*cur;
 	int		size;
 
 	cur = first;
 	size = list_size(first) - 1;
-	if (check_nl(first) != 0)
+	if (more_syntax_two(first) != 0)
 		return (1);
 	while (size-- >= 0)
 	{

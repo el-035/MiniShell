@@ -33,7 +33,7 @@ typedef struct s_input
 	int				is_builtin;
 	int				exp;
 	int				var_count;
-	int position; // do we need it? NOPE
+	int				position;
 	struct s_input	*next;
 	struct s_input	*prev;
 }					t_input;
@@ -78,13 +78,11 @@ int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
 int					parsing_execution(t_input *first, t_data *data);
 
-
 // init
 int					init_stuff(t_data *data, char **envp);
 char				*prompt(char **envp, t_data *data, struct sigaction *sig);
 
 // syntax
-int					syntax_check(t_input *first);
 int					assign_type(t_input **first);
 
 // syntax utils
@@ -108,12 +106,12 @@ char				*save_var(char *content);
 int					start_len(char *content);
 
 // exp token
-int					exp_tokenise(t_input *cur, char **envp);
-char				*save_unquoted_start(char *content, int i, char **env);
+int					exp_tokenise(t_input *cur, char **envp, int index);
+char				*save_unquoted_start(char *content, int i);
 int					unquoted_var(char *content);
 t_input				*new_token(t_input *cur, char *start, char *exp,
 						char *next);
-
+int	unquoted_var(char *content);
 // var utils 2
 t_input				*add_node(t_input *cur, char *content);
 t_input				*empty(t_input *cur, char *start, char *next, char *exp);
@@ -132,8 +130,8 @@ int					exp_helper(char *content);
 int					exp_split(t_input *first);
 int					count_word(char *content);
 int					ft(t_input *cur, char *exp, char *next, char *start);
-char				*save_unquoted_start(char *content, int i, char **env);
-int					unquoted_var(char *content);
+/* char				*save_unquoted_start(char *content, int i, char **env);
+int					unquoted_var(char *content); */
 t_input				*add_node(t_input *cur, char *content);
 // init
 void				init_input(t_input *first);

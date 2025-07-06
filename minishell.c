@@ -8,6 +8,7 @@ int	parsing_execution(t_input *first, t_data *data)
 		return (free_list(first), 1);
 	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
+	/* test_print(first); */
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
 	if (!parse_tokens(first, data))
@@ -40,8 +41,8 @@ int	main_loop(t_input *first, t_data *data, struct sigaction *sig, char **envp)
 	}
 	if (!save_input(line, &first))
 		return (0);
-	(parsing_execution(first, data), add_history(line), free(line),
-		free_all(data));
+	parsing_execution(first, data); 
+	(add_history(line), free(line),	free_all(data));
 	return (0);
 }
 
