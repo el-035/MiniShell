@@ -6,13 +6,13 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:40:02 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:40:03 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 19:59:13 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*word(char *s, int i) //
+static char	*word(char *s, int i)
 {
 	char	*word;
 	int		j;
@@ -36,7 +36,7 @@ static char	*word(char *s, int i) //
 	return (word);
 }
 
-char	**space_split(char const *s)	//
+char	**space_split(char const *s)
 {
 	int		wc;
 	int		i;

@@ -4,7 +4,7 @@ CC = cc
 
 CFLAGS = -g -Wall -Wextra -Werror 
 
-#delete t.c and testing
+#delete and testing
 SRC = minishell.c list_utils.c syntax.c syntax_utils.c  mini_split.c \
 	free.c heredoc.c env_var.c check_commands.c free_all.c  \
 	testing.c parse_input.c var_utils.c var_utils_2.c quotes.c exp_exit.c ft_unset.c \
