@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_input	*beginning(t_input *cur, char *start, char *exp, int f_b)
+t_input	*beginning(t_input *cur, char *start, char *exp, int f_b) //
 {
 	if (!start || start[0] == '\0')
 	{
@@ -36,11 +36,15 @@ t_input	*end(t_input *cur, char *next, int f_e)
 		if (f_e == 1)
 		{
 			cur = add_node(cur, next);
+			if (!cur)
+				return (NULL);
 		}
 		else
 		{
 			tmp = cur->content;
 			cur->content = ft_strjoin(tmp, next);
+			if (!cur->content)
+				return (NULL);
 			cur->exp = 0 - ft_strlen(tmp);
 			free(tmp);
 		}
