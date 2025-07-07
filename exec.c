@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/07 20:53:10 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:15:47 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	exec_proc(t_data *data, char **envp)
 	}
 	if (!exec(data, envp, -1))
 		return (0);
-	i = -1;
 	while (++i < data->cmd_count - 1)
 		(close(data->pipes[i][0]), close(data->pipes[i][1]));
 	wait_proc(data, &status, &code);

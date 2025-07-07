@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:04:38 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:05:06 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 22:08:03 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,12 @@ char	**mini_split(char const *s)
 	i = 0;
 	wc = 0;
 	wc = ft_word_count((char *)s, i, wc);
-	if (!wc)
-		return (NULL);
 	j = 0;
 	split = (char **)ft_calloc((wc + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
+	if (!wc)
+		return (split);
 	while (s && split && j < wc)
 	{
 		split[j] = ft_word((char *)s, i);
