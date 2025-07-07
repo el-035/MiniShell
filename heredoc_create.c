@@ -19,7 +19,7 @@ static int	realloc_heredoc(t_cmd *cmd, char *line, int *count)
 
 	new_lines = ft_calloc(sizeof(char *), *count + 2);
 	if (!new_lines)
-		return (perror("Malloc: "), 0);
+		return (fail_mall(), 0);
 	i = -1;
 	while (++i < *count)
 		new_lines[i] = cmd->hd_content[i];

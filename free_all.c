@@ -40,6 +40,11 @@ void	free_cmd(t_cmd *cmd)
 	}
 	if (cmd->hd_content)
 		free_str_arr(cmd->hd_content);
+	if (cmd->hd_in)
+	{
+		free(cmd->hd_in);
+		cmd->hd_in = NULL;
+	}
 	if (cmd->limiter)
 		free(cmd->limiter);
 }

@@ -49,6 +49,7 @@ static char	*check_path(t_data *data, char *cmd)
 		}
 	}
 	else if (access(cmd, X_OK) == 0)
+	//SHOULD I PROTECT??
 		return (ft_strdup(cmd));
 	else
 		return (handle_error(cmd, 0), NULL);

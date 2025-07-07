@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+/*#include "minishell.h"
 
 static void	wait_proc(t_data *data, int *status, int *code)
 {
@@ -61,7 +61,7 @@ static int	exec(t_data *data, char **envp, int i)
 		(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
 	}
 	return (1);
-}
+}*/
 #include "minishell.h"
 
 static void	wait_proc(t_data *data, int *status, int *code)
@@ -125,7 +125,11 @@ int	exec_proc(t_data *data, char **envp)
 	status = 0;
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
-		return (perror("PID malloc: "), 0);
+	{
+		while (++i < data->cmd_count - 1)
+			(close(data->pipes[i][0]), close(data->pipes[i][1]));
+		return (perror("PID: "), 0);
+	}
 	if (!exec(data, envp))
 		return (0);
 	i = -1;
@@ -160,7 +164,7 @@ int	create_pipes(t_data *data)
 	return (1);
 }
 
-
+/*
 int	exec_proc(t_data *data, char **envp)
 {
 	int	i;
@@ -203,4 +207,4 @@ int	create_pipes(t_data *data)
 	}
 	data->pipes[i] = NULL;
 	return (1);
-}
+}*/
