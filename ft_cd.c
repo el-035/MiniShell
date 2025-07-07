@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:27:12 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:27:26 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	update_envp(t_data *data, char *var, char *value)
@@ -11,7 +23,7 @@ int	update_envp(t_data *data, char *var, char *value)
 	if (i == -1)
 	{
 		if (add_env(data, var, value) != 0)
-			return(fail_mall(), -1);
+			return (fail_mall(), -1);
 		else
 			return (0);
 	}

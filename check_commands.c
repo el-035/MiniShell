@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_commands.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:06:43 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:11:47 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	**is_builtins(void)
+static char	**is_builtins(void)
 {
 	char	**commands;
 
@@ -41,7 +53,7 @@ int	compare_cmd(t_input *cur)
 	return (free(commands), 0);
 }
 
-int	ambiguous(t_input *first)
+static int	ambiguous(t_input *first)
 {
 	t_input	*cur;
 

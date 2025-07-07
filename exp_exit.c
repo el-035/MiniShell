@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_exit.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:19:27 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:20:04 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*beg(char *content) //
+char	*beg(char *content)
 {
 	int		len;
 	int		i;
@@ -26,7 +38,7 @@ char	*beg(char *content) //
 	return (beg);
 }
 
-char	*save_end(char *content, int len) //
+char	*save_end(char *content, int len)
 {
 	char	*end;
 	int		i;
@@ -47,7 +59,7 @@ char	*save_end(char *content, int len) //
 	return (end);
 }
 
-int	no_more(char *content) //
+int	no_more(char *content)
 {
 	int	i;
 
@@ -70,7 +82,7 @@ int	no_more(char *content) //
 	return (0);
 }
 
-char	*extract_exit_code(void) //
+char	*extract_exit_code(void)
 {
 	char	*num;
 	char	*var;
@@ -91,7 +103,7 @@ char	*extract_exit_code(void) //
 	return (var);
 }
 
-int	expand_exit(t_input **cur, t_data *data) //
+int	expand_exit(t_input **cur, t_data *data)
 {
 	char	*start;
 	char	*var;

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:22:04 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:22:18 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*get_var(char *str) //
+char	*get_var(char *str)
 {
 	int		i;
 	char	*var;
@@ -22,7 +34,7 @@ char	*get_var(char *str) //
 	return (var);
 }
 
-char	*get_content(char *str) //
+char	*get_content(char *str)
 {
 	int		i;
 	int		len;
@@ -41,7 +53,7 @@ char	*get_content(char *str) //
 	return (conetnt);
 }
 
-char	**copy(char **envp) //
+char	**copy(char **envp)
 {
 	char	**cpy;
 	int		i;
@@ -64,7 +76,7 @@ char	**copy(char **envp) //
 	return (cpy);
 }
 
-void	sort(char **cpy) //
+void	sort(char **cpy)
 {
 	int		flag;
 	char	*tmp;
@@ -90,7 +102,7 @@ void	sort(char **cpy) //
 	}
 }
 
-int	print_export(char **envp) //
+int	print_export(char **envp)
 {
 	char	**cpy;
 	int		i;

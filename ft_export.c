@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:29:53 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:32:03 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	ft_is_valid(char *cmd) //
+int	ft_is_valid(char *cmd)
 {
 	int	i;
 
@@ -27,28 +39,7 @@ int	ft_is_valid(char *cmd) //
 	return (0);
 }
 
-int	find_var(char **envp, char *str) //
-{
-	char	*var;
-	int		len;
-	int		i;
-
-	i = 0;
-	var = ft_strjoin(str, "=");
-	if (!var)
-		return (fail_mall(), -2);
-	len = ft_strlen(var);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], var, len) == 0)
-			return (free(var), i);
-		i++;
-	}
-	free(var);
-	return (-1);
-}
-
-int	append(char *var, char *cmd, t_data *data, int index) //
+int	append(char *var, char *cmd, t_data *data, int index)
 {
 	char	*new;
 	char	*old;
@@ -65,7 +56,7 @@ int	append(char *var, char *cmd, t_data *data, int index) //
 	free(old);
 	if (!app)
 		return (fail_mall(), -1);
-	new =double_join(var, "=", app);
+	new = double_join(var, "=", app);
 	if (!new)
 		return (free(app), fail_mall(), -1);
 	free(data->envp[index]);
@@ -73,12 +64,12 @@ int	append(char *var, char *cmd, t_data *data, int index) //
 	return (free(app), 0);
 }
 
-int	replace(char *var, char *cmd, t_data *data, int index) //
+int	replace(char *var, char *cmd, t_data *data, int index)
 {
 	char	*content;
 	char	*new;
 
-	content =get_content(cmd);
+	content = get_content(cmd);
 	if (!content)
 		return (fail_mall(), -1);
 	new = double_join(var, "=", content);
@@ -89,7 +80,7 @@ int	replace(char *var, char *cmd, t_data *data, int index) //
 	return (free(content), 0);
 }
 
-int	export_helper(char *args, t_data *data, char *var) //
+int	export_helper(char *args, t_data *data, char *var)
 {
 	char	*content;
 	int		index;
@@ -118,7 +109,7 @@ int	export_helper(char *args, t_data *data, char *var) //
 	return (free(content), 0);
 }
 
-void	ft_export(t_data *data, t_cmd *cmd) //
+void	ft_export(t_data *data, t_cmd *cmd)
 {
 	int		i;
 	char	*var;

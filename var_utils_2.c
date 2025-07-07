@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   var_utils_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:41:40 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:41:43 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-t_input	*beginning(t_input *cur, char *start, char *exp, int f_b) //
+t_input	*beginning(t_input *cur, char *start, char *exp, int f_b)
 {
 	if (!start || start[0] == '\0')
 	{
@@ -9,17 +21,17 @@ t_input	*beginning(t_input *cur, char *start, char *exp, int f_b) //
 	}
 	else if (f_b == 1)
 	{
-		cur->content =ft_strdup(start);
+		cur->content = ft_strdup(start);
 		if (!cur->content)
 			return (NULL);
-		cur =  add_node(cur, exp);
+		cur = add_node(cur, exp);
 		if (!cur)
 			return (NULL);
 		cur->exp = 0;
 	}
 	else
 	{
-		cur->content =ft_strjoin(start, exp);
+		cur->content = ft_strjoin(start, exp);
 		cur->exp = ft_strlen(start);
 	}
 	if (!cur->content)
@@ -27,7 +39,7 @@ t_input	*beginning(t_input *cur, char *start, char *exp, int f_b) //
 	return (cur);
 }
 
-t_input	*end(t_input *cur, char *next, int f_e) //
+t_input	*end(t_input *cur, char *next, int f_e)
 {
 	char	*tmp;
 
@@ -52,7 +64,7 @@ t_input	*end(t_input *cur, char *next, int f_e) //
 	return (cur);
 }
 
-t_input	*middle(t_input *cur, char **split)	//
+t_input	*middle(t_input *cur, char **split)
 {
 	int	len;
 	int	i;
@@ -76,7 +88,7 @@ t_input	*middle(t_input *cur, char **split)	//
 	return (cur);
 }
 
-t_input	*empty(t_input *cur, char *start, char *next, char *exp) //
+t_input	*empty(t_input *cur, char *start, char *next, char *exp)
 {
 	if (exp[0] == '\0')
 	{
@@ -103,7 +115,7 @@ t_input	*empty(t_input *cur, char *start, char *next, char *exp) //
 	return (cur);
 }
 
-t_input	*add_node(t_input *cur, char *content) //
+t_input	*add_node(t_input *cur, char *content)
 {
 	t_input	*new;
 

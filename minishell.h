@@ -71,16 +71,19 @@ typedef struct s_data
 	int				ec_update_flag;
 }					t_data;
 
-void				fail_mall(void);
-
 // main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
 int					parsing_execution(t_input *first, t_data *data);
 
-// init
+// init -
 int					init_stuff(t_data *data, char **envp);
 char				*prompt(char **envp, t_data *data, struct sigaction *sig);
+
+// env init -
+int					add_env(t_data *data, char *var, char *content);
+int					no_env(t_data *data);
+int					copy_envp(t_data *data, char **envp);
 
 // syntax
 int					assign_type(t_input **first);
@@ -90,103 +93,117 @@ int					is_red_or_pipe(t_input *first);
 int					is_red(t_input *cur);
 void				syntax_err(void);
 
-// env_var
-int					find_ev(t_input *first, t_data *data);
-int					expand_var(char **content, char **envp);
-int	expand_var_hd(char **content, char **envp);
+// env var -
 int					join_all(char **content, char *start, char *end, char *var);
 char				*save_rest(char *content, char *var);
 char				*save_start(char *content);
+int					expand_var(char **content, char **envp);
+int					find_ev(t_input *first, t_data *data);
 
-// var utils
+// var utils -
 char				*search_var(char *content, char *var);
 int					stop(char *content);
 char				*extract_var(char **envp, char *var);
 char				*save_var(char *content);
 int					start_len(char *content);
 
-// exp token
+// exp token -
 int					exp_tokenise(t_input *cur, char **envp, int index);
 char				*save_unquoted_start(char *content, int i);
 int					unquoted_var(char *content);
 t_input				*new_token(t_input *cur, char *start, char *exp,
 						char *next);
-int	unquoted_var(char *content);
-// var utils 2
+
+// var utils 2 -
 t_input				*add_node(t_input *cur, char *content);
 t_input				*empty(t_input *cur, char *start, char *next, char *exp);
 t_input				*middle(t_input *cur, char **split);
 t_input				*end(t_input *cur, char *next, int f_e);
 t_input				*beginning(t_input *cur, char *start, char *exp, int f_b);
 
-int					check_quotes(char *content, int len);
-int					expand_exit(t_input **cur, t_data *data);
-
-int					start_len(char *content);
-int					even_odd(char *content, int i);
-int					find_index(int i /*  int j, */);
-int					exp_helper(char *content);
-
-int					exp_split(t_input *first);
-int					count_word(char *content);
-int					ft(t_input *cur, char *exp, char *next, char *start);
-/* char				*save_unquoted_start(char *content, int i, char **env);
-int					unquoted_var(char *content); */
-t_input				*add_node(t_input *cur, char *content);
 // init
 void				init_input(t_input *first);
 int					save_input(char *line, t_input **first);
-int					copy_envp(t_data *data, char **envp);
+
 // space split
 char				**space_split(char const *s);
 
-// free
+// free -
 void				free_split(char **split);
 void				free_list(t_input *first);
+void				fail_mall(void);
 
-// list utils
+// ft more utils
+char				*double_join(char *s1, char *s2, char *s3);
+int					expand_var_hd(char **content, char **envp);
+int					count_quoted_var(char *content);
+int					find_var(char **envp, char *str);
+
+// list utils -
 t_input				*add_new(char *content, int pos, t_input *prev);
 t_input				*make_new_node(char *content, int pos);
 int					list_size(t_input *lst);
+void				init_input(t_input *first);
+int					save_input(char *line, t_input **first);
 
 // quotes
 int					check_quotes(char *content, int len);
 int					remove_useless_quotes(char **content, int len);
-int					remove_quotes(t_input *input /* , t_data *data */);
+int					remove_quotes(t_input *input);
+int					var_quotes(t_input *cur);
 int					return_final_len(char *str);
-// commands
+
+// check commands
 
 int					compare_cmd(t_input *cur);
-int					find_cmd(t_input *first /* , t_data *data */);
+int					find_cmd(t_input *first);
 
 // exit exp
-int					find_exit(t_input *first, t_data *data);
-
-// tests
-const char			*get_type_str(enum e_type type);
-void				test_print(t_input *first);
+char				*beg(char *content);
+char				*save_end(char *content, int len);
+int					no_more(char *content);
+char				*extract_exit_code(void);
+int					expand_exit(t_input **cur, t_data *data);
 
 // Split test
 char				**mini_split(char const *s);
 
-// builtinss
+// echo -
 void				ft_echo(t_cmd *cmd);
+int					valid_opt(char *opt);
+
+// exit -
 void				ft_exit(t_data *data, t_cmd *cmd);
+int					error_n(char *err);
+char				*clean_input(char *trim);
+int					check_overflow(char *trimmed);
+void				print_err(char *str, int flag);
+
+// cd -
+int					update_envp(t_data *data, char *var, char *value);
+void				cd_more_help(t_cmd *cmd, t_data *data);
+void				cd_helper(t_cmd *cmd, t_data *data);
 void				ft_cd(t_data *data, t_cmd *cmd);
 
+// unset -
 int					ft_unset(t_data *data, t_cmd *cmd);
-
 int					arr_len(char **arr);
+int					var_count(char **envp, char **args);
+int					copy_var(char *envp, char **var);
 
-// export
-int					add_env(t_data *data, char *var, char *content);
-char				*double_join(char *s1, char *s2, char *s3);
+// export -
 void				ft_export(t_data *data, t_cmd *cmd);
 int					return_exit_code(int exit);
+int					ft_is_valid(char *cmd);
+int					replace(char *var, char *cmd, t_data *data, int index);
+int					append(char *var, char *cmd, t_data *data, int index);
+
+// export utils -
 char				*get_var(char *str);
 char				*get_content(char *str);
+char				**copy(char **envp);
+void				sort(char **cpy);
 int					print_export(char **envp);
-int					find_var(char **envp, char *str);
 
 // check_files
 void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);

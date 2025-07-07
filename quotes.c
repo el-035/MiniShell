@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:36:40 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:40:18 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	check_quotes(char *content, int len) //
+int	check_quotes(char *content, int len)
 {
 	int	quote;
 	int	i;
@@ -22,7 +34,7 @@ int	check_quotes(char *content, int len) //
 	return (quote);
 }
 
-int	return_final_len(char *str) //
+int	return_final_len(char *str)
 {
 	int	i;
 	int	j;
@@ -44,7 +56,7 @@ int	return_final_len(char *str) //
 	return (j);
 }
 
-int	remove_useless_quotes(char **content, int len) //
+int	remove_useless_quotes(char **content, int len)
 {
 	int		i;
 	char	*final;
@@ -83,7 +95,7 @@ int	var_quotes(t_input *cur)
 	start = ft_substr(cur->content, 0, len);
 	if (!start)
 		return (fail_mall(), -1);
-	end =ft_strdup(&(cur->content[len]));
+	end = ft_strdup(&(cur->content[len]));
 	if (!end)
 		return (free(start), fail_mall(), -1);
 	if (cur->exp < 0)

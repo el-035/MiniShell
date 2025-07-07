@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_token.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:00:25 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:06:16 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	unquoted_var(char *content)	//
+int	unquoted_var(char *content)
 {
 	int	i;
 
@@ -22,7 +34,7 @@ int	unquoted_var(char *content)	//
 	return (-1);
 }
 
-char	*save_unquoted_start(char *content, int i)	//
+char	*save_unquoted_start(char *content, int i)
 {
 	char	*start;
 	int		j;
@@ -41,7 +53,7 @@ char	*save_unquoted_start(char *content, int i)	//
 	return (start);
 }
 
-t_input	*new_token(t_input *cur, char *start, char *exp, char *next) //
+t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 {
 	char	**split;
 
@@ -60,7 +72,7 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next) //
 		cur = middle(cur, split);
 		if (!cur)
 			return (free_split(split), NULL);
-		cur =  end(cur, next, is_space(exp[ft_strlen(exp) - 1]));
+		cur = end(cur, next, is_space(exp[ft_strlen(exp) - 1]));
 		if (!cur)
 			return (free_split(split), NULL);
 		if (count_word(exp) == 1)
@@ -69,7 +81,7 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next) //
 	return (free_split(split), cur);
 }
 
-int	exp_tokenise(t_input *cur, char **envp, int index) //
+int	exp_tokenise(t_input *cur, char **envp, int index)
 {
 	char	*start;
 	char	*var;

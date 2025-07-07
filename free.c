@@ -1,6 +1,16 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:25:19 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:25:20 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// void	free_everything(void);
+#include "minishell.h"
 
 void	fail_mall(void)
 {
@@ -40,8 +50,6 @@ void	free_list(t_input *first)
 		tmp = cur->next;
 		if (cur->content)
 			free(cur->content);
-		/* if (cur->is_builtin == 0 && cur->cmd_path)
-			free(cur->cmd_path); */
 		if (cur)
 			free(cur);
 		if (tmp == first)

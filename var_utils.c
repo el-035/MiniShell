@@ -1,30 +1,42 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   var_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 18:42:20 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 18:59:25 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*search_var(char *content, char *var)
 {
 	char	*temp;
 	int		len;
-	char	*full_var;
-	int		full_len;
+	int		var_len;
 
 	len = ft_strlen(content);
+	var_len = ft_strlen(var);
 	temp = content;
-	full_var = ft_strjoin("$", var);
-	if (!full_var)
-		return (NULL); // hehe
-	full_len = ft_strlen(full_var);
 	while (temp - content <= len)
 	{
-		temp = ft_strnstr(temp, full_var, full_len);
-		if (check_quotes(content, temp - content) != 1)
+		temp = ft_strchr(temp, '$');
+		if (!temp)
 			break ;
+		if (ft_strncmp(temp + 1, var, var_len) == 0)
+		{
+			if (check_quotes(content, temp - content) != 1)
+				return (temp);
+		}
 		temp++;
 	}
-	free(full_var);
 	return (temp);
 }
 
-int	stop(char *content) //
+int	stop(char *content)
 {
 	int	i;
 
@@ -53,7 +65,7 @@ int	stop(char *content) //
 	return (0);
 }
 
-char	*extract_var(char **envp, char *var) //
+char	*extract_var(char **envp, char *var)
 {
 	char	*value;
 	char	*temp;
@@ -81,7 +93,7 @@ char	*extract_var(char **envp, char *var) //
 	return (free(var), free(full), ft_strdup(""));
 }
 
-char	*save_var(char *content) //
+char	*save_var(char *content)
 {
 	int		i;
 	int		len;

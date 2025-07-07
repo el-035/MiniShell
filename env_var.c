@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_var.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:07:32 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:17:06 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	*save_start(char *content) //
+char	*save_start(char *content)
 {
 	int		i;
 	int		len;
@@ -21,14 +33,14 @@ char	*save_start(char *content) //
 	return (start);
 }
 
-char	*save_rest(char *content, char *var)	//
+char	*save_rest(char *content, char *var)
 {
 	int		i;
 	int		len;
 	char	*rest;
 
 	len = ft_strlen(var);
-	if (!content[len] || !content || !*content)
+	if (!content || !*content || !content[len])
 		return (ft_strdup(""));
 	i = len;
 	while (content[len])
@@ -43,7 +55,7 @@ char	*save_rest(char *content, char *var)	//
 	return (rest);
 }
 
-int	join_all(char **content, char *start, char *end, char *var) //
+int	join_all(char **content, char *start, char *end, char *var)
 {
 	free(*content);
 	*content = double_join(start, var, end);
@@ -55,36 +67,12 @@ int	join_all(char **content, char *start, char *end, char *var) //
 	return (0);
 }
 
-int	count_quoted_var(char *content) //
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	if (content[0] == '\0')
-		return (0);
-	while (content[i])
-	{
-		if (content[i] == '$')
-		{
-			if (!content[i + 1])
-				return (count);
-			if (check_quotes(content, i) == 2 && (ft_isalpha(content[i + 1]) 
-					|| content[i + 1] == '_'))
-				count++;
-		}
-		i++;
-	}
-	return (count);
-}
-
-int	expand_var(char **content, char **envp)	 //
+int	expand_var(char **content, char **envp)
 {
 	char	*start;
 	char	*var;
 	char	*end;
-	int 	count;
+	int		count;
 
 	count = count_quoted_var(*content);
 	while (count > 0)
@@ -108,33 +96,6 @@ int	expand_var(char **content, char **envp)	 //
 	return (0);
 }
 
-int	expand_var_hd(char **content, char **envp)
-{
-	char	*start;
-	char	*var;
-	char	*end;
-
-	if (stop(*content) == 0)
-		return (0);
-	start = save_start(*content);
-	if (!start)
-		return (-1);
-	var = save_var(&(*content)[start_len(*content)]);
-	if (!var)
-		return (free(start), -1);
-	end = save_rest(search_var(*content, var) + 1, var);
-	if (!end)
-		return (free(start), free(var), -1);
-	var = extract_var(envp, var);
-	if (!var)
-		return (free(start), free(end), -1);
-	if (join_all(content, start, end, var) == 1)
-		return (-1);
-	if (ft_strchr(*content, '$') != 0)
-		expand_var(content, envp);
-	return (0);
-}
-
 int	find_ev(t_input *first, t_data *data)
 {
 	t_input	*cur;
@@ -142,8 +103,7 @@ int	find_ev(t_input *first, t_data *data)
 	cur = first;
 	while (cur)
 	{
-		if ((!cur->prev || cur->prev->type != HERE_DOC) &&
-			cur->content)
+		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content)
 		{
 			if (exp_tokenise(cur, data->envp, unquoted_var(cur->content)) == -1)
 				return (fail_mall(), 1);

@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mini_split.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:04:38 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:05:06 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int	is_delimitor(char c) //
+static int	is_delimitor(char c)
 {
 	if (c == 32 || c == 9)
 		return (1);
@@ -9,7 +21,7 @@ static int	is_delimitor(char c) //
 	return (0);
 }
 
-static int	ft_word_count(char *s, int i, int wc) //
+static int	ft_word_count(char *s, int i, int wc)
 {
 	while (s[i])
 	{
@@ -36,7 +48,7 @@ static int	ft_word_count(char *s, int i, int wc) //
 	return (wc);
 }
 
-static int	word_len(char *s, int i)	//
+static int	word_len(char *s, int i)
 {
 	int	j;
 
@@ -61,7 +73,7 @@ static int	word_len(char *s, int i)	//
 	return (i - j);
 }
 
-static char	*ft_word(char *s, int i)	//
+static char	*ft_word(char *s, int i)
 {
 	char	*word;
 	int		j;
@@ -79,7 +91,7 @@ static char	*ft_word(char *s, int i)	//
 	return (word);
 }
 
-char	**mini_split(char const *s)	//
+char	**mini_split(char const *s)
 {
 	int		wc;
 	int		i;
