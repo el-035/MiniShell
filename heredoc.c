@@ -16,6 +16,8 @@ int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp)
 {
 	if (!(*cur)->next)
 		return (0);
+	if (cmd->limiter)
+		free(cmd->limiter);
 	cmd->limiter = ft_strdup((*cur)->next->content);
 	if (!cmd->limiter)
 		return (fail_mall(), 0);
@@ -86,12 +88,11 @@ void	exec_hd(t_data *data, t_cmd *cmd, int index)
 	{
 		if (!set_heredoc_fds(cmd, index))
 			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
-		//LEAK HERE FOR MULT HDs on exit
 		fd = open(cmd->hd_in, O_RDONLY);
 		if (fd < 0)
 			(perror("Opening heredoc tmp file"), free_split(data->envp),
 				free_all(data), exit(EXIT_FAILURE));
-		(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in), free(cmd->hd_in));
+		(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in));
 	}
 	else
 		(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));

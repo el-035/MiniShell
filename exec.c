@@ -70,6 +70,7 @@ int	exec_proc(t_data *data, char **envp)
 	int	code;
 
 	status = 0;
+	i = -1;
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
 	{

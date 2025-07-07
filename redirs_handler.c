@@ -80,7 +80,34 @@ int	count_redirs(t_cmd *cmd, t_input *input, t_input *start)
 	return (1);
 }
 
-void	handle_redirs(t_cmd *cmd, t_input **cur)
+static int	check_red_file(t_cmd *cmd, t_input **cur, int redir_ind, int mode)
+{
+	char	*file;
+	
+	file = ft_strdup((*cur)->next->content);
+	if (file)
+	{
+		if (mode == 1)
+		{
+			cmd->in[cmd->in_index++] = file;
+			cmd->redir_order[redir_ind] = 1;
+			return (1);
+		}
+		else if (mode == 2)
+		{
+			cmd->out[cmd->out_index++] = file;
+			if ((*cur)->type == REDIR_APPEND)
+				cmd->append = 1;
+			else
+				cmd->append = 0;
+			cmd->redir_order[redir_ind] = 2;
+			return (1);
+		}
+	}
+	return (0);
+} 
+
+int	handle_redirs(t_cmd *cmd, t_input **cur)
 {
 	int	redir_ind;
 
@@ -88,23 +115,16 @@ void	handle_redirs(t_cmd *cmd, t_input **cur)
 	if ((*cur)->type == REDIR_IN && (*cur)->next)
 	{
 		if (cmd->in && cmd->in_index < cmd->in_redirs)
-		{
-			cmd->in[cmd->in_index++] = ft_strdup((*cur)->next->content);
-			cmd->redir_order[redir_ind] = 1;
-		}
+			if (!check_red_file(cmd, cur, redir_ind, 1))
+				return (0);
 	}
 	else if (((*cur)->type == REDIR_OUT || (*cur)->type == REDIR_APPEND)
 		&& (*cur)->next)
 	{
 		if (cmd->out && cmd->out_index < cmd->out_redirs)
-		{
-			cmd->out[cmd->out_index++] = ft_strdup((*cur)->next->content);
-			if ((*cur)->type == REDIR_APPEND)
-				cmd->append = 1;
-			else
-				cmd->append = 0;
-			cmd->redir_order[redir_ind] = 2;
-		}
+			if (!check_red_file(cmd, cur, redir_ind, 2))
+				return (0);
 	}
 	*cur = (*cur)->next;
+	return (1);
 }

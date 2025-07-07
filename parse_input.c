@@ -43,7 +43,12 @@ static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 	}
 	else if (((*cur)->type == REDIR_IN || (*cur)->type == REDIR_OUT
 			|| (*cur)->type == REDIR_APPEND) && (*cur)->next)
-		handle_redirs(cmd, cur);
+			{
+				if (!handle_redirs(cmd, cur))
+					return (0);
+			}
+			//handle_redirs(cmd, cur);
+
 	else if ((*cur)->type == HERE_DOC)
 		if (!handle_heredoc(cmd, cur, data->envp))
 			return (0);
