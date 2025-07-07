@@ -49,11 +49,10 @@ static char	*check_path(t_data *data, char *cmd)
 		}
 	}
 	else if (access(cmd, X_OK) == 0)
-	//SHOULD I PROTECT??
 		return (ft_strdup(cmd));
 	else
 		return (handle_error(cmd, 0), NULL);
-	return (handle_error(cmd, 2), NULL);
+	return (NULL);
 }
 
 static int	execute_cmd(t_data *data, char **args, char **envp)
@@ -71,13 +70,14 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	{
 		path = check_path(data, args[0]);
 		if (!path)
-			return (return_exit_code(1), 0);
+			return (handle_error(args[0], 2), return_exit_code(1), 0);
 	}
+	check_if_dir(data, path, args[0]);
 	if (execve(path, args, envp) == -1)
 	{
 		if (path != args[0])
 			free(path);
-		exit(127);
+		(handle_error(args[0], 2), free_split(data->envp), free_all(data), exit(127));
 	}
 	if (path != args[0])
 		free(path);
