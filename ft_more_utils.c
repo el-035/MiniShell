@@ -114,7 +114,9 @@ void	check_if_dir(t_data *data, char *path, char *original)
 {
 	struct stat	sb;
 
-	if (stat(path, &sb) == -1 || !ft_strcmp(original, ".."))
+	if (!ft_strcmp(original, ".."))
+		(handle_error("..", 2), free(path), free_split(data->envp), free_all(data), exit(127));
+	if (stat(path, &sb) == -1)
 		return ;
 	if (S_ISDIR(sb.st_mode))
 	{
