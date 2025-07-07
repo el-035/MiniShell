@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:58:55 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 20:05:48 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ typedef struct s_data
 	int				cmd_count;
 	int				ec_update_flag;
 }					t_data;
+
+void	test_print(t_input *first);
 
 // main
 int					return_exit_code(int exit);
