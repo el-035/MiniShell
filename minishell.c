@@ -24,7 +24,6 @@ int	parsing_execution(t_input *first, t_data *data)
 		return (free_list(first), 1);
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
-	//test_print(first);
 	free_list(first);
 	if (!create_pipes(data))
 		return (1);
