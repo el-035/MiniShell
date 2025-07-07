@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   quotes.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:36:40 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:40:18 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	check_quotes(char *content, int len)
@@ -115,7 +127,8 @@ int	remove_quotes(t_input *first)
 					return (1);
 			}
 			else if (cur->exp != 0)
-				var_quotes(cur);
+				if (var_quotes(cur) != 0)
+					return (1);
 		}
 		cur = cur->next;
 		if (cur == first)

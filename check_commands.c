@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_commands.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:06:43 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 20:15:40 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char	**is_builtins(void)
+static char	**is_builtins(void)
 {
 	char	**commands;
 
@@ -24,6 +36,8 @@ int	compare_cmd(t_input *cur)
 	char	**commands;
 
 	commands = is_builtins();
+	if (!commands)
+		return (fail_mall(), -1);
 	i = 0;
 	while (i <= 6)
 	{
@@ -39,18 +53,25 @@ int	compare_cmd(t_input *cur)
 	return (free(commands), 0);
 }
 
-int	ambiguous(t_input *first)
+static int	ambiguous(t_input *first)
 {
 	t_input	*cur;
 
 	cur = first;
 	while (cur)
 	{
-		if (cur->type == REDIR_OUT && cur->next->exp != INT_MIN)
+		if (cur->type == CMD && ft_strncmp(cur->content, ".", 2) == 0)
 		{
-			write(2, "ambiguous redirect\n", 19);
-			return (return_exit_code(1), 1);
+			if (cur->next == cur)
+				return (write(2, "filename argument required\n", 27), return_exit_code(2), 1);
+			else
+			{
+				cur->type = UNKNOWN;
+				cur->next->type = CMD;
+			}
 		}
+		if (cur->type == REDIR_OUT && cur->next->exp != INT_MIN)
+			return (write(2, "ambiguous redirect\n", 19), return_exit_code(1), 1);
 		cur = cur->next;
 		if (cur == first)
 			break ;
@@ -74,7 +95,10 @@ int	find_cmd(t_input *first)
 				cur->next->type = CMD;
 		}
 		if (cur->type == CMD)
-			compare_cmd(cur);
+		{
+			if (compare_cmd(cur) != 0)
+				return (1);
+		}
 		cur = cur->next;
 		if (cur == first)
 			break ;

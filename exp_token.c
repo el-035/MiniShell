@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exp_token.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:00:25 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:06:16 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	unquoted_var(char *content)	//
+int	unquoted_var(char *content)
 {
 	int	i;
 
@@ -22,7 +34,7 @@ int	unquoted_var(char *content)	//
 	return (-1);
 }
 
-char	*save_unquoted_start(char *content, int i)	//
+char	*save_unquoted_start(char *content, int i)
 {
 	char	*start;
 	int		j;
@@ -73,26 +85,26 @@ int	exp_tokenise(t_input *cur, char **envp, int index)
 {
 	char	*start;
 	char	*var;
-	char	*exp;
 	char	*next;
 
-	if (index == -1)
-		return (0);
-	start = save_unquoted_start(cur->content, index);
-	if (!start)
-		return (-1);
-	var = save_var(&(cur->content[index]));
-	if (!var)
-		return (free(start), -1);
-	next = save_rest(&(cur->content[index + 1]), var);
-	if (!next)
-		return (free(start), free(var), -1);
-	exp = extract_var(envp, var);
-	if (!exp)
-		return (free(start), free(next), -1);
-	if (!new_token(cur, start, exp, next))
-		return (free(start), free(next), free(exp), -1);
-	if (unquoted_var(cur->content) != -1)
-		exp_tokenise(cur, envp, unquoted_var(cur->content));
-	return (free(start), free(next), free(exp), 0);
+	while (index != -1)
+	{
+		start = save_unquoted_start(cur->content, index);
+		if (!start)
+			return (-1);
+		var = save_var(&(cur->content[index]));
+		if (!var)
+			return (free(start), -1);
+		next = save_rest(&(cur->content[index + 1]), var);
+		if (!next)
+			return (free(start), free(var), -1);
+		var = extract_var(envp, var);
+		if (!var)
+			return (free(start), free(next), -1);
+		if (!new_token(cur, start, var, next))
+			return (free(start), free(next), free(var), -1);
+		index = unquoted_var(cur->content);
+		(free(start), free(next), free(var));
+	}
+	return (0);
 }

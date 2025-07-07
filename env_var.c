@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_var.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:07:32 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:17:06 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*save_start(char *content)
@@ -28,7 +40,7 @@ char	*save_rest(char *content, char *var)
 	char	*rest;
 
 	len = ft_strlen(var);
-	if (!content[len] || !content || !*content)
+	if (!content || !*content || !content[len])
 		return (ft_strdup(""));
 	i = len;
 	while (content[len])
@@ -60,25 +72,27 @@ int	expand_var(char **content, char **envp)
 	char	*start;
 	char	*var;
 	char	*end;
+	int		count;
 
-	if (stop(*content) == 0)
-		return (0);
-	start = save_start(*content); // HERE malloc faisl ???+
-	if (!start)
-		return (-1);
-	var = save_var(&(*content)[start_len(*content)]);
-	if (!var)
-		return (free(start), -1);
-	end = save_rest(search_var(*content, var) + 1, var);
-	if (!end)
-		return (free(start), free(var), -1);
-	var = extract_var(envp, var);
-	if (!var)
-		return (free(start), free(end), -1);
-	if (join_all(content, start, end, var) == 1)
-		return (-1);
-	if (ft_strchr(*content, '$') != 0)
-		expand_var(content, envp);
+	count = count_quoted_var(*content);
+	while (count > 0)
+	{
+		start = save_start(*content);
+		if (!start)
+			return (-1);
+		var = save_var(&(*content)[start_len(*content)]);
+		if (!var)
+			return (free(start), -1);
+		end = save_rest(&(*content)[start_len(*content) + 1], var);
+		if (!end)
+			return (free(start), free(var), -1);
+		var = extract_var(envp, var);
+		if (!var)
+			return (free(start), free(end), -1);
+		if (join_all(content, start, end, var) == 1)
+			return (-1);
+		count--;
+	}
 	return (0);
 }
 
@@ -89,10 +103,9 @@ int	find_ev(t_input *first, t_data *data)
 	cur = first;
 	while (cur)
 	{
-		if ((!cur->prev || cur->prev->type != HERE_DOC) &&
-			cur->content)
+		if ((!cur->prev || cur->prev->type != HERE_DOC) && cur->content)
 		{
-			if (exp_tokenise(cur, data->envp, unquoted_var(cur->content)) == -1) // protect
+			if (exp_tokenise(cur, data->envp, unquoted_var(cur->content)) == -1)
 				return (fail_mall(), 1);
 			if (expand_var(&(cur->content), data->envp) == -1)
 				return (fail_mall(), 1);

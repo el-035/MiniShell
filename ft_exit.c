@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:29:35 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:29:36 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	error_n(char *err)
@@ -43,7 +55,7 @@ int	check_overflow(char *trimmed)
 	converted = ft_itoa(long_atoi(clean));
 	if (!converted)
 		return (fail_mall(), free(trimmed), free(clean), -2);
-	if (ft_strncmp(converted, clean, ft_strlen(converted)) != 0) // vehck thias
+	if (ft_strncmp(converted, clean, ft_strlen(converted)) != 0)
 		return (free(converted), free(clean), -1);
 	return (free(converted), free(clean), 1);
 }

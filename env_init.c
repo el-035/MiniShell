@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_init.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:06:57 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:07:09 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	add_env(t_data *data, char *var, char *content)	//
+int	add_env(t_data *data, char *var, char *content)
 {
 	int		i;
 	char	**tmp;
@@ -27,7 +39,7 @@ int	add_env(t_data *data, char *var, char *content)	//
 	return (0);
 }
 
-int	no_env(t_data *data)	//
+int	no_env(t_data *data)
 {
 	char	*pwd;
 
@@ -41,7 +53,7 @@ int	no_env(t_data *data)	//
 	return (0);
 }
 
-int	copy_envp(t_data *data, char **envp)	//
+int	copy_envp(t_data *data, char **envp)
 {
 	int	i;
 

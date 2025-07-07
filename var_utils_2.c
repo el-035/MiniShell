@@ -1,26 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   var_utils_2.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:41:40 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:41:43 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_input	*beginning(t_input *cur, char *start, char *exp, int f_b)
 {
-	if (start && start[0] != '\0')
-	{
-		if (f_b == 1)
-		{
-			cur->content = ft_strdup(start);
-			cur = add_node(cur, exp);
-			cur->exp = 0;
-		}
-		else
-		{
-			cur->content = ft_strjoin(start, exp);
-			cur->exp = ft_strlen(start);
-		}
-	}
-	else
+	if (!start || start[0] == '\0')
 	{
 		cur->content = ft_strdup(exp);
 		cur->exp = 0;
 	}
+	else if (f_b == 1)
+	{
+		cur->content = ft_strdup(start);
+		if (!cur->content)
+			return (NULL);
+		cur = add_node(cur, exp);
+		if (!cur)
+			return (NULL);
+		cur->exp = 0;
+	}
+	else
+	{
+		cur->content = ft_strjoin(start, exp);
+		cur->exp = ft_strlen(start);
+	}
+	if (!cur->content)
+		return (NULL);
 	return (cur);
 }
 
@@ -33,11 +48,15 @@ t_input	*end(t_input *cur, char *next, int f_e)
 		if (f_e == 1)
 		{
 			cur = add_node(cur, next);
+			if (!cur)
+				return (NULL);
 		}
 		else
 		{
 			tmp = cur->content;
 			cur->content = ft_strjoin(tmp, next);
+			if (!cur->content)
+				return (free(tmp), NULL);
 			cur->exp = 0 - ft_strlen(tmp);
 			free(tmp);
 		}
@@ -69,7 +88,7 @@ t_input	*middle(t_input *cur, char **split)
 	return (cur);
 }
 
-t_input	*empty(t_input *cur, char *start, char *next, char *exp) //
+t_input	*empty(t_input *cur, char *start, char *next, char *exp)
 {
 	if (exp[0] == '\0')
 	{
@@ -80,10 +99,17 @@ t_input	*empty(t_input *cur, char *start, char *next, char *exp) //
 			cur->exp = 0;
 		return (cur);
 	}
-	else if (count_word(exp) == 0)		//I AM HERE
+	else if (count_word(exp) == 0)
 	{
 		cur->content = ft_strdup(start);
-		cur = add_node(cur, next); // protect
+		if (!cur->content)
+			return (NULL);
+		if (next && *next)
+		{
+			cur = add_node(cur, next);
+			if (!cur)
+				return (NULL);
+		}
 		return (cur);
 	}
 	return (cur);
@@ -93,7 +119,6 @@ t_input	*add_node(t_input *cur, char *content)
 {
 	t_input	*new;
 
-	// protect content
 	if (!content || !*content)
 		return (NULL);
 	new = (t_input *)malloc(sizeof(t_input));
@@ -103,10 +128,7 @@ t_input	*add_node(t_input *cur, char *content)
 	init_input(new);
 	new->content = ft_strdup(content);
 	if (!new->content)
-	{
-		free(new);
-		return (NULL);
-	}
+		return (free(new), NULL);
 	cur->next->prev = new;
 	new->next = cur->next;
 	new->prev = cur;

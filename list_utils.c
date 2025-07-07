@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:03:40 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:05:44 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	init_input(t_input *first) //
+void	init_input(t_input *first)
 {
 	first->content = NULL;
 	first->type = UNKNOWN;
@@ -11,7 +23,7 @@ void	init_input(t_input *first) //
 	first->exp = INT_MIN;
 }
 
-int	save_input(char *line, t_input **first)	//
+int	save_input(char *line, t_input **first)
 {
 	t_input	*cur;
 	char	**split;
@@ -39,10 +51,10 @@ int	save_input(char *line, t_input **first)	//
 	return (free_split(split), 1);
 }
 
-t_input	*make_new_node(char *content, int pos)	//
+t_input	*make_new_node(char *content, int pos)
 {
 	t_input	*node;
-	(void)content;
+
 	node = (t_input *)malloc(sizeof(t_input));
 	if (!node)
 		return (NULL);
@@ -54,11 +66,11 @@ t_input	*make_new_node(char *content, int pos)	//
 	return (node);
 }
 
-t_input	*add_new(char *content, int pos, t_input *prev) //
+t_input	*add_new(char *content, int pos, t_input *prev)
 {
 	t_input	*node;
 
-	node =make_new_node(content, pos);
+	node = make_new_node(content, pos);
 	if (node == NULL)
 		return (NULL);
 	prev->next = node;

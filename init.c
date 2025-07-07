@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:34:08 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:35:32 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int init_stuff(t_data *data, char **envp)	//
+int	init_stuff(t_data *data, char **envp)
 {
 	ft_memset(data, 0, sizeof(t_data));
 	data->fd1 = -1;
@@ -11,10 +23,10 @@ int init_stuff(t_data *data, char **envp)	//
 	return (0);
 }
 
-char	*prompt(char **envp, t_data *data, struct sigaction *sig) //
+char	*prompt(char **envp, t_data *data, struct sigaction *sig)
 {
-	char *line;
-	char *prompt;
+	char	*line;
+	char	*prompt;
 
 	sigaction(SIGINT, sig, NULL);
 	signal(SIGQUIT, SIG_IGN);

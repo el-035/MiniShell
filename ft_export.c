@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:29:53 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:32:03 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	ft_is_valid(char *cmd)
@@ -25,27 +37,6 @@ int	ft_is_valid(char *cmd)
 	if (cmd[i] != '=')
 		return (1);
 	return (0);
-}
-
-int	find_var(char **envp, char *str)
-{
-	char	*var;
-	int		len;
-	int		i;
-
-	i = 0;
-	var = ft_strjoin(str, "=");
-	len = ft_strlen(var);
-	if (!var)
-		return (fail_mall(), -2);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], var, len) == 0)
-			return (free(var), i);
-		i++;
-	}
-	free(var);
-	return (-1);
 }
 
 int	append(char *var, char *cmd, t_data *data, int index)
@@ -98,20 +89,22 @@ int	export_helper(char *args, t_data *data, char *var)
 	if (!content)
 		return (-1);
 	index = find_var(data->envp, var);
+	if (index == -2)
+		return (free(content), -1);
 	if (index == -1)
 	{
 		if (add_env(data, var, content) == -1)
-			return (free(content), -1);
+			return (free(content), fail_mall(), -1);
 	}
 	else if (args[ft_strlen(var)] == '+')
 	{
 		if (append(var, args, data, index) == -1)
-			return (free(content), free(var), -1);
+			return (free(content), -1);
 	}
 	else
 	{
 		if (replace(var, args, data, index) == -1)
-			return (free(content), free(var), -1);
+			return (free(content), -1);
 	}
 	return (free(content), 0);
 }
@@ -138,7 +131,7 @@ void	ft_export(t_data *data, t_cmd *cmd)
 		}
 		else
 		{
-			if (export_helper(cmd->args[i], data, var) == -1) // protect
+			if (export_helper(cmd->args[i], data, var) == -1)
 				return (free(var));
 		}
 		free(var);

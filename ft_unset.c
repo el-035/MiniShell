@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:33:08 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:33:09 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	arr_len(char **arr)
@@ -65,7 +77,7 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 		return (0);
 	i = var_count(data->envp, cmd->args);
 	if (i == 0)
-		return (0);	// LEAK!!
+		return (0);
 	tmp = ft_calloc((data->envp_size - i) + 1, sizeof(char *));
 	if (!tmp)
 		return (fail_mall(), -1);

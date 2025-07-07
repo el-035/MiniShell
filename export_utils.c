@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/07 19:22:04 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/07 19:22:18 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*get_var(char *str)
@@ -57,7 +69,7 @@ char	**copy(char **envp)
 		if (ft_strncmp(envp[i], "_=", 2) == 0)
 			i++;
 		if (envp[i])
-			cpy[j++] = ft_strdup(envp[i++]); // protect
+			cpy[j++] = ft_strdup(envp[i++]);
 		if (!cpy[j - 1])
 			return (free_split(cpy), NULL);
 	}
@@ -109,7 +121,7 @@ int	print_export(char **envp)
 			return (fail_mall(), free_split(cpy), 1);
 		content = get_content(cpy[i]);
 		if (!content)
-			return ((free_split(cpy), free(var), 1));
+			return ((free_split(cpy), free(var), fail_mall(), 1));
 		printf("declare -x %s=\"%s\"\n", var, content);
 		free(var);
 		free(content);

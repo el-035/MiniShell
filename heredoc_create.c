@@ -54,7 +54,7 @@ static int	read_heredoc(t_cmd *cmd, int hd_flag, int count, char **envp)
 		if (ft_strchr(line, '$'))
 		{
 			if (hd_flag == 0)
-				expand_var(&line, envp);
+				expand_var_hd(&line, envp);
 			remove_useless_quotes(&line, return_final_len(line));
 		}
 		if (!realloc_heredoc(cmd, line, &count))
