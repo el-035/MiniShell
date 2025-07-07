@@ -266,7 +266,7 @@ int					create_heredoc(t_cmd *cmd, char **envp);
 
 // redirs handler
 int					count_redirs(t_cmd *cmd, t_input *input, t_input *start);
-void				handle_redirs(t_cmd *cmd, t_input **cur);
+int					handle_redirs(t_cmd *cmd, t_input **cur);
 int					open_files(t_data *data);
 
 int					parse_tokens(t_input *tokens, t_data *data);
@@ -274,7 +274,6 @@ int					parse_tokens(t_input *tokens, t_data *data);
 int					exec_proc(t_data *data, char **envp);
 int					create_pipes(t_data *data);
 
-void				print_cmd_list(t_cmd *cmds);
 void				print_cmds(t_data *data);
 
 // Builtins
