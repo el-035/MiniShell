@@ -4,7 +4,7 @@ char	**is_builtins(void)
 {
 	char	**commands;
 
-	commands = NULL; //ft_calloc(8, sizeof(char *));
+	commands = ft_calloc(8, sizeof(char *));
 	if (!commands)
 		return (NULL);
 	commands[0] = "echo";

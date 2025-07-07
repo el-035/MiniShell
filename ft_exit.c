@@ -43,7 +43,7 @@ int	check_overflow(char *trimmed)
 	converted = ft_itoa(long_atoi(clean));
 	if (!converted)
 		return (fail_mall(), free(trimmed), free(clean), -2);
-	if (ft_strncmp(converted, clean, ft_strlen(converted)) != 0) // vehck thias
+	if (ft_strncmp(converted, clean, ft_strlen(converted)) != 0)
 		return (free(converted), free(clean), -1);
 	return (free(converted), free(clean), 1);
 }

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*get_var(char *str)
+char	*get_var(char *str) //
 {
 	int		i;
 	char	*var;
@@ -22,7 +22,7 @@ char	*get_var(char *str)
 	return (var);
 }
 
-char	*get_content(char *str)
+char	*get_content(char *str) //
 {
 	int		i;
 	int		len;
@@ -41,7 +41,7 @@ char	*get_content(char *str)
 	return (conetnt);
 }
 
-char	**copy(char **envp)
+char	**copy(char **envp) //
 {
 	char	**cpy;
 	int		i;
@@ -57,14 +57,14 @@ char	**copy(char **envp)
 		if (ft_strncmp(envp[i], "_=", 2) == 0)
 			i++;
 		if (envp[i])
-			cpy[j++] = ft_strdup(envp[i++]); // protect
+			cpy[j++] = ft_strdup(envp[i++]);
 		if (!cpy[j - 1])
 			return (free_split(cpy), NULL);
 	}
 	return (cpy);
 }
 
-void	sort(char **cpy)
+void	sort(char **cpy) //
 {
 	int		flag;
 	char	*tmp;
@@ -90,7 +90,7 @@ void	sort(char **cpy)
 	}
 }
 
-int	print_export(char **envp)
+int	print_export(char **envp) //
 {
 	char	**cpy;
 	int		i;
@@ -109,7 +109,7 @@ int	print_export(char **envp)
 			return (fail_mall(), free_split(cpy), 1);
 		content = get_content(cpy[i]);
 		if (!content)
-			return ((free_split(cpy), free(var), 1));
+			return ((free_split(cpy), free(var), fail_mall(), 1));
 		printf("declare -x %s=\"%s\"\n", var, content);
 		free(var);
 		free(content);

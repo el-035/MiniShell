@@ -42,7 +42,7 @@ int	save_input(char *line, t_input **first)	//
 t_input	*make_new_node(char *content, int pos)	//
 {
 	t_input	*node;
-	(void)content;
+
 	node = (t_input *)malloc(sizeof(t_input));
 	if (!node)
 		return (NULL);

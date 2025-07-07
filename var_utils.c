@@ -24,7 +24,7 @@ char	*search_var(char *content, char *var)
 	return (temp);
 }
 
-int	stop(char *content)
+int	stop(char *content) //
 {
 	int	i;
 

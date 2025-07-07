@@ -8,7 +8,6 @@ int	parsing_execution(t_input *first, t_data *data)
 		return (free_list(first), 1);
 	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
-	/* test_print(first); */
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
 	if (!parse_tokens(first, data))

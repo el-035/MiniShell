@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_is_valid(char *cmd)
+int	ft_is_valid(char *cmd) //
 {
 	int	i;
 
@@ -27,7 +27,7 @@ int	ft_is_valid(char *cmd)
 	return (0);
 }
 
-int	find_var(char **envp, char *str)
+int	find_var(char **envp, char *str) //
 {
 	char	*var;
 	int		len;
@@ -35,9 +35,9 @@ int	find_var(char **envp, char *str)
 
 	i = 0;
 	var = ft_strjoin(str, "=");
-	len = ft_strlen(var);
 	if (!var)
 		return (fail_mall(), -2);
+	len = ft_strlen(var);
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], var, len) == 0)
@@ -48,7 +48,7 @@ int	find_var(char **envp, char *str)
 	return (-1);
 }
 
-int	append(char *var, char *cmd, t_data *data, int index)
+int	append(char *var, char *cmd, t_data *data, int index) //
 {
 	char	*new;
 	char	*old;
@@ -65,7 +65,7 @@ int	append(char *var, char *cmd, t_data *data, int index)
 	free(old);
 	if (!app)
 		return (fail_mall(), -1);
-	new = double_join(var, "=", app);
+	new =double_join(var, "=", app);
 	if (!new)
 		return (free(app), fail_mall(), -1);
 	free(data->envp[index]);
@@ -73,12 +73,12 @@ int	append(char *var, char *cmd, t_data *data, int index)
 	return (free(app), 0);
 }
 
-int	replace(char *var, char *cmd, t_data *data, int index)
+int	replace(char *var, char *cmd, t_data *data, int index) //
 {
 	char	*content;
 	char	*new;
 
-	content = get_content(cmd);
+	content =get_content(cmd);
 	if (!content)
 		return (fail_mall(), -1);
 	new = double_join(var, "=", content);
@@ -89,7 +89,7 @@ int	replace(char *var, char *cmd, t_data *data, int index)
 	return (free(content), 0);
 }
 
-int	export_helper(char *args, t_data *data, char *var)
+int	export_helper(char *args, t_data *data, char *var) //
 {
 	char	*content;
 	int		index;
@@ -98,25 +98,27 @@ int	export_helper(char *args, t_data *data, char *var)
 	if (!content)
 		return (-1);
 	index = find_var(data->envp, var);
+	if (index == -2)
+		return (free(content), -1);
 	if (index == -1)
 	{
 		if (add_env(data, var, content) == -1)
-			return (free(content), -1);
+			return (free(content), fail_mall(), -1);
 	}
 	else if (args[ft_strlen(var)] == '+')
 	{
 		if (append(var, args, data, index) == -1)
-			return (free(content), free(var), -1);
+			return (free(content), -1);
 	}
 	else
 	{
 		if (replace(var, args, data, index) == -1)
-			return (free(content), free(var), -1);
+			return (free(content), -1);
 	}
 	return (free(content), 0);
 }
 
-void	ft_export(t_data *data, t_cmd *cmd)
+void	ft_export(t_data *data, t_cmd *cmd) //
 {
 	int		i;
 	char	*var;
@@ -138,7 +140,7 @@ void	ft_export(t_data *data, t_cmd *cmd)
 		}
 		else
 		{
-			if (export_helper(cmd->args[i], data, var) == -1) // protect
+			if (export_helper(cmd->args[i], data, var) == -1)
 				return (free(var));
 		}
 		free(var);
