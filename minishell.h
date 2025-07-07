@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 20:05:48 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:29:00 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/ioctl.h>
+# include <sys/stat.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <sys/stat.h>
 
 typedef enum e_type
 {
@@ -84,7 +84,7 @@ typedef struct s_data
 	int				ec_update_flag;
 }					t_data;
 
-void	test_print(t_input *first);
+void				test_print(t_input *first);	//delet
 
 // main
 int					return_exit_code(int exit);
@@ -153,6 +153,7 @@ char				*double_join(char *s1, char *s2, char *s3);
 int					expand_var_hd(char **content, char **envp);
 int					count_quoted_var(char *content);
 int					find_var(char **envp, char *str);
+void				check_if_dir(t_data *data, char *path, char *original);
 
 // list utils -
 t_input				*add_new(char *content, int pos, t_input *prev);
@@ -280,7 +281,5 @@ void				print_cmds(t_data *data);
 // Builtins
 void				ft_pwd(void);
 void				ft_env(char **env);
-
-void	check_if_dir(t_data *data, char *path, char *original);
 
 #endif

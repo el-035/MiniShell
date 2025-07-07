@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:03:40 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:05:44 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:23:42 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	init_input(t_input *first)
 	first->position = -1;
 	first->next = first;
 	first->prev = first;
-	first->is_builtin = -1;
+	first->is_builtin = 0;
 	first->exp = INT_MIN;
 }
 
