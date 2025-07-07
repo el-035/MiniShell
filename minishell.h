@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 21:29:00 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 22:13:48 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ t_input				*beginning(t_input *cur, char *start, char *exp, int f_b);
 
 // init
 void				init_input(t_input *first);
-int					save_input(char *line, t_input **first);
 
 // space split
 char				**space_split(char const *s);
@@ -160,7 +159,7 @@ t_input				*add_new(char *content, int pos, t_input *prev);
 t_input				*make_new_node(char *content, int pos);
 int					list_size(t_input *lst);
 void				init_input(t_input *first);
-int					save_input(char *line, t_input **first);
+int					save_input(char *line, t_input **first, int pos);
 
 // quotes
 int					check_quotes(char *content, int len);
