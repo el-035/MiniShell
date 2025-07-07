@@ -9,17 +9,17 @@ t_input	*beginning(t_input *cur, char *start, char *exp, int f_b) //
 	}
 	else if (f_b == 1)
 	{
-		cur->content = ft_strdup(start);
+		cur->content =ft_strdup(start);
 		if (!cur->content)
 			return (NULL);
-		cur = add_node(cur, exp);
+		cur =  add_node(cur, exp);
 		if (!cur)
 			return (NULL);
 		cur->exp = 0;
 	}
 	else
 	{
-		cur->content = ft_strjoin(start, exp);
+		cur->content =ft_strjoin(start, exp);
 		cur->exp = ft_strlen(start);
 	}
 	if (!cur->content)
@@ -27,7 +27,7 @@ t_input	*beginning(t_input *cur, char *start, char *exp, int f_b) //
 	return (cur);
 }
 
-t_input	*end(t_input *cur, char *next, int f_e)
+t_input	*end(t_input *cur, char *next, int f_e) //
 {
 	char	*tmp;
 
@@ -44,7 +44,7 @@ t_input	*end(t_input *cur, char *next, int f_e)
 			tmp = cur->content;
 			cur->content = ft_strjoin(tmp, next);
 			if (!cur->content)
-				return (NULL);
+				return (free(tmp), NULL);
 			cur->exp = 0 - ft_strlen(tmp);
 			free(tmp);
 		}
@@ -52,7 +52,7 @@ t_input	*end(t_input *cur, char *next, int f_e)
 	return (cur);
 }
 
-t_input	*middle(t_input *cur, char **split)
+t_input	*middle(t_input *cur, char **split)	//
 {
 	int	len;
 	int	i;
@@ -90,7 +90,14 @@ t_input	*empty(t_input *cur, char *start, char *next, char *exp) //
 	else if (count_word(exp) == 0)
 	{
 		cur->content = ft_strdup(start);
-		cur = add_node(cur, next);
+		if (!cur->content)
+			return (NULL);
+		if (next && *next)
+		{
+			cur = add_node(cur, next);
+			if (!cur)
+				return (NULL);
+		}
 		return (cur);
 	}
 	return (cur);

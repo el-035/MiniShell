@@ -81,7 +81,7 @@ char	*extract_var(char **envp, char *var) //
 	return (free(var), free(full), ft_strdup(""));
 }
 
-char	*save_var(char *content)
+char	*save_var(char *content) //
 {
 	int		i;
 	int		len;

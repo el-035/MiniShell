@@ -41,7 +41,7 @@ char	*save_unquoted_start(char *content, int i)	//
 	return (start);
 }
 
-t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
+t_input	*new_token(t_input *cur, char *start, char *exp, char *next) //
 {
 	char	**split;
 
@@ -60,7 +60,7 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 		cur = middle(cur, split);
 		if (!cur)
 			return (free_split(split), NULL);
-		cur = end(cur, next, is_space(exp[ft_strlen(exp) - 1]));
+		cur =  end(cur, next, is_space(exp[ft_strlen(exp) - 1]));
 		if (!cur)
 			return (free_split(split), NULL);
 		if (count_word(exp) == 1)
@@ -69,30 +69,30 @@ t_input	*new_token(t_input *cur, char *start, char *exp, char *next)
 	return (free_split(split), cur);
 }
 
-int	exp_tokenise(t_input *cur, char **envp, int index)
+int	exp_tokenise(t_input *cur, char **envp, int index) //
 {
 	char	*start;
 	char	*var;
-	char	*exp;
 	char	*next;
 
-	if (index == -1)
-		return (0);
-	start = save_unquoted_start(cur->content, index);
-	if (!start)
-		return (-1);
-	var = save_var(&(cur->content[index]));
-	if (!var)
-		return (free(start), -1);
-	next = save_rest(&(cur->content[index + 1]), var);
-	if (!next)
-		return (free(start), free(var), -1);
-	exp = extract_var(envp, var);
-	if (!exp)
-		return (free(start), free(next), -1);
-	if (!new_token(cur, start, exp, next))
-		return (free(start), free(next), free(exp), -1);
-	if (unquoted_var(cur->content) != -1)
-		exp_tokenise(cur, envp, unquoted_var(cur->content));
-	return (free(start), free(next), free(exp), 0);
+	while (index != -1)
+	{
+		start = save_unquoted_start(cur->content, index);
+		if (!start)
+			return (-1);
+		var = save_var(&(cur->content[index]));
+		if (!var)
+			return (free(start), -1);
+		next = save_rest(&(cur->content[index + 1]), var);
+		if (!next)
+			return (free(start), free(var), -1);
+		var = extract_var(envp, var);
+		if (!var)
+			return (free(start), free(next), -1);
+		if (!new_token(cur, start, var, next))
+			return (free(start), free(next), free(var), -1);
+		index = unquoted_var(cur->content);
+		(free(start), free(next), free(var));
+	}
+	return (0);
 }

@@ -93,7 +93,7 @@ void				syntax_err(void);
 // env_var
 int					find_ev(t_input *first, t_data *data);
 int					expand_var(char **content, char **envp);
-
+int	expand_var_hd(char **content, char **envp);
 int					join_all(char **content, char *start, char *end, char *var);
 char				*save_rest(char *content, char *var);
 char				*save_start(char *content);

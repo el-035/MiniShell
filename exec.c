@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+/* #include "minishell.h"
 
 static void	wait_proc(t_data *data, int *status, int *code)
 {
@@ -61,7 +61,7 @@ static int	exec(t_data *data, char **envp, int i)
 		(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
 	}
 	return (1);
-}
+} */
 #include "minishell.h"
 
 static void	wait_proc(t_data *data, int *status, int *code)
@@ -161,7 +161,7 @@ int	create_pipes(t_data *data)
 }
 
 
-int	exec_proc(t_data *data, char **envp)
+/* int	exec_proc(t_data *data, char **envp)
 {
 	int	i;
 	int	status;
@@ -204,3 +204,4 @@ int	create_pipes(t_data *data)
 	data->pipes[i] = NULL;
 	return (1);
 }
+ */
