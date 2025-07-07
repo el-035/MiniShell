@@ -25,6 +25,7 @@
 # include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 
 typedef enum e_type
 {
@@ -279,5 +280,7 @@ void				print_cmds(t_data *data);
 // Builtins
 void				ft_pwd(void);
 void				ft_env(char **env);
+
+void	check_if_dir(t_data *data, char *path, char *original);
 
 #endif

@@ -17,6 +17,8 @@ int	handle_heredoc(t_cmd *cmd, t_input **cur, char **envp)
 	if (!(*cur)->next)
 		return (0);
 	cmd->limiter = ft_strdup((*cur)->next->content);
+	if (!cmd->limiter)
+		return (fail_mall(), 0);
 	if (!create_heredoc(cmd, envp))
 		return (0);
 	cmd->is_hd = 1;
@@ -45,7 +47,7 @@ static int	create_hd_filename(char *name, int size, int index)
 			return (fd);
 		hd_id++;
 	}
-	return (perror("Open: "), -1);
+	return (-1);
 }
 
 int	set_heredoc_fds(t_cmd *cmd, int index)
@@ -56,8 +58,16 @@ int	set_heredoc_fds(t_cmd *cmd, int index)
 
 	fd = create_hd_filename(tmp_name, sizeof(tmp_name), index);
 	if (fd < 0)
-		return (perror("Open heredoc file: "), 0);
+		return (perror("Open heredoc file"), 0);
+	if (cmd->hd_in)
+	{
+		unlink(cmd->hd_in);
+		free(cmd->hd_in);
+		cmd->hd_in = NULL;
+	}
 	cmd->hd_in = ft_strdup(tmp_name);
+	if (!cmd->hd_in)
+		return (close(fd), fail_mall(), 0);
 	i = -1;
 	while (cmd->hd_content && cmd->hd_content[++i])
 	{
@@ -76,11 +86,12 @@ void	exec_hd(t_data *data, t_cmd *cmd, int index)
 	{
 		if (!set_heredoc_fds(cmd, index))
 			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
+		//LEAK HERE FOR MULT HDs on exit
 		fd = open(cmd->hd_in, O_RDONLY);
 		if (fd < 0)
-			(perror("Opening heredoc tmp file: "), free_split(data->envp),
+			(perror("Opening heredoc tmp file"), free_split(data->envp),
 				free_all(data), exit(EXIT_FAILURE));
-		(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in));
+		(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in), free(cmd->hd_in));
 	}
 	else
 		(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
