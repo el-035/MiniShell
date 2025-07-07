@@ -4,7 +4,7 @@ char	**is_builtins(void)
 {
 	char	**commands;
 
-	commands = ft_calloc(8, sizeof(char *));
+	commands = NULL; //ft_calloc(8, sizeof(char *));
 	if (!commands)
 		return (NULL);
 	commands[0] = "echo";
@@ -24,6 +24,8 @@ int	compare_cmd(t_input *cur)
 	char	**commands;
 
 	commands = is_builtins();
+	if (!commands)
+		return (fail_mall(), -1);
 	i = 0;
 	while (i <= 6)
 	{
@@ -74,7 +76,10 @@ int	find_cmd(t_input *first)
 				cur->next->type = CMD;
 		}
 		if (cur->type == CMD)
-			compare_cmd(cur);
+		{
+			if (compare_cmd(cur) != 0)
+				return (1);
+		}
 		cur = cur->next;
 		if (cur == first)
 			break ;

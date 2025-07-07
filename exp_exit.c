@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char	*beg(char *content)
+char	*beg(char *content) //
 {
 	int		len;
 	int		i;
@@ -20,13 +20,13 @@ char	*beg(char *content)
 		return (ft_strdup(""));
 	beg = (char *)ft_calloc((len + 1), sizeof(char));
 	if (!beg)
-		return (fail_mall(), NULL);
+		return (NULL);
 	while (++i < len)
 		beg[i] = content[i];
 	return (beg);
 }
 
-char	*save_end(char *content, int len)
+char	*save_end(char *content, int len) //
 {
 	char	*end;
 	int		i;
@@ -47,7 +47,7 @@ char	*save_end(char *content, int len)
 	return (end);
 }
 
-int	no_more(char *content)
+int	no_more(char *content) //
 {
 	int	i;
 
@@ -70,7 +70,7 @@ int	no_more(char *content)
 	return (0);
 }
 
-char	*extract_exit_code(void)
+char	*extract_exit_code(void) //
 {
 	char	*num;
 	char	*var;
@@ -86,12 +86,12 @@ char	*extract_exit_code(void)
 		return (NULL);
 	var = ft_strdup(num);
 	if (!var)
-		return (NULL);
+		return (free(num), NULL);
 	free(num);
 	return (var);
 }
 
-int	expand_exit(t_input **cur, t_data *data)
+int	expand_exit(t_input **cur, t_data *data) //
 {
 	char	*start;
 	char	*var;
@@ -104,12 +104,12 @@ int	expand_exit(t_input **cur, t_data *data)
 		return (1);
 	var = extract_exit_code();
 	if (!var)
-		return (free(start), fail_mall(), 1);
+		return (free(start), 1);
 	end = save_end((*cur)->content, ft_strlen(start) + 2);
 	if (!end)
-		return (free(start), free(var), fail_mall(), 1);
+		return (free(start), free(var), 1);
 	if (join_all(&((*cur)->content), start, end, var) == 1)
-		return (fail_mall(), 1);
+		return (1);
 	if (ft_strnstr((*cur)->content, "$?", ft_strlen((*cur)->content)))
 		expand_exit(cur, data);
 	return (0);

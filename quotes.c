@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	check_quotes(char *content, int len)
+int	check_quotes(char *content, int len) //
 {
 	int	quote;
 	int	i;
@@ -22,7 +22,7 @@ int	check_quotes(char *content, int len)
 	return (quote);
 }
 
-int	return_final_len(char *str)
+int	return_final_len(char *str) //
 {
 	int	i;
 	int	j;
@@ -44,7 +44,7 @@ int	return_final_len(char *str)
 	return (j);
 }
 
-int	remove_useless_quotes(char **content, int len)
+int	remove_useless_quotes(char **content, int len) //
 {
 	int		i;
 	char	*final;
@@ -83,7 +83,7 @@ int	var_quotes(t_input *cur)
 	start = ft_substr(cur->content, 0, len);
 	if (!start)
 		return (fail_mall(), -1);
-	end = ft_strdup(&(cur->content[len]));
+	end =ft_strdup(&(cur->content[len]));
 	if (!end)
 		return (free(start), fail_mall(), -1);
 	if (cur->exp < 0)
@@ -115,7 +115,8 @@ int	remove_quotes(t_input *first)
 					return (1);
 			}
 			else if (cur->exp != 0)
-				var_quotes(cur);
+				if (var_quotes(cur) != 0)
+					return (1);
 		}
 		cur = cur->next;
 		if (cur == first)
