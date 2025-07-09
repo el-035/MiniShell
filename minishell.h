@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 22:13:48 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:45:08 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ typedef struct s_data
 	int				ec_update_flag;
 }					t_data;
 
-void				test_print(t_input *first);	//delet
-
 // main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
@@ -138,7 +136,7 @@ t_input				*beginning(t_input *cur, char *start, char *exp, int f_b);
 
 // init
 void				init_input(t_input *first);
-
+void				line_helper(t_data *data, char **args);
 // space split
 char				**space_split(char const *s);
 
@@ -273,8 +271,6 @@ int					parse_tokens(t_input *tokens, t_data *data);
 
 int					exec_proc(t_data *data, char **envp);
 int					create_pipes(t_data *data);
-
-void				print_cmds(t_data *data);
 
 // Builtins
 void				ft_pwd(void);

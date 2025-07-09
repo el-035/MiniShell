@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:37:00 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ static int	count_args(t_input *cur)
 
 static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 {
-	if (((*cur)->type == CMD || (*cur)->type == ARG) && (!(*cur)->prev
-			|| ((*cur)->prev->type != REDIR_IN
-				&& (*cur)->prev->type != REDIR_OUT
-				&& (*cur)->prev->type != REDIR_APPEND)))
+	if (((*cur)->type == CMD || (*cur)->type == ARG) && (!(*cur)->prev || \
+			((*cur)->prev->type != REDIR_IN && (*cur)->prev->type != REDIR_OUT \
+			&& (*cur)->prev->type != REDIR_APPEND)))
 	{
 		cmd->args[(*j)++] = ft_strdup((*cur)->content);
 		if ((*cur)->type == CMD)
@@ -43,12 +42,10 @@ static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 	}
 	else if (((*cur)->type == REDIR_IN || (*cur)->type == REDIR_OUT
 			|| (*cur)->type == REDIR_APPEND) && (*cur)->next)
-			{
-				if (!handle_redirs(cmd, cur))
-					return (0);
-			}
-			//handle_redirs(cmd, cur);
-
+	{
+		if (!handle_redirs(cmd, cur))
+			return (0);
+	}
 	else if ((*cur)->type == HERE_DOC)
 		if (!handle_heredoc(cmd, cur, data->envp))
 			return (0);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redirs_handlers.c                                  :+:      :+:    :+:   */
+/*   redirs_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:33:28 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	count_redirs(t_cmd *cmd, t_input *input, t_input *start)
 static int	check_red_file(t_cmd *cmd, t_input **cur, int redir_ind, int mode)
 {
 	char	*file;
-	
+
 	file = ft_strdup((*cur)->next->content);
 	if (file)
 	{
@@ -105,7 +105,7 @@ static int	check_red_file(t_cmd *cmd, t_input **cur, int redir_ind, int mode)
 		}
 	}
 	return (0);
-} 
+}
 
 int	handle_redirs(t_cmd *cmd, t_input **cur)
 {

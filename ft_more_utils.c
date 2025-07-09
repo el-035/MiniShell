@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:03:10 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:31:29 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:38:05 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ void	check_if_dir(t_data *data, char *path, char *original)
 	struct stat	sb;
 
 	if (!ft_strcmp(original, ".."))
-		(handle_error("..", 2), free(path), free_split(data->envp), free_all(data), exit(127));
+		(handle_error("..", 2), free(path), free_split(data->envp),
+			free_all(data), exit(127));
 	if (stat(path, &sb) == -1)
 		return ;
 	if (S_ISDIR(sb.st_mode))

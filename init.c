@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:34:08 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 21:33:54 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:45:35 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,11 @@ char	*prompt(char **envp, t_data *data, struct sigaction *sig)
 		prompt = "\001\033[1;31m\002Minishell: \001\033[0m\002";
 	line = readline(prompt);
 	return (line);
+}
+
+void	line_helper(t_data *data, char **args)
+{
+	handle_error(args[0], 2);
+	free_split(data->envp);
+	free_all(data);
 }

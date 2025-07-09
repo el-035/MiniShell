@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/07 21:16:19 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/07 23:50:39 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char	*check_path(t_data *data, char *cmd)
 		return (ft_strdup(cmd));
 	else
 		return (handle_error(cmd, 0), NULL);
-	return (handle_error(cmd, 2), NULL);
+	return (NULL);
 }
 
 static int	execute_cmd(t_data *data, char **args, char **envp)
@@ -70,14 +70,14 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	{
 		path = check_path(data, args[0]);
 		if (!path)
-			return (return_exit_code(1), 0);
+			return (handle_error(args[0], 2), return_exit_code(1), 0);
 	}
 	check_if_dir(data, path, args[0]);
 	if (execve(path, args, envp) == -1)
 	{
 		if (path != args[0])
 			free(path);
-		(handle_error(args[0], 2), free_split(data->envp), free_all(data), exit(127));
+		(line_helper(data, args), exit(127));
 	}
 	if (path != args[0])
 		free(path);
@@ -127,8 +127,8 @@ int	exec_child(t_data *data, int index, char **envp)
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
-		(exec_builtin_child(cmd, data)/* , close(STDOUT_FILENO) */, free_all(data),
-			free_split(data->envp)/* , close(STDIN_FILENO) */, exit(EXIT_SUCCESS));
+		(exec_builtin_child(cmd, data), close(STDOUT_FILENO), free_all(data),
+			free_split(data->envp), close(STDIN_FILENO), exit(EXIT_SUCCESS));
 	if (!cmd->args || !cmd->args[0])
 	{
 		if (cmd->is_hd == 1)
@@ -137,7 +137,7 @@ int	exec_child(t_data *data, int index, char **envp)
 			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
 	}
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_split(data->envp), free_all(data)/* , close(STDOUT_FILENO),
-			close(STDIN_FILENO) */, exit(127));
+		(free_split(data->envp), free_all(data), close(STDOUT_FILENO),
+			close(STDIN_FILENO), exit(127));
 	(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
 }
