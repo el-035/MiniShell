@@ -52,7 +52,7 @@ static char	*check_path(t_data *data, char *cmd)
 		return (ft_strdup(cmd));
 	else
 		return (handle_error(cmd, 0), NULL);
-	return (NULL);
+	return (handle_error(cmd, 2), NULL);
 }
 
 static int	execute_cmd(t_data *data, char **args, char **envp)
@@ -70,7 +70,7 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	{
 		path = check_path(data, args[0]);
 		if (!path)
-			return (handle_error(args[0], 2), return_exit_code(1), 0);
+			return (0);
 	}
 	check_if_dir(data, path, args[0]);
 	if (execve(path, args, envp) == -1)

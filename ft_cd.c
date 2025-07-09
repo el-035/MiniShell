@@ -82,10 +82,14 @@ void	ft_cd(t_data *data, t_cmd *cmd)
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
 		write(2, "getcwd failed: OLD_PWD could not be retrtived\n", 46);
-	cd_helper(cmd, data);
 	new_pwd = getcwd(NULL, 0);
 	if (!new_pwd)
+	{
 		write(2, "getcwd failed: PWD could not be retrtived\n", 42);
+		if (chdir(cmd->args[1]) == 0)
+			write(2, ": No such file or directory\n", 28);
+	}
+	cd_helper(cmd, data);
 	if (update_envp(data, "OLDPWD", old_pwd) != 0)
 		return (free(old_pwd), free(new_pwd));
 	if (update_envp(data, "PWD", new_pwd))
