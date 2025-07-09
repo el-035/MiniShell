@@ -29,4 +29,9 @@ void	handle_error(char *str, int error_code)
 		write(2, str, ft_strlen(str));
 		write(2, ": command not found\n", 20);
 	}
+	else if (error_code == 3)
+	{
+		write(2, str, ft_strlen(str));
+		write(2, ": Is a directory\n", 17);
+	}
 }
