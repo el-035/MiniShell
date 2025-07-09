@@ -56,7 +56,6 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 		else if (cmd->args[1] && cmd->args[2])
 		{
 			write(2, "exit: too many arguments\n", 25);
-			write (2, "hi", 2);
 			return_exit_code(1);
 		}
 		else if (data->pipes != 0)

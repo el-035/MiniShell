@@ -102,6 +102,11 @@ int	check_in(t_data *data, int i)
 			return (0);
 		if (j == cmd->in_redirs - 1)
 		{
+			if (data->fd1 >= 0)
+			{
+				close(data->fd1);
+				data->fd1 = -1;
+			}
 			data->fd1 = open(cmd->in[j], O_RDONLY);
 			if (data->fd1 == -1)
 				return (add_skip_flag(cmd, i, data->cmd_count, 1),
