@@ -60,20 +60,12 @@ int	check_overflow(char *trimmed)
 	return (free(converted), free(clean), 1);
 }
 
-void	print_err(char *str, int flag)
+void	print_err(char *str)
 {
-	if (flag == 1)
-	{
-		write(2, "bash: exit: ", 12);
-		write(2, str, ft_strlen(str));
-		write(2, ": numeric argument required\n", 28);
-		return_exit_code(2);
-	}
-	else if (flag == 2)
-	{
-		write(2, "exit: too many arguments\n", 25);
-		return_exit_code(1);
-	}
+	write(2, "exit: ", 6);
+	write(2, str, ft_strlen(str));
+	write(2, ": numeric argument required\n", 28);
+	return_exit_code(2);
 }
 
 void	ft_exit(t_data *data, t_cmd *cmd)
@@ -92,11 +84,9 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 		if (is_valid == -2)
 			return (free_split(data->envp), free_all(data), exit(1));
 		if (ft_str_digit(trimmed) != 0 || is_valid == -1)
-			print_err(cmd->args[1], 1);
-		else if (cmd->args[2] && ft_str_digit(cmd->args[1]) == 0)
-			print_err(cmd->args[1], 2);
+			print_err(cmd->args[1]);
 		else
-			error_n(cmd->args[1]);
+			error_n(cmd->args[1]);		
 		free(trimmed);
 		return (free_split(data->envp), free_all(data),
 			exit(return_exit_code(-2)));

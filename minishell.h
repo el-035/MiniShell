@@ -190,7 +190,7 @@ void				ft_exit(t_data *data, t_cmd *cmd);
 int					error_n(char *err);
 char				*clean_input(char *trim);
 int					check_overflow(char *trimmed);
-void				print_err(char *str, int flag);
+void				print_err(char *str);
 
 // cd -
 int					update_envp(t_data *data, char *var, char *value);

@@ -24,12 +24,25 @@ void	exec_builtin_child(t_cmd *cmd, t_data *data)
 		return ;
 }
 
+static int	is_valid_numeric(const char *str)
+{
+	int	i = 0;
+
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+		i++;
+	if (!ft_isdigit(str[i]))
+		return (0);
+	while (ft_isdigit(str[i]))
+		i++;
+	while (str[i] == ' ' || str[i] == '\t')
+		i++;
+	return (str[i] == '\0');
+}
+
 int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 {
-	int	exit_count;
-	int	i;
-
-	exit_count = 0;
 	if ((ft_strcmp(cmd->args[0], "cd") == 0) && data->pipes == NULL)
 		ft_cd(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
@@ -38,14 +51,18 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 		ft_unset(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
 	{
-		i = -1;
-		while (++i < data->cmd_count)
-			if (ft_strcmp(cmd->args[0], data->cmds[i].args[0]) == 0)
-				exit_count++;
-		if (exit_count == 1)
+		if (cmd->args[1] && !is_valid_numeric(cmd->args[1]))
 			ft_exit(data, cmd);
-		else
+		else if (cmd->args[1] && cmd->args[2])
+		{
+			write(2, "exit: too many arguments\n", 25);
+			write (2, "hi", 2);
+			return_exit_code(1);
+		}
+		else if (data->pipes != 0)
 			data->ec_update_flag = 1;
+		else
+			ft_exit(data, cmd);
 	}
 	else
 		return (1);
