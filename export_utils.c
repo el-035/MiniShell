@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:04 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 17:21:04 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 19:30:59 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,15 @@ void	sort(char **cpy)
 	}
 }
 
+void	actual_print(char *var,char *content)
+{
+	write(1, "declare -x ", 11);
+	ft_putstr_fd(var, 1);
+	write(1, "=\"", 2);
+	ft_putstr_fd(content, 1);
+	write(1, "\"\n", 2);
+}
+
 int	print_export(char **envp, t_data *data)
 {
 	char	**cpy;
@@ -122,7 +131,7 @@ int	print_export(char **envp, t_data *data)
 		content = get_content(cpy[i]);
 		if (!content)
 			return ((free_split(cpy), free(var), fail_mall(), 1));
-		printf("declare -x %s=\"%s\"\n", var, content);
+		actual_print(var, content);
 		free(var);
 		free(content);
 		i++;
