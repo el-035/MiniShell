@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:35 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 16:45:25 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:35:30 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 	char	*trimmed;
 	int		is_valid;
 
-	printf("exit\n");
+	write(1, "exit\n", 5);
 	if (cmd->args[1])
 	{
 		trimmed = ft_strtrim(cmd->args[1], " \t");

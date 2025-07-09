@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 23:32:41 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 18:11:18 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:28:44 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	ft_pwd(void)
 		ft_putstr_fd(cwd, 1);
 		write(1, "\n", 1);
 	}
-	//		printf("%s\n", cwd);
 	else
 		perror("pwd: ");
 }

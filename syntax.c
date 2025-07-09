@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:41:00 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:41:01 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:36:35 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	syntax_check(t_input *first)
 		if (more_syntax(cur) != 0)
 			return (1);
 		if (check_quotes(cur->content, ft_strlen(cur->content)) != 0)
-			return (printf("Unexpected end of file\n"), return_exit_code(2), 1);
+			return (write(2, "Unexpected end of file\n", 23), return_exit_code(2), 1);
 		cur = cur->next;
 	}
 	return (0);

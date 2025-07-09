@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handlers.c                                  :+:      :+:    :+:   */
+/*   handlers_flags.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/09 18:35:58 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	handler(int sig)
 	if (sig == SIGINT)
 	{
 		return_sig_flag(1);
-		printf("\n");
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
@@ -28,7 +28,7 @@ void	child_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
+		write(1, "\n", 1);
 		exit(SIGINT + 128);
 	}
 	if (sig == SIGQUIT)
