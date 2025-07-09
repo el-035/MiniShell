@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:57:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 22:13:14 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 14:48:08 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main_loop(t_input *first, t_data *data, struct sigaction *sig, char **envp)
 		return (0);
 	}
 	if (!save_input(line, &first, 0))
-		return (0);
+		return (add_history(line), free(line), free_all(data), 0);
 	parsing_execution(first, data);
 	(add_history(line), free(line), free_all(data));
 	return (0);
