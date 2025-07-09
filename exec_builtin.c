@@ -43,8 +43,11 @@ static int	is_valid_numeric(const char *str)
 
 int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 {
-	if ((ft_strcmp(cmd->args[0], "cd") == 0) && data->pipes == NULL)
-		ft_cd(data, cmd);
+	if ((ft_strcmp(cmd->args[0], "cd") == 0))
+		if (data->pipes == NULL)
+			ft_cd(data, cmd);
+		else
+			cd_helper(cmd, data);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		ft_export(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
@@ -54,10 +57,7 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 		if (cmd->args[1] && !is_valid_numeric(cmd->args[1]))
 			ft_exit(data, cmd);
 		else if (cmd->args[1] && cmd->args[2])
-		{
-			write(2, "exit: too many arguments\n", 25);
-			return_exit_code(1);
-		}
+			(write(2, "exit: too many arguments\n", 25), return_exit_code(1));
 		else if (data->pipes != 0)
 			data->ec_update_flag = 1;
 		else
