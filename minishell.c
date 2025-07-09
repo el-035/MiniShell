@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:57:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 17:56:33 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:11:15 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,11 @@ int	parsing_execution(t_input *first, t_data *data)
 		return (free_list(first), 1);
 	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
+	/* test_print(first);
+	printf("\n"); */
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
+	/* test_print(first); */
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
 	free_list(first);

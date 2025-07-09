@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:06:43 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 21:26:20 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 21:15:03 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	find_cmd(t_input *first)
 	{
 		if (cur->type == UNKNOWN)
 			cur->type = ARG;
-		if (cur->type == CMD && cur->content[0] == '\0' && cur->exp != INT_MIN)
+		if (/* cur->type == CMD &&  */cur->content[0] == '\0' && cur->exp != INT_MIN)
 		{
 			cur->type = UNKNOWN;
 			if (cur->next != cur && cur->next->type == ARG)
