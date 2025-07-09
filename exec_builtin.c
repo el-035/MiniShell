@@ -43,11 +43,14 @@ static int	is_valid_numeric(const char *str)
 
 int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 {
-	if ((ft_strcmp(cmd->args[0], "cd") == 0))
+	if (ft_strcmp(cmd->args[0], "cd") == 0)
+	{
 		if (data->pipes == NULL)
 			ft_cd(data, cmd);
-		else
-			cd_helper(cmd, data);
+		else if (access(cmd->args[1], F_OK) == -1)
+			(write(2, "cd: ", 4), handle_error(cmd->args[1], 0));
+		//UPDATE ERROR CODE IF THE LAST
+	}
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
 		ft_export(data, cmd);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
