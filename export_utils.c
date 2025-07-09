@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:04 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:22:18 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:21:04 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ char	*get_content(char *str)
 	return (conetnt);
 }
 
-char	**copy(char **envp)
+char	**copy(char **envp, t_data *data)
 {
 	char	**cpy;
 	int		i;
@@ -61,7 +61,7 @@ char	**copy(char **envp)
 
 	i = 0;
 	j = 0;
-	cpy = ft_calloc(arr_len(envp), sizeof(char *));
+	cpy = ft_calloc(data->envp_size + 1, sizeof(char *));
 	if (!cpy)
 		return (NULL);
 	while (envp[i])
@@ -88,7 +88,7 @@ void	sort(char **cpy)
 	{
 		flag = 0;
 		i = 0;
-		while (cpy[i + 1])
+		while (cpy[i] && cpy[i + 1])
 		{
 			if (ft_strncmp(cpy[i], cpy[i + 1], ft_strlen(cpy[i])) > 0)
 			{
@@ -102,7 +102,7 @@ void	sort(char **cpy)
 	}
 }
 
-int	print_export(char **envp)
+int	print_export(char **envp, t_data *data)
 {
 	char	**cpy;
 	int		i;
@@ -110,7 +110,7 @@ int	print_export(char **envp)
 	char	*content;
 
 	i = 0;
-	cpy = copy(envp);
+	cpy = copy(envp, data);
 	if (!cpy)
 		return (fail_mall(), 1);
 	sort(cpy);

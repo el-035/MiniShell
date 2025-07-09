@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 23:45:08 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:20:48 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void				ft_exit(t_data *data, t_cmd *cmd);
 int					error_n(char *err);
 char				*clean_input(char *trim);
 int					check_overflow(char *trimmed);
-void				print_err(char *str, int flag);
+void				print_err(char *str/* , int flag */);
 
 // cd -
 int					update_envp(t_data *data, char *var, char *value);
@@ -214,9 +214,9 @@ int					append(char *var, char *cmd, t_data *data, int index);
 // export utils -
 char				*get_var(char *str);
 char				*get_content(char *str);
-char				**copy(char **envp);
+char				**copy(char **envp, t_data *data);
 void				sort(char **cpy);
-int					print_export(char **envp);
+int					print_export(char **envp, t_data *data);
 
 // check_files
 void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);
