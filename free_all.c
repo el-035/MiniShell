@@ -49,7 +49,7 @@ void	free_cmd(t_cmd *cmd)
 		free(cmd->limiter);
 }
 
-void	free_pipes(int ***pipes, int count)
+/* void	free_pipes(int ***pipes, int count)
 {
 	int	i;
 
@@ -58,7 +58,7 @@ void	free_pipes(int ***pipes, int count)
 		free((*pipes)[i]);
 	free(*pipes);
 	*pipes = NULL;
-}
+} */
 
 static void	close_fds(t_data *data)
 {
@@ -83,8 +83,8 @@ void	free_all(t_data *data)
 		free_str_arr(data->env_path);
 		data->env_path = NULL;
 	}
-	if (data->pipes != NULL)
-		free_pipes(&data->pipes, data->cmd_count);
+/* 	if (data->pipes != NULL)
+		free_pipes(&data->pipes, data->cmd_count); */
 	if (data->pid != NULL)
 	{
 		free(data->pid);

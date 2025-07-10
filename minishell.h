@@ -76,13 +76,14 @@ typedef struct s_data
 	char			**envp;
 	int				envp_size;
 	pid_t			*pid;
-	int				**pipes;
+	int				pipes[2][2];
 	int				fd1;
 	int				fd2;
 	t_cmd			*cmds;
 	int				cmd_count;
 	int				ec_update_flag;
 }					t_data;
+
 void	test_print(t_input *first);
 
 // main

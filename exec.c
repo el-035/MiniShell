@@ -45,43 +45,63 @@ static int	exec(t_data *data, char **envp, int i)
 			data->pid[i] = -2;
 			continue ;
 		}
+		if (i < data->cmd_count - 1 && !data->cmds[i + 1].error_skip)
+		{
+			if (pipe(data->pipes[1]) == -1)
+				return (perror("Pipe"), 0);
+		}
+		else
+		{
+			data->pipes[1][0] = -1;
+			data->pipes[1][1] = -1;
+		}
 		if (data->cmds[i].is_builtin)
 		{
 			if (!exec_builtin_parent(&data->cmds[i], data))
 			{
 				data->pid[i] = -2;
+				if (data->pipes[1][0] != -1) 
+					close(data->pipes[1][0]);
+				if (data->pipes[1][1] != -1) 
+					close(data->pipes[1][1]);
 				continue ;
 			}
 		}
 		data->pid[i] = fork();
 		if (data->pid[i] == -1)
-			return (perror("Fork: "), 0);
+			return (perror("Fork"), 0);
 		else if (data->pid[i] == 0)
 			exec_child(data, i, envp);
 		(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
+		if (data->pipes[0][0] != -1)
+			close (data->pipes[0][0]);
+		if (data->pipes[0][1] != -1)
+			close (data->pipes[0][1]);
+		data->pipes[0][0] = data->pipes[1][0];
+		data->pipes[0][1] = data->pipes[1][1];
 	}
 	return (1);
 }
 
 int	exec_proc(t_data *data, char **envp)
 {
-	int	i;
+	//int	i;
 	int	status;
 	int	code;
 
 	status = 0;
-	i = -1;
+	//i = -1;
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
 	{
-		while (++i < data->cmd_count - 1)
-			(close(data->pipes[i][0]), close(data->pipes[i][1]));
+/* 		while (++i < data->cmd_count - 1)
+			(close(data->pipes[i][0]), close(data->pipes[i][1])); */
 		return (perror("PID: "), 0);
 	}
 	if (!exec(data, envp, -1))
 		return (0);
-	while (++i < data->cmd_count - 1)
-		(close(data->pipes[i][0]), close(data->pipes[i][1]));
+/* 	while (++i < data->cmd_count - 1)
+		(close(data->pipes[i][0]), close(data->pipes[i][1])); */
 	wait_proc(data, &status, &code);
 	if (WIFEXITED(status))
 	{
@@ -91,7 +111,7 @@ int	exec_proc(t_data *data, char **envp)
 	return (1);
 }
 
-int	create_pipes(t_data *data)
+/* int	create_pipes(t_data *data)
 {
 	int	i;
 
@@ -109,4 +129,4 @@ int	create_pipes(t_data *data)
 	}
 	data->pipes[i] = NULL;
 	return (1);
-}
+} */

@@ -17,6 +17,10 @@ int	init_stuff(t_data *data, char **envp)
 	ft_memset(data, 0, sizeof(t_data));
 	data->fd1 = -1;
 	data->fd2 = -1;
+	data->pipes[0][0] = -1;
+	data->pipes[0][1] = -1;
+	data->pipes[1][0] = -1;
+	data->pipes[1][1] = -1;
 	if (copy_envp(data, envp) == -1)
 		return (fail_mall(), -1);
 	return_exit_code(0);

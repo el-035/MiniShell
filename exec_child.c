@@ -84,7 +84,7 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	return (1);
 }
 
-static void	set_child_fds(t_data *data, t_cmd *cmd, int index, int i)
+/* static void	set_child_fds(t_data *data, t_cmd *cmd, int index, int i)
 {
 	while (++i < data->cmd_count - 1)
 	{
@@ -111,6 +111,33 @@ static void	set_child_fds(t_data *data, t_cmd *cmd, int index, int i)
 	while (++i < 256)
 		if (i != STDIN_FILENO && i != STDOUT_FILENO && i != STDERR_FILENO)
 			close(i);
+} */
+
+static void	set_child_fds(t_data *data, t_cmd *cmd, /* int index,  */int i)
+{
+	/* while (++i < data->cmd_count - 1)
+	{
+		if (i != index)
+			close(data->pipes[i][1]);
+		if (i != index - 1)
+			close(data->pipes[i][0]);
+	} */
+	if (cmd->in)
+		(dup2(data->fd1, STDIN_FILENO), close(data->fd1));
+	else if (data->pipes[0][0] != -1)
+		(dup2(data->pipes[0][0], STDIN_FILENO), close(data->pipes[0][0]));
+	if (cmd->out)
+		(dup2(data->fd2, STDOUT_FILENO), close(data->fd2));
+	else if (data->pipes[1][1] != -1)
+		(dup2(data->pipes[1][1], STDOUT_FILENO), close(data->pipes[1][1]));
+	if (!cmd->in && data->fd1 != STDIN_FILENO && data->fd1 != -1)
+		close(data->fd1);
+	if (!cmd->out && data->fd2 != STDOUT_FILENO && data->fd2 != -1)
+		close(data->fd2);
+	i = 2;
+	while (++i < 256)
+		if (i != STDIN_FILENO && i != STDOUT_FILENO && i != STDERR_FILENO)
+			close(i);
 }
 
 int	exec_child(t_data *data, int index, char **envp)
@@ -123,7 +150,7 @@ int	exec_child(t_data *data, int index, char **envp)
 	sig.sa_flags = 0;
 	(sigaction(SIGINT, &sig, NULL), sigaction(SIGQUIT, &sig, NULL));
 	cmd = &data->cmds[index];
-	set_child_fds(data, cmd, index, -1);
+	set_child_fds(data, cmd, /* index, */ -1);
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
