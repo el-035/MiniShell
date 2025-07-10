@@ -48,7 +48,7 @@ static int	read_heredoc(t_cmd *cmd, int hd_flag, int count, char **envp)
 		if (!line)
 			return (print_hd_err(cmd), 1);
 		if (return_sig_flag(-1) == 2)
-			break ;
+			return(free(line), 0);
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
 		if (ft_strchr(line, '$'))
