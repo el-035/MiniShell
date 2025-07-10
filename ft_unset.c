@@ -74,13 +74,13 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 	char	**tmp;
 
 	if (!cmd->args[1])
-		return (0);
+		return (1);
 	i = var_count(data->envp, cmd->args);
 	if (i == 0)
-		return (0);
+		return (1);
 	tmp = ft_calloc((data->envp_size - i) + 1, sizeof(char *));
 	if (!tmp)
-		return (fail_mall(), -1);
+		return (fail_mall(), 0);
 	data->envp_size -= i;
 	i = 0;
 	j = 0;
@@ -92,5 +92,5 @@ int	ft_unset(t_data *data, t_cmd *cmd)
 			free(data->envp[i]);
 		i++;
 	}
-	return (free(data->envp), data->envp = tmp, 0);
+	return (free(data->envp), data->envp = tmp, 1);
 }
