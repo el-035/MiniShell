@@ -67,10 +67,10 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 	}
 	else if (chdir(cmd->args[1]) == -1)
 	{
-		write(2, "cd: ", 4);
-		write(2, cmd->args[1], ft_strlen(cmd->args[1]));
-		write(2, ": No such file or directory\n", 28);
-		return_exit_code(1);
+		if (access(cmd->args[1], F_OK) == -1)
+			(write(2, "cd: ", 4), handle_error(cmd->args[1], 0));
+		else if (access(cmd->args[1], X_OK) == -1)
+			(write(2, "cd: ", 4), handle_error(cmd->args[1], 1));
 	}
 }
 
