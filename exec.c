@@ -40,12 +40,7 @@ static int	exec(t_data *data, char **envp, int i)
 {
 	while (++i < data->cmd_count)
 	{
-		if (data->cmds[i].error_skip)
-		{
-			data->pid[i] = -2;
-			continue ;
-		}
-		if (i < data->cmd_count - 1 && !data->cmds[i + 1].error_skip)
+		if (i < data->cmd_count - 1)
 		{
 			if (pipe(data->pipes[1]) == -1)
 				return (perror("Pipe"), 0);
@@ -54,6 +49,15 @@ static int	exec(t_data *data, char **envp, int i)
 		{
 			data->pipes[1][0] = -1;
 			data->pipes[1][1] = -1;
+		}
+		if (data->cmds[i].error_skip)
+		{
+			data->pid[i] = -2;
+			if (data->pipes[1][0] != -1)
+				close(data->pipes[1][0]);
+			if (data->pipes[1][1] != -1)
+				close(data->pipes[1][1]);
+			continue ;
 		}
 		if (data->cmds[i].is_builtin)
 		{
@@ -102,6 +106,8 @@ int	exec_proc(t_data *data, char **envp)
 		return (0);
 /* 	while (++i < data->cmd_count - 1)
 		(close(data->pipes[i][0]), close(data->pipes[i][1])); */
+/* 	close(data->pipes[1][1]), close(data->pipes[1][0]);
+	close(data->pipes[0][1]), close(data->pipes[0][0]); */
 	wait_proc(data, &status, &code);
 	if (WIFEXITED(status))
 	{
