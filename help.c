@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   help.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/11 18:54:58 by efittant          #+#    #+#             */
+/*   Updated: 2025/07/11 19:00:40 by efittant         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	actual_print(char *var, char *content)
@@ -11,8 +23,10 @@ void	actual_print(char *var, char *content)
 		write(1, "\"", 1);
 	}
 	write(1, "\n", 1);
+	free(var);
+	if (content)
+		free(content);
 }
-
 
 int	add_empty_env(t_data *data, char *var)
 {
@@ -39,11 +53,10 @@ int	add_empty_env(t_data *data, char *var)
 	return (0);
 }
 
-
 int	find_exp_var(char **envp, char *str)
 {
-	int		len;
-	int		i;
+	int	len;
+	int	i;
 
 	i = 0;
 	len = ft_strlen(str);

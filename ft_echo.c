@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:01:41 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 14:27:55 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 18:55:55 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_echo(t_cmd *cmd)
 	{
 		ft_putstr_fd(cmd->args[i], 1);
 		if (cmd->args[i + 1])
-			write(1, " ", 1);	
+			write(1, " ", 1);
 		i++;
 	}
 	if (nl == 1)

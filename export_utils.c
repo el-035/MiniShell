@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:04 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 17:59:10 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 19:00:43 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,12 @@ void	sort(char **cpy)
 	}
 }
 
-int	print_export(char **envp, t_data *data)
+int	print_export(char **envp, t_data *data, int i)
 {
 	char	**cpy;
-	int		i;
 	char	*var;
 	char	*content;
 
-	i = 0;
-	
 	cpy = copy(envp, data);
 	if (!cpy)
 		return (fail_mall(), 1);
@@ -127,9 +124,6 @@ int	print_export(char **envp, t_data *data)
 				return ((free_split(cpy), free(var), fail_mall(), 1));
 		}
 		actual_print(var, content);
-		free(var);
-		if (content)
-			free(content);
 		content = NULL;
 		i++;
 	}

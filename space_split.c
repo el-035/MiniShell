@@ -6,12 +6,11 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:40:02 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 19:37:11 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 19:02:46 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 static int	count_strings(char const *s)
 {
@@ -55,13 +54,15 @@ static char	*copy_str(char const *s, char *start)
 	str[i] = '\0';
 	return (str);
 }
+
 static char	**free_mem(char **res, int i)
 {
 	while (i-- > 0)
-		free (res[i]);
-	free (res);
+		free(res[i]);
+	free(res);
 	return (0);
 }
+
 char	**space_split(char const *s)
 {
 	char	**res;
@@ -90,7 +91,6 @@ char	**space_split(char const *s)
 	res[i] = 0;
 	return (res);
 }
-
 
 /* static char	*word(char *s, int i)
 {

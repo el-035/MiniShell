@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:57:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 21:11:15 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 19:10:14 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,11 @@ int	parsing_execution(t_input *first, t_data *data)
 		return (free_list(first), 1);
 	if (remove_quotes(first) != 0)
 		return (free_list(first), 1);
-	/* test_print(first);
-	printf("\n"); */
 	if (find_cmd(first) != 0)
 		return (free_list(first), 1);
-	/* test_print(first); */
 	if (!parse_tokens(first, data))
 		return (free_list(first), 1);
 	free_list(first);
-/* 	if (!create_pipes(data))
-		return (1); */
 	if (!get_env_path(data, data->envp))
 		return (1);
 	open_files(data);
@@ -53,9 +48,10 @@ int	main_loop(t_input *first, t_data *data, struct sigaction *sig, char **envp)
 		data->ec_update_flag = 1;
 		return (free(line), free_all(data), 0);
 	}
+	add_history(line);
 	if (save_input(line, &first, 0))
 		parsing_execution(first, data);
-	(add_history(line), free(line), free_all(data));
+	(free(line), free_all(data));
 	return (0);
 }
 
@@ -82,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 	if (first)
 		free_list(first);
 	free_all(&data);
-	rl_clear_history();
+	rl_clear_history(); //add everywhere the child exits
 	if (return_sig_flag(-1) != 0)
 		return (free_split(data.envp), return_exit_code(130));
 	return (free_split(data.envp), return_exit_code(-1));

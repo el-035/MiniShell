@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/11 18:38:12 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	handle_error(char *str, int error_code)
 	{
 		write(2, str, ft_strlen(str));
 		write(2, ": command not found\n", 20);
+		rl_clear_history();
 	}
 	else if (error_code == 3)
 	{

@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:35 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 18:35:30 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 19:01:52 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,12 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 		if (ft_str_digit(trimmed) != 0 || is_valid == -1)
 			print_err(cmd->args[1]);
 		else
-			error_n(cmd->args[1]);		
+			error_n(cmd->args[1]);
 		free(trimmed);
+		rl_clear_history();
 		return (free_split(data->envp), free_all(data),
 			exit(return_exit_code(-2)));
 	}
+	rl_clear_history();
 	return (free_split(data->envp), free_all(data), exit(return_exit_code(-1)));
 }

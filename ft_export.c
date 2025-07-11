@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:53 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 17:59:22 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 19:00:00 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ int	replace(char *var, char *cmd, t_data *data, int index)
 	return (free(content), 0);
 }
 
-
 int	export_helper(char *args, t_data *data, char *var)
 {
 	char	*content;
@@ -117,7 +116,7 @@ void	ft_export(t_data *data, t_cmd *cmd)
 
 	i = 0;
 	if (!cmd->args[1])
-		print_export(data->envp, data);
+		print_export(data->envp, data, 0);
 	while (cmd->args[++i])
 	{
 		var = get_var(cmd->args[i]);
