@@ -64,7 +64,7 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 		if (access(args[0], X_OK) == 0)
 			path = args[0];
 		else
-			return (handle_error(args[0], 0), 0);
+			return (handle_error(args[0], 4), 0);
 	}
 	else
 	{
