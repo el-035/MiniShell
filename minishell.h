@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 21:04:51 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 18:00:45 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_data
 	int				ec_update_flag;
 }					t_data;
 
-void	test_print(t_input *first);
+void				test_print(t_input *first);
 
 // main
 int					return_exit_code(int exit);
@@ -219,6 +219,11 @@ char				*get_content(char *str);
 char				**copy(char **envp, t_data *data);
 void				sort(char **cpy);
 int					print_export(char **envp, t_data *data);
+
+// help
+void				actual_print(char *var, char *content);
+int					add_empty_env(t_data *data, char *var);
+int					find_exp_var(char **envp, char *str);
 
 // check_files
 void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);

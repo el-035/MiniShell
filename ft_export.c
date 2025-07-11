@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:53 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 17:19:25 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 17:59:22 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,19 @@ int	replace(char *var, char *cmd, t_data *data, int index)
 	return (free(content), 0);
 }
 
+
 int	export_helper(char *args, t_data *data, char *var)
 {
 	char	*content;
 	int		index;
 
+	content = NULL;
+	if (!ft_strchr(args, '='))
+		return (add_empty_env(data, var));
 	content = get_content(args);
 	if (!content)
 		return (-1);
-	index = find_var(data->envp, var);
+	index = find_exp_var(data->envp, var);
 	if (index == -2)
 		return (free(content), -1);
 	if (index == -1)
@@ -101,11 +105,8 @@ int	export_helper(char *args, t_data *data, char *var)
 		if (append(var, args, data, index) == -1)
 			return (free(content), -1);
 	}
-	else
-	{
-		if (replace(var, args, data, index) == -1)
-			return (free(content), -1);
-	}
+	else if (replace(var, args, data, index) == -1)
+		return (free(content), -1);
 	return (free(content), 0);
 }
 

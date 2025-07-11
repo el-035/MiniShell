@@ -1,6 +1,24 @@
-5a6,10
-> [1m[34m# **************************************************************************** #
-> #                           MINISHELL NOT UP TO DATE                           #
-> #                                 COMPILING ...                                #
-> # **************************************************************************** #[0m
-> [1m[34m# **************************************************************************** #[0m
+364c364
+< [1m[35m  4:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ❌  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_builtins_exit.sh:11[0m  
+---
+> [1m[35m  4:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_builtins_exit.sh:11[0m  
+487c487
+< [1m[35m  56:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ❌[1m[31m [ minishell(1) bash(0) ][0m  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_builtins_export.sh:134[0m  
+---
+> [1m[35m  56:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/1_builtins_export.sh:134[0m  
+866c866
+< [1m[35m  66:	[0m[1m[34mSTD_OUT:[0m ❌  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ❌[1m[31m [ minishell(1) bash(0) ][0m  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:151[0m  
+---
+> [1m[35m  66:	[0m[1m[34mSTD_OUT:[0m ✅  [1m[33mSTD_ERR:[0m ✅  [1m[36mEXIT_CODE:[0m ✅  [1m[36mCRASH:[0m ✅  [90m/home/efittant/42_minishell_tester/cmds/mand/2_correction.sh:151[0m  
+956,957c956,957
+<                      [1m[35mTOTAL TEST COUNT: 877[0m  [1m[32mTESTS PASSED: 837[0m
+<                [1m[34mSTD_OUT:[0m [1m[31m11[0m  [1m[33mSTD_ERR:[0m [1m[31m24[0m  [1m[36mEXIT_CODE:[0m [1m[31m14[0m  [1m[32mCRASHING: 0[0m
+---
+>                      [1m[35mTOTAL TEST COUNT: 877[0m  [1m[32mTESTS PASSED: 840[0m
+>                 [1m[34mSTD_OUT:[0m [1m[31m9[0m  [1m[33mSTD_ERR:[0m [1m[31m23[0m  [1m[36mEXIT_CODE:[0m [1m[31m12[0m  [1m[32mCRASHING: 0[0m
+959,960c959,960
+< [1m[31m                                      ❌ 49 [0m
+< [1m[32m                                      ✅ 2582 [0m
+---
+> [1m[31m                                      ❌ 44 [0m
+> [1m[32m                                      ✅ 2587 [0m

@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:22:04 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/09 19:30:59 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 17:59:10 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,6 @@ void	sort(char **cpy)
 	}
 }
 
-void	actual_print(char *var,char *content)
-{
-	write(1, "declare -x ", 11);
-	ft_putstr_fd(var, 1);
-	write(1, "=\"", 2);
-	ft_putstr_fd(content, 1);
-	write(1, "\"\n", 2);
-}
-
 int	print_export(char **envp, t_data *data)
 {
 	char	**cpy;
@@ -119,6 +110,7 @@ int	print_export(char **envp, t_data *data)
 	char	*content;
 
 	i = 0;
+	
 	cpy = copy(envp, data);
 	if (!cpy)
 		return (fail_mall(), 1);
@@ -128,12 +120,17 @@ int	print_export(char **envp, t_data *data)
 		var = get_var(cpy[i]);
 		if (!var)
 			return (fail_mall(), free_split(cpy), 1);
-		content = get_content(cpy[i]);
-		if (!content)
-			return ((free_split(cpy), free(var), fail_mall(), 1));
+		if (ft_strchr(cpy[i], '='))
+		{
+			content = get_content(cpy[i]);
+			if (!content)
+				return ((free_split(cpy), free(var), fail_mall(), 1));
+		}
 		actual_print(var, content);
 		free(var);
-		free(content);
+		if (content)
+			free(content);
+		content = NULL;
 		i++;
 	}
 	return (free_split(cpy), 0);
