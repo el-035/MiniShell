@@ -6,13 +6,13 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:41:00 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 18:01:20 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 18:10:56 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	more_syntax(t_input *cur)
+static int	more_syntax(t_input *cur, t_input *first)
 {
 	if (is_red(cur) == 1 && cur->next->type == REDIR_OUT)
 		return (syntax_err(), 1);
@@ -30,6 +30,8 @@ static int	more_syntax(t_input *cur)
 			"<<<", 3) == 0)
 		return (syntax_err(), 1);
 	if (ft_strncmp(cur->content, "|||", 3) == 0)
+		return (syntax_err(), 1);
+	if (cur->type == PIPE && cur->next == first)
 		return (syntax_err(), 1);
 	return (0);
 }
@@ -58,7 +60,7 @@ static int	syntax_check(t_input *first)
 		return (1);
 	while (size-- >= 0)
 	{
-		if (more_syntax(cur) != 0)
+		if (more_syntax(cur, first) != 0)
 			return (1);
 		if (check_quotes(cur->content, ft_strlen(cur->content)) != 0)
 			return (write(2, "Unexpected end of file\n", 23),
