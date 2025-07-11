@@ -89,31 +89,27 @@ static int	exec(t_data *data, char **envp, int i)
 
 int	exec_proc(t_data *data, char **envp)
 {
-	//int	i;
 	int	status;
 	int	code;
 
 	status = 0;
-	//i = -1;
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
-	{
-/* 		while (++i < data->cmd_count - 1)
-			(close(data->pipes[i][0]), close(data->pipes[i][1])); */
 		return (perror("PID: "), 0);
-	}
 	if (!exec(data, envp, -1))
 		return (0);
-/* 	while (++i < data->cmd_count - 1)
-		(close(data->pipes[i][0]), close(data->pipes[i][1])); */
- 	close(data->pipes[0][1]), close(data->pipes[0][0]);
-	close(data->pipes[1][1]), close(data->pipes[1][0]);
+	if (data->pipes[0][0] != -1)
+		close(data->pipes[0][0]);
+	if (data->pipes[0][1] != -1)
+		close(data->pipes[0][1]);
+	if (data->pipes[1][0] != -1)
+		close(data->pipes[1][0]);
+	if (data->pipes[1][1] != -1)
+		close(data->pipes[1][1]);
 	wait_proc(data, &status, &code);
 	if (WIFEXITED(status))
-	{
 		if (code != 0)
 			return_exit_code(code);
-	}
 	return (1);
 }
 
