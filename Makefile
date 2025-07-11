@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 
 SRC = minishell.c list_utils.c syntax.c syntax_utils.c  mini_split.c \
 	free.c heredoc.c env_var.c check_commands.c free_all.c  \

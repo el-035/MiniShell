@@ -50,7 +50,7 @@ static int	check_permission(t_data *data, char *file, int i, int file_order)
 		if (stat(file, &sb) == 0 && S_ISDIR(sb.st_mode))
 			return (handle_error(file, 3), add_skip_flag(&data->cmds[i], i, data->cmd_count, 1), 0);
 		if (access(file, F_OK) != -1)
-			if (access(file, R_OK) == -1 || access(file, W_OK) == -1)
+			if (access(file, W_OK) == -1)
 				return (handle_error(file, 1), add_skip_flag(&data->cmds[i], i,
 						data->cmd_count, 1), 0);
 	}
