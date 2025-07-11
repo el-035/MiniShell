@@ -106,8 +106,8 @@ int	exec_proc(t_data *data, char **envp)
 		return (0);
 /* 	while (++i < data->cmd_count - 1)
 		(close(data->pipes[i][0]), close(data->pipes[i][1])); */
-/* 	close(data->pipes[1][1]), close(data->pipes[1][0]);
-	close(data->pipes[0][1]), close(data->pipes[0][0]); */
+ 	close(data->pipes[0][1]), close(data->pipes[0][0]);
+	close(data->pipes[1][1]), close(data->pipes[1][0]);
 	wait_proc(data, &status, &code);
 	if (WIFEXITED(status))
 	{
