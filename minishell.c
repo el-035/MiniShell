@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:57:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 19:10:14 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:39:36 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 	if (first)
 		free_list(first);
 	free_all(&data);
-	rl_clear_history(); //add everywhere the child exits
+	rl_clear_history();
 	if (return_sig_flag(-1) != 0)
 		return (free_split(data.envp), return_exit_code(130));
 	return (free_split(data.envp), return_exit_code(-1));

@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:53 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 19:00:00 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 22:05:33 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,10 @@ int	append(char *var, char *cmd, t_data *data, int index)
 	new = get_content(cmd);
 	if (!new)
 		return (fail_mall(), -1);
-	old = get_content(data->envp[index]);
+	if (ft_strchr(data->envp[index], '=') != NULL)
+		old = get_content(data->envp[index]);
+	else
+		old = ft_strdup("");
 	if (!old)
 		return (free(new), fail_mall(), -1);
 	app = ft_strjoin(old, new);
@@ -85,15 +88,13 @@ int	export_helper(char *args, t_data *data, char *var)
 	char	*content;
 	int		index;
 
+	index = find_exp_var(data->envp, var);
 	content = NULL;
 	if (!ft_strchr(args, '='))
-		return (add_empty_env(data, var));
+		return (add_empty_env(data, var, index));
 	content = get_content(args);
 	if (!content)
 		return (-1);
-	index = find_exp_var(data->envp, var);
-	if (index == -2)
-		return (free(content), -1);
 	if (index == -1)
 	{
 		if (add_env(data, var, content) == -1)

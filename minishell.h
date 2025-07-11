@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 19:01:02 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 20:59:35 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,7 @@ int					print_export(char **envp, t_data *data, int i);
 
 // help
 void				actual_print(char *var, char *content);
-int					add_empty_env(t_data *data, char *var);
+int					add_empty_env(t_data *data, char *var, int index);
 int					find_exp_var(char **envp, char *str);
 
 // check_files
