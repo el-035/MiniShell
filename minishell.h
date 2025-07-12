@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 20:59:35 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 04:16:49 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void				test_print(t_input *first);
 // main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
-int					parsing_execution(t_input *first, t_data *data);
+int					parsing_execution(t_input *first, t_data *data, char *line);
 
 // init -
 int					init_stuff(t_data *data, char **envp);
