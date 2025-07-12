@@ -15,7 +15,7 @@
 void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
 {
 	cmd->error_skip = 1;
-	if (mode == 1)
+/* 	if (mode == 1)
 	{
 		if (i == cmd_count - 1)
 			return_exit_code(1);
@@ -24,7 +24,7 @@ void	add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode)
 	{
 		if (i == cmd_count - 1)
 			return_exit_code(0);
-	}
+	} */
 }
 
 static int	check_permission(t_data *data, char *file, int i, int file_order)

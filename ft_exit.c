@@ -93,5 +93,6 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 			exit(return_exit_code(-2)));
 	}
 	rl_clear_history();
-	return (free_split(data->envp), free_all(data), exit(return_exit_code(-1)));
+	return (free_split(data->envp), free_all(data), exit(data->prev_ec_code)/* exit(return_exit_code(-1)) */);
 }
+ 

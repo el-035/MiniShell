@@ -34,15 +34,19 @@ char	*prompt(char **envp, t_data *data, struct sigaction *sig)
 
 	sigaction(SIGINT, sig, NULL);
 	signal(SIGQUIT, SIG_IGN);
-	if (data->ec_update_flag == 0)
+	
+ 	if (data->ec_update_flag == 0)
+	{
+		data->prev_ec_code = return_exit_code(-2);
 		return_exit_code(0);
+	}
 	data->ec_update_flag = 0;
 	return_sig_flag(0);
 	if (!*envp)
 		prompt = "\001\033[1;34m\002Minishell: \001\033[0m\002";
-	else if (return_exit_code(-1) == 0)
+	else if (data->prev_ec_code == 0)
 		prompt = "\001\033[1;32m\002Minishell: \001\033[0m\002";
-	else if (return_exit_code(-1) != 0 || return_sig_flag(-1) == 1)
+	else if (data->prev_ec_code != 0)
 		prompt = "\001\033[1;31m\002Minishell: \001\033[0m\002";
 	line = readline(prompt);
 	return (line);

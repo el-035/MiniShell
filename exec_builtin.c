@@ -64,7 +64,9 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 			(write(2, "exit: too many arguments\n", 25), return_exit_code(1));
 	//UPDATE ERROR CODE IF THE LAST
 			else if (data->cmd_count > 1)
+			{
 				data->ec_update_flag = 1;
+			}
 		else
 			ft_exit(data, cmd);
 	}

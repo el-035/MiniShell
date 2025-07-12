@@ -61,6 +61,7 @@ typedef struct s_cmd
 	int				*redir_order;
 	int				in_index;
 	int				out_index;
+	int				redir_ec_flag;
 	int				is_builtin;
 	int				append;
 	int				is_hd;
@@ -82,6 +83,7 @@ typedef struct s_data
 	t_cmd			*cmds;
 	int				cmd_count;
 	int				ec_update_flag;
+	int				prev_ec_code;
 }					t_data;
 
 void				test_print(t_input *first);
@@ -177,7 +179,7 @@ int					find_cmd(t_input *first);
 char				*beg(char *content);
 char				*save_end(char *content, int len);
 int					no_more(char *content);
-char				*extract_exit_code(void);
+char				*extract_exit_code(t_data *data);
 int					expand_exit(t_input **cur, t_data *data);
 
 // Split test

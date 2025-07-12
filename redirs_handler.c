@@ -15,10 +15,10 @@
 int	open_files(t_data *data)
 {
 	t_cmd	*cmd;
-	int		i;
 	int		j;
 	int		total;
-
+	int		i;
+	
 	i = -1;
 	while (++i < data->cmd_count)
 	{
@@ -29,15 +29,15 @@ int	open_files(t_data *data)
 		total = cmd->in_redirs + cmd->out_redirs;
 		while (cmd->redir_order && ++j < total)
 		{
-			if (cmd->redir_order[j] == 1)
-				if (!check_in(data, i))
-					break ;
-			if (cmd->redir_order[j] == 2)
-				if (!check_out(data, i))
-					break ;
+			if ((cmd->redir_order[j] == 1 && !check_in(data, i)) ||
+				(cmd->redir_order[j] == 2 && !check_out(data, i)))
+			{
+				cmd->redir_ec_flag = 1;
+				break;
+			}
 		}
 	}
-	return (1);
+	return (return_exit_code(cmd->redir_ec_flag), 1);
 }
 
 int	alloc_redirs(t_cmd *cmd)

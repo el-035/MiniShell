@@ -82,7 +82,7 @@ int	no_more(char *content)
 	return (0);
 }
 
-char	*extract_exit_code(void)
+char	*extract_exit_code(t_data *data)
 {
 	char	*num;
 	char	*var;
@@ -93,7 +93,7 @@ char	*extract_exit_code(void)
 		return_sig_flag(0);
 	}
 	else
-		num = ft_itoa(return_exit_code(-1));
+		num = ft_itoa(data->prev_ec_code);
 	if (!num)
 		return (NULL);
 	var = ft_strdup(num);
@@ -114,7 +114,7 @@ int	expand_exit(t_input **cur, t_data *data)
 	start = beg((*cur)->content);
 	if (!start)
 		return (1);
-	var = extract_exit_code();
+	var = extract_exit_code(data);
 	if (!var)
 		return (free(start), 1);
 	end = save_end((*cur)->content, ft_strlen(start) + 2);

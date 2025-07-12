@@ -81,5 +81,5 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history(); //add everywhere the child exits
 	if (return_sig_flag(-1) != 0)
 		return (free_split(data.envp), return_exit_code(130));
-	return (free_split(data.envp), return_exit_code(-1));
+	return (free_split(data.envp), data.prev_ec_code/* return_exit_code(-1) */);
 }
