@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/12 03:52:26 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/12 15:20:50 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	run_exit(t_data *data, t_cmd *cmd)
 	if (cmd->args[1] && !is_valid_numeric(cmd->args[1]))
 		ft_exit(data, cmd);
 	else if (cmd->args[1] && cmd->args[2])
-		(write(2, "exit: too many arguments\n", 25), return_exit_code(1));
+		(write(2, "exit\nexit: too many arguments\n", 30), return_exit_code(1));
 	else if (data->cmd_count > 1)
 		data->ec_update_flag = 1;
 	else
