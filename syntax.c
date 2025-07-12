@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:41:00 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 18:10:56 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 18:58:41 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ static int	more_syntax(t_input *cur, t_input *first)
 		return (syntax_err(), 1);
 	if (ft_strncmp(cur->content, ">>>", 3) == 0 || ft_strncmp(cur->content,
 			"<<<", 3) == 0)
+		return (syntax_err(), 1);
+	if (ft_strncmp(cur->content, "||", 2) == 0)
 		return (syntax_err(), 1);
 	if (ft_strncmp(cur->content, "|||", 3) == 0)
 		return (syntax_err(), 1);
