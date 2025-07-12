@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:27:12 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/12 01:37:26 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:48:15 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	cd_more_help(t_cmd *cmd, t_data *data)
 		return (return_exit_code(1), free(home));
 	}
 	if (cmd->args[1] && cmd->args[1][0] == '\0')
-		return ;
+		return (free(home));
 	if (chdir(home) == -1)
 	{
 		write(2, "cd: ", 4);
