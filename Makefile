@@ -11,7 +11,7 @@ SRC = minishell.c list_utils.c syntax.c syntax_utils.c  mini_split.c \
 	ft_exit.c ft_echo.c ft_cd.c exec.c check_files.c exec_builtin.c \
 	ft_utils.c handlers_flags.c error_handler.c exec_child.c \
 	space_split.c exp_token.c heredoc_create.c redirs_handler.c \
-	env_init.c ft_more_utils.c t.c help.c
+	env_init.c ft_more_utils.c help.c
 
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a

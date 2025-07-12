@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/11 18:54:58 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 19:00:40 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/11 21:00:44 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,18 @@ void	actual_print(char *var, char *content)
 	free(var);
 	if (content)
 		free(content);
+	content = NULL;
 }
 
-int	add_empty_env(t_data *data, char *var)
+int	add_empty_env(t_data *data, char *var, int index)
 {
 	int		i;
 	char	**tmp;
 	char	*new;
 
 	i = 0;
+	if (index != -1)
+		return (0);
 	tmp = ft_calloc(data->envp_size + 2, sizeof(char *));
 	if (!tmp)
 		return (-1);

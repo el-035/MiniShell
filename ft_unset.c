@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:33:08 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:33:09 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:42:15 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	var_count(char **envp, char **args)
 		while (args[j])
 		{
 			if (ft_strncmp(envp[i], args[j], ft_strlen(args[j])) == 0
-				&& envp[i][ft_strlen(args[j])] == '=')
+				&& (envp[i][ft_strlen(args[j])] == '='
+				|| envp[i][ft_strlen(args[j])] == '\0'))
 			{
 				count++;
 				break ;
@@ -55,12 +56,14 @@ int	var_count(char **envp, char **args)
 int	copy_var(char *envp, char **var)
 {
 	int	i;
+	int	len;
 
 	i = 1;
 	while (var[i])
 	{
+		len = ft_strlen(var[i]);
 		if (ft_strncmp(envp, var[i], ft_strlen(var[i])) == 0
-			&& (envp[ft_strlen(var[i])] == '='))
+			&& (envp[len] == '=' || envp[len] == '\0'))
 			return (0);
 		i++;
 	}

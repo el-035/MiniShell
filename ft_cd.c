@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:27:12 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:27:26 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 01:37:26 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,11 @@ void	cd_more_help(t_cmd *cmd, t_data *data)
 	if (cmd->args[1] && cmd->args[1][0] == '\0')
 		return ;
 	if (chdir(home) == -1)
+	{
+		write(2, "cd: ", 4);
+		handle_error(home, 0);
 		return_exit_code(1);
+	}
 	free(home);
 }
 
@@ -68,7 +72,11 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 	else if (chdir(cmd->args[1]) == -1)
 	{
 		if (access(cmd->args[1], F_OK) == -1)
-			(write(2, "cd: ", 4), handle_error(cmd->args[1], 0));
+		{
+			write(2, "cd: ", 4);
+			handle_error(cmd->args[1], 0);
+			return_exit_code(1);
+		}
 		else if (access(cmd->args[1], X_OK) == -1)
 			(write(2, "cd: ", 4), handle_error(cmd->args[1], 1));
 	}
