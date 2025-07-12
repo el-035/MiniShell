@@ -63,7 +63,7 @@ void	close_child(t_data *data)
 {
 	free_all(data);
 	free_split(data->envp);
+	rl_clear_history();
 	close(STDOUT_FILENO);
 	close(STDIN_FILENO);
-	rl_clear_history();
 }
