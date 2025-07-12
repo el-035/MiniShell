@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/12 23:01:12 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:37:45 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ void	handle_error(char *str, int error_code)
 	{
 		write(2, str, ft_strlen(str));
 		write(2, ": command not found\n", 20);
-		//rl_clear_history();
 	}
 	else if (error_code == 3)
 	{
