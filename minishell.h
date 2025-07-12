@@ -86,8 +86,6 @@ typedef struct s_data
 	int				prev_ec_code;
 }					t_data;
 
-void				test_print(t_input *first);
-
 // main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
@@ -148,6 +146,7 @@ char				**space_split(char const *s);
 void				free_split(char **split);
 void				free_list(t_input *first);
 void				fail_mall(void);
+void				close_child(t_data *data);
 
 // ft more utils
 char				*double_join(char *s1, char *s2, char *s3);
@@ -228,7 +227,7 @@ int					add_empty_env(t_data *data, char *var, int index);
 int					find_exp_var(char **envp, char *str);
 
 // check_files
-void				add_skip_flag(t_cmd *cmd, int i, int cmd_count, int mode);
+void				add_skip_flag(t_cmd *cmd);
 int					check_out(t_data *data, int i);
 int					check_in(t_data *data, int i);
 
@@ -264,8 +263,7 @@ void				handle_error(char *str, int error_code);
 // free_all
 void				free_cmd(t_cmd *cmd);
 void				free_str_arr(char **str);
-void				free_pipes(int ***pipes, int count);
-void				close_fd(int *fd);
+void				close_pipes(t_data *data);
 void				free_all(t_data *data);
 
 // heredoc_create
@@ -279,7 +277,6 @@ int					open_files(t_data *data);
 int					parse_tokens(t_input *tokens, t_data *data);
 
 int					exec_proc(t_data *data, char **envp);
-int					create_pipes(t_data *data);
 
 // Builtins
 void				ft_pwd(void);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/07 21:15:47 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 04:07:42 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,43 @@ static void	wait_proc(t_data *data, int *status, int *code)
 	}
 }
 
+static int	is_bd(t_data *data, int i, int cont)
+{
+	if (data->cmds[i].error_skip)
+	{
+		data->pid[i] = -2;
+		if (data->pipes[1][0] != -1)
+			close(data->pipes[1][0]);
+		if (data->pipes[1][1] != -1)
+			close(data->pipes[1][1]);
+		return_exit_code(data->cmds[i].redir_ec_flag);
+		cont = 1;
+	}
+	if (data->cmds[i].is_builtin)
+	{
+		if (!exec_builtin_parent(&data->cmds[i], data))
+		{
+			data->pid[i] = -2;
+			if (data->pipes[1][0] != -1)
+				close(data->pipes[1][0]);
+			if (data->pipes[1][1] != -1)
+				close(data->pipes[1][1]);
+			cont = 1;
+		}
+	}
+	return (cont);
+}
+
+static void	close_stuff(t_data *data)
+{
+	if (data->pipes[0][0] != -1)
+		close (data->pipes[0][0]);
+	if (data->pipes[0][1] != -1)
+		close (data->pipes[0][1]);
+	data->pipes[0][0] = data->pipes[1][0];
+	data->pipes[0][1] = data->pipes[1][1];
+}
+
 static int	exec(t_data *data, char **envp, int i)
 {
 	while (++i < data->cmd_count)
@@ -50,40 +87,15 @@ static int	exec(t_data *data, char **envp, int i)
 			data->pipes[1][0] = -1;
 			data->pipes[1][1] = -1;
 		}
-		if (data->cmds[i].error_skip)
-		{
-			data->pid[i] = -2;
-			if (data->pipes[1][0] != -1)
-				close(data->pipes[1][0]);
-			if (data->pipes[1][1] != -1)
-				close(data->pipes[1][1]);
-			return_exit_code(data->cmds[i].redir_ec_flag);
+		if (is_bd(data, i, 0))
 			continue ;
-		}
-		if (data->cmds[i].is_builtin)
-		{
-			if (!exec_builtin_parent(&data->cmds[i], data))
-			{
-				data->pid[i] = -2;
-				if (data->pipes[1][0] != -1) 
-					close(data->pipes[1][0]);
-				if (data->pipes[1][1] != -1) 
-					close(data->pipes[1][1]);
-				continue ;
-			}
-		}
 		data->pid[i] = fork();
 		if (data->pid[i] == -1)
 			return (perror("Fork"), 0);
 		else if (data->pid[i] == 0)
 			exec_child(data, i, envp);
 		(signal(SIGINT, SIG_IGN), signal(SIGQUIT, SIG_IGN));
-		if (data->pipes[0][0] != -1)
-			close (data->pipes[0][0]);
-		if (data->pipes[0][1] != -1)
-			close (data->pipes[0][1]);
-		data->pipes[0][0] = data->pipes[1][0];
-		data->pipes[0][1] = data->pipes[1][1];
+		close_stuff(data);
 	}
 	return (1);
 }

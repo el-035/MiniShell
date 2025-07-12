@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirs_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/07 23:33:28 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:25:27 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,22 @@ int	open_files(t_data *data)
 	int		j;
 	int		total;
 	int		i;
-	
+
 	i = -1;
 	while (++i < data->cmd_count)
 	{
 		cmd = &data->cmds[i];
 		if (!cmd->args || !cmd->args[0])
-			add_skip_flag(cmd, i, data->cmd_count, 2);
+			add_skip_flag(cmd);
 		j = -1;
 		total = cmd->in_redirs + cmd->out_redirs;
 		while (cmd->redir_order && ++j < total)
 		{
-			if ((cmd->redir_order[j] == 1 && !check_in(data, i)) ||
-				(cmd->redir_order[j] == 2 && !check_out(data, i)))
+			if ((cmd->redir_order[j] == 1 && !check_in(data, i))
+				|| (cmd->redir_order[j] == 2 && !check_out(data, i)))
 			{
 				cmd->redir_ec_flag = 1;
-				break;
+				break ;
 			}
 		}
 	}

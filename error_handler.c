@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/11 18:38:12 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:24:01 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ void	handle_error(char *str, int error_code)
 	}
 	else if (error_code == 4)
 	{
-		write(2, str, ft_strlen(str));
-		perror(" ");
+		(write(2, str, ft_strlen(str)), perror(" "));
 	}
 }
