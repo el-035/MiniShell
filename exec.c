@@ -109,7 +109,7 @@ int	exec_proc(t_data *data, char **envp)
 	code = -1;
 	data->pid = malloc(sizeof(pid_t) * data->cmd_count);
 	if (!data->pid)
-		return (perror("PID: "), 0);
+		return (perror("PID"), 0);
 	if (!exec(data, envp, -1))
 		return (0);
 	wait_proc(data, &status, &code);

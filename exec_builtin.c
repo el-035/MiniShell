@@ -65,9 +65,9 @@ int	exec_builtin_parent(t_cmd *cmd, t_data *data)
 		if (data->cmd_count == 1)
 			ft_cd(data, cmd);
 		else if (access(cmd->args[1], F_OK) == -1)
-			(write(2, "cd: ", 4), handle_error(cmd->args[1], 0));
+			(write(2, "cd: ", 4), handle_error(cmd->args[1], 0), return_exit_code(1));
 		else if (access(cmd->args[1], X_OK) == -1)
-			(write(2, "cd: ", 4), handle_error(cmd->args[1], 1));
+			(write(2, "cd: ", 4), handle_error(cmd->args[1], 1), return_exit_code(1));
 	}
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
 		run_exit(data, cmd);

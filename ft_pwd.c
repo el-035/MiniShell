@@ -23,5 +23,5 @@ void	ft_pwd(void)
 		write(1, "\n", 1);
 	}
 	else
-		perror("pwd: ");
+		perror("pwd");
 }
