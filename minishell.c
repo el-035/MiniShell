@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:57:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/12 01:39:36 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:26:24 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,5 +81,5 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	if (return_sig_flag(-1) != 0)
 		return (free_split(data.envp), return_exit_code(130));
-	return (free_split(data.envp), data.prev_ec_code/* return_exit_code(-1) */);
+	return (free_split(data.envp), data.prev_ec_code);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:35 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/11 19:01:52 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:30:11 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,5 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 			exit(return_exit_code(-2)));
 	}
 	rl_clear_history();
-	return (free_split(data->envp), free_all(data), exit(data->prev_ec_code)/* exit(return_exit_code(-1)) */);
+	return (free_split(data->envp), free_all(data), exit(data->prev_ec_code));
 }
- 

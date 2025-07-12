@@ -6,7 +6,7 @@
 /*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/06 22:43:18 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:29:21 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	read_heredoc(t_cmd *cmd, int hd_flag, int count, char **envp)
 		if (!line)
 			return (print_hd_err(cmd), 1);
 		if (return_sig_flag(-1) == 2)
-			return(free(line), 0);
+			return (free(line), 0);
 		if (ft_strcmp(line, cmd->limiter) == 0)
 			break ;
 		if (ft_strchr(line, '$'))

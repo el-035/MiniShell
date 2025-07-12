@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:25:19 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 19:25:20 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:44:05 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,13 @@ void	free_list(t_input *first)
 		cur = tmp;
 	}
 	first = NULL;
+}
+
+void	close_child(t_data *data)
+{
+	free_all(data);
+	free_split(data->envp);
+	close(STDOUT_FILENO);
+	close(STDIN_FILENO);
+	rl_clear_history();
 }

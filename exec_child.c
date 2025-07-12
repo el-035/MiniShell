@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_child.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
+/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/09 19:19:27 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 03:44:20 by apchelni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	return (1);
 }
 
-static void	set_child_fds(t_data *data, t_cmd *cmd, /* int index,  */int i)
+static void	set_child_fds(t_data *data, t_cmd *cmd, int i)
 {
 	if (cmd->in)
 		(dup2(data->fd1, STDIN_FILENO), close(data->fd1));
@@ -114,21 +114,21 @@ int	exec_child(t_data *data, int index, char **envp)
 	sig.sa_flags = 0;
 	(sigaction(SIGINT, &sig, NULL), sigaction(SIGQUIT, &sig, NULL));
 	cmd = &data->cmds[index];
-	set_child_fds(data, cmd, /* index, */ -1);
+	set_child_fds(data, cmd, -1);
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
-		(exec_builtin_child(cmd, data), close(STDOUT_FILENO), free_all(data),
-			free_split(data->envp), close(STDIN_FILENO), rl_clear_history(), exit(EXIT_SUCCESS));
+		(exec_builtin_child(cmd, data), close_child(data), exit(EXIT_SUCCESS));
 	if (!cmd->args || !cmd->args[0])
 	{
+		(free_split(data->envp), free_all(data), rl_clear_history());
 		if (cmd->is_hd == 1)
-			(free_split(data->envp), free_all(data), rl_clear_history(), exit(EXIT_SUCCESS));
+			exit(EXIT_SUCCESS);
 		else
-			(free_split(data->envp), free_all(data), rl_clear_history(), exit(EXIT_FAILURE));
+			exit(EXIT_FAILURE);
 	}
 	if (!execute_cmd(data, cmd->args, envp))
-		(free_split(data->envp), free_all(data), close(STDOUT_FILENO),
-			close(STDIN_FILENO), rl_clear_history(), exit(127));
-	(free_split(data->envp), free_all(data), rl_clear_history(), exit(EXIT_SUCCESS));
+		(close_child(data), exit(127));
+	(free_split(data->envp), free_all(data), rl_clear_history(),
+		exit(EXIT_SUCCESS));
 }
