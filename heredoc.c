@@ -95,5 +95,5 @@ void	exec_hd(t_data *data, t_cmd *cmd, int index)
 		(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in));
 	}
 	else
-		(free_split(data->envp), free_all(data), exit(EXIT_SUCCESS));
+		(close_child(data), exit(EXIT_SUCCESS));
 }
