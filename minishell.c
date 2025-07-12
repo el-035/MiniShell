@@ -12,8 +12,9 @@
 
 #include "minishell.h"
 
-int	parsing_execution(t_input *first, t_data *data)
+int	parsing_execution(t_input *first, t_data *data, char *line)
 {
+	free(line);
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
 	if (find_ev(first, data) != 0)
@@ -50,8 +51,8 @@ int	main_loop(t_input *first, t_data *data, struct sigaction *sig, char **envp)
 	}
 	add_history(line);
 	if (save_input(line, &first, 0))
-		parsing_execution(first, data);
-	(free(line), free_all(data));
+		parsing_execution(first, data, line);
+	(free_all(data));
 	return (0);
 }
 
