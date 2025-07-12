@@ -102,27 +102,7 @@ int	exec_proc(t_data *data, char **envp)
 		return (0);
 	wait_proc(data, &status, &code);
 	if (WIFEXITED(status))
-		if (code != -1)
+		if (code != -1 && data->pid[data->cmd_count - 1] != -2)
 			return_exit_code(code);
 	return (1);
 }
-
-/* int	create_pipes(t_data *data)
-{
-	int	i;
-
-	if (data->cmd_count < 2)
-		return (1);
-	data->pipes = ft_calloc(sizeof(int *), (data->cmd_count));
-	if (!data->pipes)
-		return (perror("Pipes memory alloc: "), 0);
-	i = -1;
-	while (++i < data->cmd_count - 1)
-	{
-		data->pipes[i] = ft_calloc(sizeof(int), 2);
-		if (!data->pipes[i] || pipe(data->pipes[i]) == -1)
-			return (perror("Pipe: "), 0);
-	}
-	data->pipes[i] = NULL;
-	return (1);
-} */
