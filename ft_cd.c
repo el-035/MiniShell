@@ -66,7 +66,7 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 		cd_more_help(cmd, data);
 	else if (cmd->args[2])
 	{
-		write(2, "bash: cd: too many arguments\n", 29);
+		write(2, "cd: too many arguments\n", 23);
 		return_exit_code(1);
 	}
 	else if (chdir(cmd->args[1]) == -1)
@@ -78,7 +78,8 @@ void	cd_helper(t_cmd *cmd, t_data *data)
 			return_exit_code(1);
 		}
 		else if (access(cmd->args[1], X_OK) == -1)
-			(write(2, "cd: ", 4), handle_error(cmd->args[1], 1));
+			(write(2, "cd: ", 4), handle_error(cmd->args[1], 1),
+				return_exit_code(1));
 	}
 }
 
