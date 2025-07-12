@@ -84,12 +84,20 @@ static int	execute_cmd(t_data *data, char **args, char **envp)
 	return (1);
 }
 
-static void	set_child_fds(t_data *data, t_cmd *cmd, int i)
+static void	set_child_fds(t_data *data, t_cmd *cmd, int i, int index)
 {
+	int	null_fd;
+
 	if (cmd->in)
 		(dup2(data->fd1, STDIN_FILENO), close(data->fd1));
 	else if (data->pipes[0][0] != -1)
 		(dup2(data->pipes[0][0], STDIN_FILENO), close(data->pipes[0][0]));
+	else if (index > 0)
+	{
+		null_fd = open("/dev/null", O_RDONLY);
+		if (null_fd != -1)
+			(dup2(null_fd, STDIN_FILENO), close(null_fd));
+	}
 	if (cmd->out)
 		(dup2(data->fd2, STDOUT_FILENO), close(data->fd2));
 	else if (data->pipes[1][1] != -1)
@@ -114,7 +122,7 @@ int	exec_child(t_data *data, int index, char **envp)
 	sig.sa_flags = 0;
 	(sigaction(SIGINT, &sig, NULL), sigaction(SIGQUIT, &sig, NULL));
 	cmd = &data->cmds[index];
-	set_child_fds(data, cmd, -1);
+	set_child_fds(data, cmd, -1, index);
 	if (cmd->is_hd == 1)
 		exec_hd(data, cmd, index);
 	if (cmd->is_builtin)
