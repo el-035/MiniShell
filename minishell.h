@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:58:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/12 04:16:49 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 04:46:31 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct s_data
 // main
 int					return_exit_code(int exit);
 int					return_sig_flag(int sig);
-int					parsing_execution(t_input *first, t_data *data, char *line);
+int					parsing_execution(t_input *first, t_data *data);
 
 // init -
 int					init_stuff(t_data *data, char **envp);

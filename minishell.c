@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:57:54 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/12 03:26:24 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/12 04:46:27 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	parsing_execution(t_input *first, t_data *data, char *line)
+int	parsing_execution(t_input *first, t_data *data)
 {
-	free(line);
 	if (assign_type(&first) != 0)
 		return (free_list(first), 1);
 	if (find_ev(first, data) != 0)
@@ -51,7 +50,7 @@ int	main_loop(t_input *first, t_data *data, struct sigaction *sig, char **envp)
 	}
 	add_history(line);
 	if (save_input(line, &first, 0))
-		parsing_execution(first, data, line);
+		parsing_execution(first, data);
 	(free_all(data));
 	return (0);
 }

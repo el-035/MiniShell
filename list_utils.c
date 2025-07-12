@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:03:40 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 22:12:55 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 04:46:14 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	save_input(char *line, t_input **first, int pos)
 		cur->next = *first;
 		(*first)->prev = cur;
 	}
-	return (free_split(split), 1);
+	return (free_split(split), free(line), 1);
 }
 
 t_input	*make_new_node(char *content, int pos)
