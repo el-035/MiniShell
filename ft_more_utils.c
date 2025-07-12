@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:03:10 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/07 23:38:05 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:02:50 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	check_if_dir(t_data *data, char *path, char *original)
 
 	if (!ft_strcmp(original, ".."))
 		(handle_error("..", 2), free(path), free_split(data->envp),
-			free_all(data), exit(127));
+			free_all(data), rl_clear_history(), exit(127));
 	if (stat(path, &sb) == -1)
 		return ;
 	if (S_ISDIR(sb.st_mode))
@@ -125,6 +125,6 @@ void	check_if_dir(t_data *data, char *path, char *original)
 		write(2, ": Is a directory\n", 17);
 		if (path != original)
 			free(path);
-		(free_split(data->envp), free_all(data), exit(126));
+		(free_split(data->envp), free_all(data), rl_clear_history(), exit(126));
 	}
 }

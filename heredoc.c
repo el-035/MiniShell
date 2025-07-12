@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42vienna.com>   +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/04/18 17:48:36 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:03:50 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,11 @@ void	exec_hd(t_data *data, t_cmd *cmd, int index)
 	if (cmd->hd_content)
 	{
 		if (!set_heredoc_fds(cmd, index))
-			(free_split(data->envp), free_all(data), exit(EXIT_FAILURE));
+			(free_split(data->envp), free_all(data), rl_clear_history(), exit(EXIT_FAILURE));
 		fd = open(cmd->hd_in, O_RDONLY);
 		if (fd < 0)
 			(perror("Opening heredoc tmp file"), free_split(data->envp),
-				free_all(data), exit(EXIT_FAILURE));
+				free_all(data), rl_clear_history(), exit(EXIT_FAILURE));
 		(dup2(fd, STDIN_FILENO), close(fd), unlink(cmd->hd_in));
 	}
 	else

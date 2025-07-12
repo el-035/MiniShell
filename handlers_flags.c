@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/09 18:35:58 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:05:05 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,14 @@ void	child_handler(int sig)
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
+		rl_clear_history();
 		exit(SIGINT + 128);
 	}
 	if (sig == SIGQUIT)
+	{
+		rl_clear_history();	
 		exit(SIGQUIT + 128);
+	}
 }
 
 void	hd_handler(int sig)
