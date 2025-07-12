@@ -6,7 +6,7 @@
 /*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 00:54:42 by apchelni          #+#    #+#             */
-/*   Updated: 2025/07/07 23:37:00 by efittant         ###   ########.fr       */
+/*   Updated: 2025/07/12 23:29:06 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static int	handle_token(t_cmd *cmd, t_input **cur, int *j, t_data *data)
 			&& (*cur)->prev->type != REDIR_APPEND)))
 	{
 		cmd->args[(*j)++] = ft_strdup((*cur)->content);
+		if (!cmd->args[(*j) - 1])
+			return (fail_mall(), 0);
 		if ((*cur)->type == CMD)
 			cmd->is_builtin = (*cur)->is_builtin;
 	}
