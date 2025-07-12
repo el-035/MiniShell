@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:29:35 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/12 03:30:11 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:28:56 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 	int		is_valid;
 
 	write(1, "exit\n", 5);
+	rl_clear_history();
 	if (cmd->args[1])
 	{
 		trimmed = ft_strtrim(cmd->args[1], " \t");
@@ -88,10 +89,8 @@ void	ft_exit(t_data *data, t_cmd *cmd)
 		else
 			error_n(cmd->args[1]);
 		free(trimmed);
-		rl_clear_history();
 		return (free_split(data->envp), free_all(data),
 			exit(return_exit_code(-2)));
 	}
-	rl_clear_history();
 	return (free_split(data->envp), free_all(data), exit(data->prev_ec_code));
 }

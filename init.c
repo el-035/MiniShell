@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apchelni <apchelni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: efittant <efittant@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 19:34:08 by efittant          #+#    #+#             */
-/*   Updated: 2025/07/12 03:28:00 by apchelni         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:30:50 by efittant         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ char	*prompt(char **envp, t_data *data, struct sigaction *sig)
 	char	*line;
 	char	*prompt;
 
+	prompt = NULL;
+	line = NULL;
 	sigaction(SIGINT, sig, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	if (data->ec_update_flag == 0)
